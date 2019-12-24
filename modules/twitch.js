@@ -10,7 +10,6 @@ class Twitch {
         client.on('connected', function () {
             client.color("Blue");
             console.log("\x1b[42m[TWITCH] - Bot connecté sur le chat de " + username + "\x1b[0m");
-            Logs.logSystem("Bot connecté sur le chat de " + username);
         });
 
         client.on("hosted", function (channel, username, viewers, autohost) {

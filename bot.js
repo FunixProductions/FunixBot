@@ -69,7 +69,6 @@ process.stdin.on('data', function (msg) {
     args.shift();
     switch (cmd) {
         case 'stop':
-            Logs.logSystem("Arrêt du bot.");
             console.log("\x1b[33mArrêt du bot.\x1b[0m");
             process.exit(0);
             break;
