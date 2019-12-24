@@ -29,7 +29,7 @@ class Logs {
         });
     }
 
-    static async logSystem(msg) {
+    static logSystem(msg) {
         checkLogDir();
         const dataDate = getDateData();
         let messageLog = "SYSTEM [" + dataDate.time + "] " + msg + '\n';
