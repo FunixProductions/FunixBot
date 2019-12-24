@@ -4,13 +4,12 @@ const Logs = require('./logs');
 class Twitch {
     constructor(config) {
         const username = config.channels[0];
-        Logs.logSystem("[TWITCH] - Connection au chat : " + username);
         console.log("[TWITCH] - Connection au chat : " + username);
         const client = new tmi.client(config);
         this.client = client;
         client.on('connected', function () {
             client.color("Blue");
-            console.log("[TWITCH] - Bot connecté sur le chat de " + username);
+            console.log("\x1b[42m[TWITCH] - Bot connecté sur le chat de " + username + "\x1b[0m");
             Logs.logSystem("Bot connecté sur le chat de " + username);
         });
 

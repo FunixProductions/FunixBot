@@ -1,5 +1,6 @@
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
+console.log("\x1b[33mDémarrage du bot...\x1b[0m");
 const Logs = require('./modules/logs');
 Logs.logSystem("Démarrage du bot...");
 const Mysql = require('./modules/mysql');
@@ -68,7 +69,7 @@ process.stdin.on('data', function (msg) {
     args.shift();
     switch (cmd) {
         case 'stop':
-            console.log("Arrêt du bot.");
+            console.log("\x1b[33mArrêt du bot.\x1b[0m");
             Logs.logSystem("Arrêt du bot.");
             process.exit(0);
             break;

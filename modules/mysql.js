@@ -14,7 +14,6 @@ class Mysql {
     constructor(mysqlInfos) {
         let host = mysqlInfos.host;
         let databaseName = mysqlInfos.database;
-        Logs.logSystem("[MYSQL] - Connection à la base : " + host);
         console.log("[MYSQL] - Connection à la base : " + host);
         let database = mysql.createConnection({
             host: host,
@@ -24,7 +23,6 @@ class Mysql {
         });
         database.connect(function (err) {
             if (err) throw err;
-            Logs.logSystem("[MYSQL] - Base SQL : " + host + "/" + databaseName + " connectée.");
             console.log("[MYSQL] - Base SQL : " + host + "/" + databaseName + " connectée.");
 
             const createCmdTable = "CREATE TABLE IF NOT EXISTS " + configSql.tables.chat_commands.table +
