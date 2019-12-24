@@ -1,6 +1,7 @@
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 console.log("\x1b[33mDémarrage du bot...\x1b[0m");
+const { exec } = require('child_process');
 const Logs = require('./modules/logs');
 Logs.logSystem("Démarrage du bot.");
 const Mysql = require('./modules/mysql');
@@ -77,6 +78,17 @@ process.stdin.on('data', function (msg) {
         case 'stop':
             console.log("\x1b[33mArrêt du bot.\x1b[0m");
             process.exit(0);
+            break;
+        case 'update':
+            exec('git pull', function (err, stdout, stderr) {
+                if (err) throw err;
+                if (stdout === "Déjà à jour.\n") {
+                    console.log("Aucune mise a jour disponible.");
+                    return;
+                }
+                console.log('Mis a jour. Veuillez redémarrer le bot.');
+            });
+            console.log('Mise à jour depuis master...');
             break;
         case 'say':
             let message = '';
