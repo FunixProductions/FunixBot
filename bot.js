@@ -17,18 +17,18 @@ let commands = {
     discord: require('./commands/discord'),
     site: require('./commands/site'),
     help: require('./commands/help'),
-    ip: require('./commands/ip')
+    ip: require('./commands/ip'),
+    giveaway: require('./commands/giveaway')
 };
 
 const prefix = '!';
 
 FunixBot.on('message', function (target, user, msg, self) {
     if (self) { return; }
-    AutoMessages.newMessage(FunixBot, target);
     msg = msg.replace(/\s\s+/g, ' ');
     msg = msg.toLowerCase();
-    Logs.log(user, msg);
-    const args = msg.split(' ');
+    let args = msg.split(' ');
+    commands.giveaway.participant(FunixBot, user, args[0]);
     if (args[0].charAt(0) === prefix) {
         let cmd = args[0].substr(1);
         args.shift();
@@ -48,6 +48,9 @@ FunixBot.on('message', function (target, user, msg, self) {
             case 'ip':
                 commands.ip.command(FunixBot, target);
                 break;
+            case 'giveaway':
+                commands.giveaway.init(FunixBot, user, args, target);
+                break;
             default:
                 database.getChatCommand(cmd, function (message) {
                     if (message !== null) {
@@ -57,6 +60,9 @@ FunixBot.on('message', function (target, user, msg, self) {
                     }
                 });
         }
+    } else {
+        AutoMessages.newMessage(FunixBot, target);
+        Logs.log(user, msg);
     }
 });
 

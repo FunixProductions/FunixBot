@@ -1,5 +1,4 @@
 const tmi = require('tmi.js');
-const Logs = require('./logs');
 
 class Twitch {
     constructor(config) {
