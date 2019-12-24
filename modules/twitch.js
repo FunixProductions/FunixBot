@@ -1,14 +1,17 @@
 const tmi = require('tmi.js');
+const Logs = require('./logs');
 
 class Twitch {
     constructor(config) {
         const username = config.channels[0];
+        Logs.logSystem("[TWITCH] - Connection au chat : " + username);
         console.log("[TWITCH] - Connection au chat : " + username);
         const client = new tmi.client(config);
         this.client = client;
         client.on('connected', function () {
             client.color("Blue");
             console.log("[TWITCH] - Bot connecté sur le chat de " + username);
+            Logs.logSystem("Bot connecté sur le chat de " + username);
         });
 
         client.on("hosted", function (channel, username, viewers, autohost) {
@@ -40,10 +43,6 @@ function isSub(user) {
 
 function isStreamer(user) {
     return user.badges.broadcaster === '1';
-}
-
-function callUserTwitchApi(config, client, user, cb) {
-    console.log(user);
 }
 
 function callTwitchApi(config, client, cb) {
@@ -93,4 +92,3 @@ module.exports.isMod = isMod;
 module.exports.isSub = isSub;
 module.exports.isStreamer = isStreamer;
 module.exports.callApi = callTwitchApi;
-module.exports.callUserApi = callUserTwitchApi;

@@ -1,5 +1,7 @@
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
+const Logs = require('./modules/logs');
+Logs.logSystem("Démarrage du bot...");
 const Mysql = require('./modules/mysql');
 const Twitch = require('./modules/twitch');
 const AutoMessagesClass = require('./modules/autoMessages');
@@ -24,6 +26,7 @@ FunixBot.on('message', function (target, user, msg, self) {
     AutoMessages.newMessage(FunixBot, target);
     msg = msg.replace(/\s\s+/g, ' ');
     msg = msg.toLowerCase();
+    Logs.log(user, msg);
     const args = msg.split(' ');
     if (args[0].charAt(0) === prefix) {
         let cmd = args[0].substr(1);
@@ -65,7 +68,8 @@ process.stdin.on('data', function (msg) {
     args.shift();
     switch (cmd) {
         case 'stop':
-            console.log("Arret du bot.");
+            console.log("Arrêt du bot.");
+            Logs.logSystem("Arrêt du bot.");
             process.exit(0);
             break;
         case 'say':
