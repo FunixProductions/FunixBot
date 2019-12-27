@@ -18,7 +18,8 @@ let commands = {
     site: require('./commands/site'),
     help: require('./commands/help'),
     ip: require('./commands/ip'),
-    giveaway: require('./commands/giveaway')
+    giveaway: require('./commands/giveaway'),
+    level: require('./commands/level')
 };
 
 const prefix = '!';
@@ -29,6 +30,7 @@ FunixBot.on('message', function (target, user, msg, self) {
     msg = msg.toLowerCase();
     let args = msg.split(' ');
     commands.giveaway.participant(FunixBot, user, args[0]);
+    database.messageUserXP(user, FunixBot, target);
     if (args[0].charAt(0) === prefix) {
         let cmd = args[0].substr(1);
         args.shift();
@@ -50,6 +52,9 @@ FunixBot.on('message', function (target, user, msg, self) {
                 break;
             case 'giveaway':
                 commands.giveaway.init(FunixBot, user, args, target);
+                break;
+            case 'level':
+                commands.level.command(FunixBot, user, target, database);
                 break;
             default:
                 database.getChatCommand(cmd, function (message) {

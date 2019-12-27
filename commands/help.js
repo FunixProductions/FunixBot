@@ -3,7 +3,8 @@ let commandsIncluded = [
     "help",
     "prime",
     "site",
-    "ip"
+    "ip",
+    "level"
 ];
 
 class Help {
