@@ -34,49 +34,114 @@ class Mysql {
         this.database = database;
     }
 
-    messageUserXP(user, client, channel) {
-        const userId = user['user-id'];
-        const userName = user['username'];
-        const now = Date.now();
-        const requestCommand = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
+    messageUserXP(user, client, channel, Twitch, config) {
         const database = this.database;
-        database.query(requestCommand, function (err, result) {
-            if (err) throw err;
-            if (result.length < 1) {
-                const requestInsert = "INSERT INTO " + configSql.tables.users_xp.table + " VALUES (" + userId + ", '" + userName + "', 0, 50, 0, " + now + ")";
-                database.query(requestInsert, function (err) {
-                    if (err) throw err;
-                });
-            } else {
-                let xp = result[0].xp;
-                let xp_next = result[0].xp_next_level;
-                let level = result[0].level;
-                let lastMessageTimestamp = result[0].last_message_time;
+        Twitch.callApi(config.api.twitch, client, function (data) {
+            if (data.isStreaming) {
+                const userId = user['user-id'];
+                const userName = user['username'];
                 const now = Date.now();
-                if ((now - lastMessageTimestamp) / 1000 >= 210) {
-                    xp += 10 + parseInt(level / 2);
-                    if (xp >= xp_next) {
-                        level++;
-                        xp_next += 30 + level;
-                        xp = 0;
-                        Logs.logSystem("[LEVEL] " + user['display-name'] + " est passé au niveau " + level);
-                        if (level % 5 === 0) {
-                            client.say(channel, "imGlitch " + user['display-name'] + " est passé au niveau " + level + ' ! imGlitch');
+                const requestCommand = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
+                database.query(requestCommand, function (err, result) {
+                    if (err) throw err;
+                    if (result.length < 1) {
+                        const requestInsert = "INSERT INTO " + configSql.tables.users_xp.table + " VALUES (" + userId + ", '" + userName + "', 0, 50, 0, " + now + ")";
+                        database.query(requestInsert, function (err) {
+                            if (err) throw err;
+                        });
+                    } else {
+                        let xp = result[0].xp;
+                        let xp_next = result[0].xp_next_level;
+                        let level = result[0].level;
+                        let lastMessageTimestamp = result[0].last_message_time;
+                        const now = Date.now();
+                        if ((now - lastMessageTimestamp) / 1000 >= 210) {
+                            xp += 10 + parseInt(level / 2);
+                            if (xp >= xp_next) {
+                                level++;
+                                xp_next += 30 + level;
+                                xp = 0;
+                                Logs.logSystem("[LEVEL] " + user['display-name'] + " est passé au niveau " + level);
+                                if (level % 5 === 0) {
+                                    client.say(channel, "imGlitch " + user['display-name'] + " est passé au niveau " + level + ' ! imGlitch');
+                                }
+                            }
+                            const requestXpUpdate = "UPDATE " + configSql.tables.users_xp.table + " SET " +
+                                configSql.tables.users_xp.columns[1] + "= '" + userName + "', " +
+                                configSql.tables.users_xp.columns[2] + "=" + xp + ", " +
+                                configSql.tables.users_xp.columns[3] + "=" + xp_next + ", " +
+                                configSql.tables.users_xp.columns[4] + "=" + level + ", " +
+                                configSql.tables.users_xp.columns[5] + "=" + now +
+                                " WHERE " + configSql.tables.users_xp.columns[0] + "=" + userId;
+                            database.query(requestXpUpdate, function (err) {
+                                if (err) throw err;
+                            });
                         }
                     }
-                    const requestXpUpdate = "UPDATE " + configSql.tables.users_xp.table + " SET " +
-                        configSql.tables.users_xp.columns[1] + "= '" + userName + "', " +
-                        configSql.tables.users_xp.columns[2] + "=" + xp + ", " +
-                        configSql.tables.users_xp.columns[3] + "=" + xp_next + ", " +
-                        configSql.tables.users_xp.columns[4] + "=" + level + ", " +
-                        configSql.tables.users_xp.columns[5] + "=" + now +
-                        " WHERE " + configSql.tables.users_xp.columns[0] + "=" + userId;
-                    database.query(requestXpUpdate, function (err) {
-                        if (err) throw err;
-                    });
-                }
+                });
             }
         });
+    }
+
+    timeUsersXP(users, client, channel, Twitch, config) {
+        const database = this.database;
+        Twitch.callApi(config.api.twitch, client, function (data) {
+            if (data.isStreaming) {
+                let usersList = fetchUsersInRow(users);
+                const requestCommand = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[1] + " IN (" + usersList + ")";
+                database.query(requestCommand, function (err, result) {
+                    if (err) throw err;
+                    let updateXP = [];
+                    for (let i = 0; i < result.length; ++i) {
+                        let userXp = {
+                            userId: result[i].user_id,
+                            xp: result[i].xp,
+                            xpNext: result[i].xp_next_level,
+                            level: result[i].level
+                        };
+                        userXp.xp += 5 + parseInt(userXp.level / 2);
+                        if (userXp.xp >= userXp.xpNext) {
+                            userXp.level++;
+                            userXp.xpNext += 30 + userXp.level;
+                            userXp.xp = 0;
+                            Logs.logSystem("[LEVEL] " + result[i].username + " est passé au niveau " + userXp.level);
+                            if (userXp.level % 5 === 0) {
+                                client.say(channel, "imGlitch " + result[i].username + " est passé au niveau " + userXp.level + ' ! imGlitch');
+                            }
+                        }
+                        updateXP.push(userXp);
+                    }
+                    let updateValues = "";
+                    for (let i = 0; i < updateXP.length; ++i) {
+                        updateValues += "(" + updateXP[i].userId + ", " + updateXP[i].xp + ", " + updateXP[i].xpNext + ", " + updateXP[i].level + ")";
+                        if (i + 1 < updateXP.length) {
+                            updateValues += ',';
+                        }
+                    }
+                    const requestSql = "INSERT INTO " + configSql.tables.users_xp.table + " (" +
+                        configSql.tables.users_xp.columns[0] + ", " + configSql.tables.users_xp.columns[2] + ", " +
+                        configSql.tables.users_xp.columns[3] + ", " + configSql.tables.users_xp.columns[4] +
+                        ") VALUES " + updateValues + " ON DUPLICATE KEY UPDATE " +
+                        configSql.tables.users_xp.columns[2] + " = VALUES(" + configSql.tables.users_xp.columns[2] + ")," +
+                        configSql.tables.users_xp.columns[3] + " = VALUES(" + configSql.tables.users_xp.columns[3] + ")," +
+                        configSql.tables.users_xp.columns[4] + " = VALUES(" + configSql.tables.users_xp.columns[4] + ")";
+                    database.query(requestSql, function (err) {
+                        if (err) throw err;
+                    })
+                });
+            }
+        });
+    }
+
+    getUserExp(userId, cb) {
+        const request = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "=" + userId;
+        this.database.query(request, function (err, result) {
+            if (err) throw err;
+            if (result.length !== 0)
+                cb(result[0]);
+            else
+                cb(null);
+        })
     }
 
     getCommandList(cb) {
@@ -102,18 +167,6 @@ class Mysql {
             }
         });
     }
-
-    getUserExp(userId, cb) {
-        const request = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "=" + userId;
-        this.database.query(request, function (err, result) {
-            if (err) throw err;
-            if (result.length !== 0)
-                cb(result[0]);
-            else
-                cb(null);
-        })
-    }
-
 }
 
 function createUserXpTable(database) {
@@ -160,6 +213,33 @@ function createCommandsTable(database) {
             console.log("[MYSQL] - Table : " + configSql.tables.chat_commands.table + " crée");
         }
     });
+}
+
+function fetchUsersInRow(users) {
+    let usersRow = '';
+    let nbrVips = users.vips.length;
+    let nbrMods = users.moderators.length;
+    let nbrViewers = users.viewers.length;
+    for (let i = 0; i < nbrVips; ++i) {
+        usersRow += "'" + users.vips[i] + (i + 1 === nbrVips ? "'" : "', ");
+    }
+    if (nbrMods > 0) {
+        if (nbrVips > 0) {
+            usersRow += ", ";
+        }
+        for (let i = 0; i < nbrMods; ++i) {
+            usersRow += "'" + users.moderators[i] + (i + 1 === nbrMods ? "'" : "', ");
+        }
+    }
+    if (nbrViewers > 0) {
+        if (nbrVips > 0 || nbrMods > 0) {
+            usersRow += ", ";
+        }
+        for (let i = 0; i < nbrViewers; ++i) {
+            usersRow += "'" + users.viewers[i] + ((i + 1 === nbrViewers) ? "'" : "', ");
+        }
+    }
+    return usersRow;
 }
 
 module.exports = Mysql;

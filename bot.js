@@ -6,6 +6,7 @@ Logs.logSystem("Démarrage du bot.");
 const Mysql = require('./modules/mysql');
 const Twitch = require('./modules/twitch');
 const AutoMessagesClass = require('./modules/autoMessages');
+const StatusLive = require('./modules/statusLive');
 const config = require('./.env.json');
 
 let database = new Mysql(config.mysql);
@@ -30,7 +31,7 @@ FunixBot.on('message', function (target, user, msg, self) {
     msg = msg.toLowerCase();
     let args = msg.split(' ');
     commands.giveaway.participant(FunixBot, user, args[0]);
-    database.messageUserXP(user, FunixBot, target);
+    database.messageUserXP(user, FunixBot, target, Twitch, config);
     if (args[0].charAt(0) === prefix) {
         let cmd = args[0].substr(1);
         args.shift();
@@ -68,6 +69,7 @@ FunixBot.on('message', function (target, user, msg, self) {
     } else {
         AutoMessages.newMessage(FunixBot, target);
         Logs.log(user, msg);
+        StatusLive.incrementMessages();
     }
 });
 
@@ -94,3 +96,13 @@ process.stdin.on('data', function (msg) {
             console.log("Commande non reconnue : " + cmd);
     }
 });
+
+setInterval(function () {
+    Twitch.getChatters(config.funixbot.channels[0], FunixBot, function (users) {
+        database.timeUsersXP(users, FunixBot, config.funixbot.channels[0], Twitch, config);
+    });
+}, 300000);
+
+setInterval(function () {
+    StatusLive.checkStatus(Twitch, config.api.twitch, FunixBot, config.funixbot.channels[0]);
+}, 10000);
