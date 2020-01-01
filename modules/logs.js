@@ -4,12 +4,12 @@ const logDir = 'logs/';
 function getDateData() {
     const now = new Date();
     return {
-        time: (now.getHours() < 10 ? now.getHours().toString() + '0' : now.getHours().toString()) + ':' +
-            (now.getMinutes() < 10 ? now.getMinutes().toString() + '0' : now.getMinutes().toString()) + ':' +
-            (now.getSeconds() < 10 ? now.getSeconds().toString() + '0' : now.getSeconds()),
-        todayDate: (now.getDate() < 10 ? now.getDate() + '0' : now.getDate()) + '-' +
-        (now.getMonth() < 10 ? now.getMonth() + '0' : now.getMonth()) + '-' +
-        now.getFullYear()
+        time: (now.getHours() < 10 ? '0' + now.getHours().toString() : now.getHours().toString()) + ':' +
+            (now.getMinutes() < 10 ? '0' + now.getMinutes().toString() : now.getMinutes().toString()) + ':' +
+            (now.getSeconds() < 10 ? '0' + now.getSeconds().toString() : now.getSeconds()),
+        todayDate: now.getFullYear() + '-' +
+            (now.getMonth() < 10 ? '0' + (now.getMonth() + 1).toString() : (now.getMonth() + 1).toString()) + '-' +
+            (now.getDate() < 10 ? '0' + now.getDate() : now.getDate())
     };
 }
 
@@ -40,3 +40,4 @@ class Logs {
 }
 
 module.exports = Logs;
+module.exports.logDir = logDir;

@@ -1,6 +1,9 @@
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 console.log("\x1b[33mDémarrage du bot...\x1b[0m");
+
+const fs = require('fs');
+
 const Logs = require('./modules/logs');
 Logs.logSystem("Démarrage du bot.");
 const Mysql = require('./modules/mysql');
@@ -91,6 +94,26 @@ process.stdin.on('data', function (msg) {
                 message += args[i] + ' ';
             }
             FunixBot.say(target, message);
+            break;
+        case 'purgeLogs':
+            const now = Date.now();
+            let logsDeleted = 0;
+            fs.readdir(Logs.logDir, function (err, files) {
+                for (let i = 0; i < files.length; ++i) {
+                    let file = files[i];
+                    if (file !== '.gitkeep') {
+                        file = file.replace(/\.[^/.]+$/, "");
+                        let date = Date.parse(file);
+                        if (now - date >= 5259600000) {
+                            fs.unlink("./" + Logs.logDir + file + '.log', function (err) {
+                                if (err) throw err;
+                            });
+                            logsDeleted++;
+                        }
+                    }
+                }
+                console.log(logsDeleted + " logs ont été supprimés");
+            });
             break;
         default:
             console.log("Commande non reconnue : " + cmd);
