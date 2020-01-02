@@ -26,7 +26,10 @@ class Mysql {
             database: databaseName
         });
         database.connect(function (err) {
-            if (err) throw err;
+            if (err) {
+                Logs.logError(err);
+                throw err;
+            }
             console.log("[MYSQL] - Base SQL : " + host + "/" + databaseName + " connectée.");
             createCommandsTable(database);
             createUserXpTable(database);
@@ -43,11 +46,17 @@ class Mysql {
                 const now = Date.now();
                 const requestCommand = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
                 database.query(requestCommand, function (err, result) {
-                    if (err) throw err;
+                    if (err) {
+                        Logs.logError(err);
+                        throw err;
+                    }
                     if (result.length < 1) {
                         const requestInsert = "INSERT INTO " + configSql.tables.users_xp.table + " VALUES (" + userId + ", '" + userName + "', 0, 50, 0, " + now + ")";
                         database.query(requestInsert, function (err) {
-                            if (err) throw err;
+                            if (err) {
+                                Logs.logError(err);
+                                throw err;
+                            }
                         });
                     } else {
                         let xp = result[0].xp;
@@ -74,7 +83,10 @@ class Mysql {
                                 configSql.tables.users_xp.columns[5] + "=" + now +
                                 " WHERE " + configSql.tables.users_xp.columns[0] + "=" + userId;
                             database.query(requestXpUpdate, function (err) {
-                                if (err) throw err;
+                                if (err) {
+                                    Logs.logError(err);
+                                    throw err;
+                                }
                             });
                         }
                     }
@@ -90,7 +102,10 @@ class Mysql {
                 let usersList = fetchUsersInRow(users);
                 const requestCommand = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[1] + " IN (" + usersList + ")";
                 database.query(requestCommand, function (err, result) {
-                    if (err) throw err;
+                    if (err) {
+                        Logs.logError(err);
+                        throw err;
+                    }
                     let updateXP = [];
                     for (let i = 0; i < result.length; ++i) {
                         let userXp = {
@@ -126,7 +141,10 @@ class Mysql {
                         configSql.tables.users_xp.columns[3] + " = VALUES(" + configSql.tables.users_xp.columns[3] + ")," +
                         configSql.tables.users_xp.columns[4] + " = VALUES(" + configSql.tables.users_xp.columns[4] + ")";
                     database.query(requestSql, function (err) {
-                        if (err) throw err;
+                        if (err) {
+                            Logs.logError(err);
+                            throw err;
+                        }
                     })
                 });
             }
@@ -136,7 +154,10 @@ class Mysql {
     getUserExp(userId, cb) {
         const request = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "=" + userId;
         this.database.query(request, function (err, result) {
-            if (err) throw err;
+            if (err) {
+                Logs.logError(err);
+                throw err;
+            }
             if (result.length !== 0)
                 cb(result[0]);
             else
@@ -147,7 +168,10 @@ class Mysql {
     getCommandList(cb) {
         const requestCommand = "SELECT " + configSql.tables.chat_commands.columns[1] + " FROM " + configSql.tables.chat_commands.table;
         this.database.query(requestCommand, function (err, result) {
-            if (err) throw err;
+            if (err) {
+                Logs.logError(err);
+                throw err;
+            }
             let commandList = [];
             for (let i = 0; i < result.length; ++i) {
                 commandList.push(result[i].command);
@@ -159,7 +183,10 @@ class Mysql {
     getChatCommand(cmd, cb) {
         const requestCommand = "SELECT * FROM " + configSql.tables.chat_commands.table + " WHERE " + configSql.tables.chat_commands.columns[1] + "='" + cmd + "'";
         this.database.query(requestCommand, function (err, result) {
-            if (err) throw err;
+            if (err) {
+                Logs.logError(err);
+                throw err;
+            }
             if (result.length > 0) {
                 cb(result[0].message);
             } else {
@@ -178,7 +205,10 @@ function createUserXpTable(database) {
         configSql.tables.users_xp.columns[4] + " INT, " +
         configSql.tables.users_xp.columns[5] + " BIGINT)";
     database.query(createUserXpTable, function (err, result) {
-        if (err) throw err;
+        if (err) {
+            Logs.logError(err);
+            throw err;
+        }
         if (result.warningCount === 0) {
             Logs.logSystem("[MYSQL] - Table : " + configSql.tables.users_xp.table + " crée");
             console.log("[MYSQL] - Table : " + configSql.tables.users_xp.table + " crée");
@@ -192,7 +222,10 @@ function createCommandsTable(database) {
         configSql.tables.chat_commands.columns[1] + " VARCHAR(255), " +
         configSql.tables.chat_commands.columns[2] + " VARCHAR(255))";
     database.query(createCmdTable, function (err, result) {
-        if (err) throw err;
+        if (err) {
+            Logs.logError(err);
+            throw err;
+        }
         if (result.warningCount === 0) {
             const insertCommands = "INSERT INTO " + configSql.tables.chat_commands.table + " (" +
                 configSql.tables.chat_commands.columns[1] + ", " +
@@ -207,7 +240,10 @@ function createCommandsTable(database) {
                 "('sub', \"LE SUB C'EST VRAIMENT SUPER ! : https://www.twitch.tv/products/funixgaming <3\")," +
                 "('battlenet', \"Pour m'ajouter en ami sur BattleNet : FunixGaming#2154\")";
             database.query(insertCommands, function (err) {
-                if (err) throw err;
+                if (err) {
+                    Logs.logError(err);
+                    throw err;
+                }
             });
             Logs.logSystem("[MYSQL] - Table : " + configSql.tables.chat_commands.table + " crée");
             console.log("[MYSQL] - Table : " + configSql.tables.chat_commands.table + " crée");

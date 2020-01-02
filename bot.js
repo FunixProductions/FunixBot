@@ -23,7 +23,8 @@ let commands = {
     help: require('./commands/help'),
     ip: require('./commands/ip'),
     giveaway: require('./commands/giveaway'),
-    level: require('./commands/level')
+    level: require('./commands/level'),
+    followCheck: require('./commands/followCheck')
 };
 
 const prefix = '!';
@@ -59,6 +60,11 @@ FunixBot.on('message', function (target, user, msg, self) {
                 break;
             case 'level':
                 commands.level.command(FunixBot, user, target, database);
+                break;
+            case 'fc':
+                commands.followCheck.command(FunixBot, user, target, Twitch, config);
+                break;
+            case 'uptime':
                 break;
             default:
                 database.getChatCommand(cmd, function (message) {
@@ -106,12 +112,16 @@ process.stdin.on('data', function (msg) {
                         let date = Date.parse(file);
                         if (now - date >= 5259600000) {
                             fs.unlink("./" + Logs.logDir + file + '.log', function (err) {
-                                if (err) throw err;
+                                if (err) {
+                                    Logs.logError(err);
+                                    throw err;
+                                }
                             });
                             logsDeleted++;
                         }
                     }
                 }
+                Logs.logSystem(logsDeleted + " logs ont été supprimés");
                 console.log(logsDeleted + " logs ont été supprimés");
             });
             break;

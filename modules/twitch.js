@@ -1,4 +1,5 @@
 const tmi = require('tmi.js');
+const Logs = require('./logs');
 
 class Twitch {
     constructor(config) {
@@ -50,7 +51,10 @@ function getChatters(channel, client, cb) {
         method: "GET"
     };
     client.api(options, function (err, res, body) {
-        if (err) throw err;
+        if (err) {
+            Logs.logError(err);
+            throw err;
+        }
         cb(body.chatters);
     });
 }
@@ -71,7 +75,10 @@ function callTwitchApi(config, client, cb) {
             game: "null",
             viewers: 0
         };
-        if (err) throw err;
+        if (err) {
+            Logs.logError(err);
+            throw err;
+        }
         if (body.data.length === 0) {
             dataApi.isStreaming = false;
             cb(dataApi);
@@ -93,7 +100,10 @@ function callTwitchApi(config, client, cb) {
 function getGameName(client, options) {
     return function (callback) {
         client.api(options, function (err, res, body) {
-            if (err) throw err;
+            if (err) {
+                Logs.logError(err);
+                throw err;
+            }
             callback(body.data[0].name);
         });
     };

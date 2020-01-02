@@ -4,7 +4,8 @@ let commandsIncluded = [
     "prime",
     "site",
     "ip",
-    "level"
+    "level",
+    "fc"
 ];
 
 class Help {

@@ -37,6 +37,15 @@ class Logs {
             if (err) throw err;
         });
     }
+
+    static logError(msg) {
+        checkLogDir();
+        const dataDate = getDateData();
+        let messageLog = "ERROR [" + dataDate.time + "] " + msg + '\n';
+        fs.appendFileSync(logDir + dataDate.todayDate + '.log', messageLog, function (err) {
+            if (err) throw err;
+        });
+    }
 }
 
 module.exports = Logs;
