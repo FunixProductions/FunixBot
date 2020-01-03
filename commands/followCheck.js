@@ -10,7 +10,7 @@ class FollowCheck {
             const date = new Date(followDate);
             const formattedDate = formatDateFR(date);
             const followTime = getFollowTime(date);
-            client.say(target, user['display-name'] + " dernier follow le : " + formattedDate + " (" + followTime + ")");
+            client.say(target, user['display-name'] + " suit la chaine depuis le : " + formattedDate + " (" + followTime + ")");
         });
     }
 }
@@ -38,9 +38,17 @@ function getFollowTime(date) {
     const nbrYears = parseInt(diffDates / 31536000000);
     const nbrMonths = parseInt(diffDates / 2628000000);
     const nbrDays = parseInt(diffDates / 86400000);
-    return (nbrYears > 0 ? (nbrYears + (nbrYears > 1 ? ' ans ' : ' an ')) : '') +
-        nbrMonths > 0 ? nbrMonths + ' mois ' : '' +
-        nbrDays > 0 ? (nbrDays + (nbrDays > 1 ? ' jours' : ' jour')) : '';
+    let followTime = '';
+    if (nbrYears > 0) {
+        followTime += nbrYears + (nbrYears > 1 ? ' ans ' : ' an ');
+    }
+    if (nbrMonths > 0) {
+        followTime += nbrMonths + ' mois ';
+    }
+    if (nbrDays > 0) {
+        followTime += nbrDays + (nbrDays > 1 ? ' jours' : ' jour');
+    }
+    return followTime;
 }
 
 function formatDateFR(date) {

@@ -65,6 +65,7 @@ FunixBot.on('message', function (target, user, msg, self) {
                 commands.followCheck.command(FunixBot, user, target, Twitch, config);
                 break;
             case 'uptime':
+                StatusLive.uptime(config.api.twitch, FunixBot, target);
                 break;
             default:
                 database.getChatCommand(cmd, function (message) {
@@ -137,5 +138,5 @@ setInterval(function () {
 }, 300000);
 
 setInterval(function () {
-    StatusLive.checkStatus(Twitch, config.api.twitch, FunixBot, config.funixbot.channels[0]);
+    StatusLive.checkStatus(config.api.twitch, FunixBot, config.funixbot.channels[0]);
 }, 10000);

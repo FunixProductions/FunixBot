@@ -1,3 +1,5 @@
+const Twitch = require('../modules/twitch');
+
 let isStreaming = false;
 let startStream = 0;
 let game = '';
@@ -5,7 +7,7 @@ let title = '';
 let nbrMessages = 0;
 
 class StatusLive {
-    static checkStatus(Twitch, config, client, target) {
+    static checkStatus(config, client, target) {
         Twitch.callApi(config, client, function (data) {
             if (data.isStreaming && !isStreaming) {
                 isStreaming = true;
@@ -13,7 +15,7 @@ class StatusLive {
                 game = data.game;
                 title = data.title;
                 nbrMessages = 0;
-                client.say(target, "imGlitch Le live commence ! COUCOU ! funixgLuv");
+                client.say(target, "imGlitch Le live commence ! Jeu : " + game);
                 return;
             }
             if (!data.isStreaming && isStreaming) {
@@ -40,6 +42,38 @@ class StatusLive {
     }
     static incrementMessages() {
         ++nbrMessages;
+    }
+    static uptime(config, client, target) {
+        Twitch.callApi(config, client, function (data) {
+            if (data.isStreaming) {
+                let uptime = Date.now() - startStream;
+                let diff = {};
+                uptime = Math.floor(uptime / 1000);
+                diff.sec = uptime % 60;
+                uptime = Math.floor((uptime - diff.sec) / 60);
+                diff.min = uptime % 60;
+                uptime = Math.floor((uptime - diff.min) / 60);
+                diff.hour = uptime % 24;
+                uptime = Math.floor((uptime - diff.hour) / 24);
+                diff.day = uptime;
+                let strUptime = "imGlitch Live en cours depuis : ";
+                if (diff.day > 0) {
+                    strUptime += diff.day + "J ";
+                }
+                if (diff.hour > 0) {
+                    strUptime += diff.hour + "h ";
+                }
+                if (diff.min > 0) {
+                    strUptime += diff.min + "m ";
+                }
+                if (diff.sec > 0) {
+                    strUptime += diff.sec + "s";
+                }
+                client.say(target, strUptime);
+            } else {
+                client.say(target, "imGlitch Pas de live en cours ! (!prog ou !twitter)");
+            }
+        });
     }
 }
 
