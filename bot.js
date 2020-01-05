@@ -10,12 +10,14 @@ const Twitch = require('./modules/twitch');
 const NewFollowerClass = require('./modules/newFollower');
 const AutoMessagesClass = require('./modules/autoMessages');
 const StatusLive = require('./modules/statusLive');
+const WebServerClass = require('./modules/webserver');
 const config = require('./.env.json');
 
 let database = new Mysql(config.mysql);
 let FunixBot = new Twitch(config.funixbot).client;
 let AutoMessages = new AutoMessagesClass(config.settings.autoMessages);
 let NewFollower = new NewFollowerClass(FunixBot, config);
+let WebServer = new WebServerClass(config, database);
 
 let commands = {
     prime: require('./commands/prime'),
@@ -140,6 +142,9 @@ setInterval(function () {
 
 setInterval(function () {
     StatusLive.checkStatus(config.api.twitch, FunixBot, config.funixbot.channels[0]);
+    database.getUserClassment(function (data) {
+        WebServer.updateTopUsers(data);
+    });
 }, 10000);
 
 setInterval(function () {

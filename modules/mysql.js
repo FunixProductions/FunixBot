@@ -180,6 +180,18 @@ class Mysql {
         })
     }
 
+    getUserClassment(cb) {
+        const request = "SELECT " + configSql.tables.users_xp.columns[1] + "," + configSql.tables.users_xp.columns[2] + "," + configSql.tables.users_xp.columns[4] +
+            " FROM " + configSql.tables.users_xp.table + " ORDER BY " + configSql.tables.users_xp.columns[4] + " DESC, " + configSql.tables.users_xp.columns[2] + " DESC LIMIT 100";
+        this.database.query(request, function (err, result) {
+            if (err) {
+                Logs.logError(err);
+                throw err;
+            }
+            cb(result);
+        })
+    }
+
     getCommandList(cb) {
         const requestCommand = "SELECT " + configSql.tables.chat_commands.columns[1] + " FROM " + configSql.tables.chat_commands.table;
         this.database.query(requestCommand, function (err, result) {
