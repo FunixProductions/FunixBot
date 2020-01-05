@@ -7,6 +7,10 @@ class FollowCheck {
             return;
         }
         callUserApi(config, client, userId, function (followDate) {
+            if (followDate === null) {
+                client.say(target, user['display-name'] + " ne suit pas la chaine.");
+                return;
+            }
             const date = new Date(followDate);
             const formattedDate = formatDateFR(date);
             const followTime = getFollowTime(date);
@@ -28,7 +32,10 @@ function callUserApi(config, client, userId, cb) {
             Logs.logError(err);
             throw err;
         }
-        cb(body.data[0].followed_at);
+        if (body.data > 1)
+            cb(body.data[0].followed_at);
+        else
+            cb(null);
     })
 }
 
