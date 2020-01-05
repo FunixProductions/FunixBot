@@ -63,6 +63,7 @@ function checkApiKey(apiKeyHeader, req, res, cb) {
         data.error = "Pas de clé api générée sur le bot.";
         res.send(data);
         cb(false);
+        return;
     }
     if (!fs.existsSync(dataFolderPath)) {
         fs.mkdirSync(dataFolderPath);
