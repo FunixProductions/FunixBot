@@ -1,5 +1,6 @@
 const Logs = require('./logs');
-const followersFilePath = './data/followers.json';
+const dataDirPath = './data/';
+const followersFilePath = dataDirPath + 'followers.json';
 const fs = require('fs');
 
 class NewFollower {
@@ -23,6 +24,7 @@ class NewFollower {
 }
 
 function hasAlreadyFollowed(userId) {
+    checkFollowersFile();
     let followers = JSON.parse(fs.readFileSync(followersFilePath));
     for (let i = 0; i < followers.length; ++i) {
         if (followers[i] === userId) {
@@ -54,6 +56,15 @@ function getLastFollower(client, config, cb) {
         };
         cb(data);
     });
+}
+
+function checkFollowersFile() {
+    if (!fs.existsSync(dataDirPath)) {
+        fs.mkdirSync(dataDirPath);
+    }
+    if (!fs.existsSync(followersFilePath)) {
+        fs.appendFileSync(followersFilePath, '[]');
+    }
 }
 
 module.exports = NewFollower;
