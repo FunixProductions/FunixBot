@@ -10,6 +10,10 @@ const configSql = {
         users_xp: {
             table: "bot_twitch_users_xp",
             columns: ["user_id", "username", "xp", "xp_next_level", "level", "last_message_time"]
+        },
+        users_myuptime: {
+            table: "bot_twitch_user_uptime",
+            columns: ["user_id", "username", "uptime_global", "uptime_month", "uptime_week", "messages_global", "messages_month", "messages_week"]
         }
     }
 };
@@ -33,22 +37,52 @@ class Mysql {
             console.log("[MYSQL] - Base SQL : " + host + "/" + databaseName + " connectée.");
             createCommandsTable(database);
             createUserXpTable(database);
+            createUserUptimetable(database);
         });
         this.database = database;
     }
 
-    messageUserXP(user, client, channel, Twitch, config) {
+    messageUser(user, client, channel, Twitch, config) {
         const database = this.database;
         Twitch.callApi(config.api.twitch, client, function (data) {
             if (data.isStreaming) {
                 const userId = user['user-id'];
                 const userName = user['username'];
                 const now = Date.now();
-                const requestCommand = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
+                const requestCommandXp = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
+                const requestCommandNbrMessage = "SELECT * FROM " + configSql.tables.users_myuptime.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
                 if (parseInt(userId) === config.settings.streamerId) {
                     return;
                 }
-                database.query(requestCommand, function (err, result) {
+                database.query(requestCommandNbrMessage, function (err, result) {
+                    if (err) {
+                        Logs.logError(err);
+                        throw err;
+                    }
+                    if (result.length < 1) {
+                        const insertNbrMessages = "INSERT INTO " + configSql.tables.users_myuptime.table + " VALUES (" + userId + ",'" + userName + "',0,0,0,1,1,1)";
+                        database.query(insertNbrMessages, function (err) {
+                            if (err) {
+                                Logs.logError(err);
+                                throw err;
+                            }
+                        });
+                    } else {
+                        const requestMessageUpdate = "UPDATE " + configSql.tables.users_myuptime.table + " SET " +
+                            configSql.tables.users_myuptime.columns[1] + "= '" + userName + "', " +
+                            configSql.tables.users_myuptime.columns[5] + "=" + (result[0].messages_global += 1) + ", " +
+                            configSql.tables.users_myuptime.columns[6] + "=" + (result[0].messages_month += 1) + ", " +
+                            configSql.tables.users_myuptime.columns[7] + "=" + (result[0].messages_week += 1) +
+                            " WHERE " + configSql.tables.users_myuptime.columns[0] + "=" + userId;
+                        database.query(requestMessageUpdate, function (err) {
+                            if (err) {
+                                Logs.logError(err);
+                                throw err;
+                            }
+                        });
+                    }
+                });
+                database.query(requestCommandXp, function (err, result) {
                     if (err) {
                         Logs.logError(err);
                         throw err;
@@ -99,6 +133,85 @@ class Mysql {
         });
     }
 
+    getUptimeUser(user, client, target) {
+        const database = this.database;
+        const userId = user['user-id'];
+        const displayName = user['display-name'];
+        const request = "SELECT * FROM " + configSql.tables.users_myuptime.table + " WHERE " + configSql.tables.users_myuptime.columns[0] + "=" + userId;
+        database.query(request, function (err, result) {
+            if (err) {
+                Logs.logError(err);
+                throw err;
+            }
+            if (result.length > 0) {
+                const data = {
+                    uptimeGlobal: parseInt(result[0].uptime_global / 3600000000),
+                    uptimeMonth: parseInt(result[0].uptime_month / 3600000000),
+                    uptimeWeek: parseInt(result[0].uptime_week / 3600000000),
+                    messagesGlobal: result[0].messages_global,
+                    messagesMonth: result[0].messages_month,
+                    messagesWeek: result[0].messages_week
+                };
+                client.say(target, "Uptime de " + displayName + " : Semaine " + data.uptimeWeek + "h - " + data.messagesWeek + " messages | " +
+                    "Mois " + data.uptimeMonth + "h - " + data.messagesMonth + " messages | " +
+                    "Global " + data.uptimeGlobal + "h - " + data.messagesGlobal + " messages");
+            } else {
+                client.say(target, displayName + " n'as pas encore de uptime sur ce stream.");
+            }
+        });
+    }
+
+    addWatchTimeUser(users, client, Twitch, config) {
+        const database = this.database;
+        Twitch.callApi(config.api.twitch, client, function (data) {
+            if (data.isStreaming) {
+                let usersList = fetchUsersInRow(users);
+                const request = "SELECT * FROM " + configSql.tables.users_myuptime.table + " WHERE " + configSql.tables.users_myuptime.columns[1] + " IN (" + usersList + ")";
+                database.query(request, function (err, result) {
+                    if (err) {
+                        Logs.logError(err);
+                        throw err;
+                    }
+                    let updateWatchTime = [];
+                    for (let i = 0; i < result.length; ++i) {
+                        if (result[i].user_id !== config.settings.streamerId) {
+                            let userWatchTime = {
+                                userId: result[i].user_id,
+                                uptimeGlobal: result[i].uptime_global += 300000,
+                                uptimeMonth: result[i].uptime_month += 300000,
+                                uptimeWeek: result[i].uptime_week += 300000
+                            };
+                            updateWatchTime.push(userWatchTime);
+                        }
+                    }
+                    if (updateWatchTime.length < 1) {
+                        return;
+                    }
+                    let updateValues = "";
+                    for (let i = 0; i < updateWatchTime.length; ++i) {
+                        updateValues += "(" + updateWatchTime[i].userId + ", " + updateWatchTime[i].uptimeGlobal + ", " + updateWatchTime[i].uptimeMonth + ", " + updateWatchTime[i].uptimeWeek + ")";
+                        if (i + 1 < updateWatchTime.length) {
+                            updateValues += ',';
+                        }
+                    }
+                    const requestSql = "INSERT INTO " + configSql.tables.users_myuptime.table + " (" +
+                        configSql.tables.users_myuptime.columns[0] + ", " + configSql.tables.users_myuptime.columns[2] + ", " +
+                        configSql.tables.users_myuptime.columns[3] + ", " + configSql.tables.users_myuptime.columns[4] +
+                        ") VALUES " + updateValues + " ON DUPLICATE KEY UPDATE " +
+                        configSql.tables.users_myuptime.columns[2] + " = VALUES(" + configSql.tables.users_myuptime.columns[2] + ")," +
+                        configSql.tables.users_myuptime.columns[3] + " = VALUES(" + configSql.tables.users_myuptime.columns[3] + ")," +
+                        configSql.tables.users_myuptime.columns[4] + " = VALUES(" + configSql.tables.users_myuptime.columns[4] + ")";
+                    database.query(requestSql, function (err) {
+                        if (err) {
+                            Logs.logError(err);
+                            throw err;
+                        }
+                    });
+                });
+            }
+        });
+    }
+
     timeUsersXP(users, client, channel, Twitch, config) {
         const database = this.database;
         Twitch.callApi(config.api.twitch, client, function (data) {
@@ -132,6 +245,9 @@ class Mysql {
                             }
                             updateXP.push(userXp);
                         }
+                    }
+                    if (updateXP.length < 1) {
+                        return;
                     }
                     let updateValues = "";
                     for (let i = 0; i < updateXP.length; ++i) {
@@ -252,6 +368,28 @@ function createUserXpTable(database) {
         if (result.warningCount === 0) {
             Logs.logSystem("[MYSQL] - Table : " + configSql.tables.users_xp.table + " crée");
             console.log("[MYSQL] - Table : " + configSql.tables.users_xp.table + " crée");
+        }
+    });
+}
+
+function createUserUptimetable(database) {
+    const request = "CREATE TABLE IF NOT EXISTS " + configSql.tables.users_myuptime.table +
+        " (" + configSql.tables.users_myuptime.columns[0] + " INT PRIMARY KEY, " +
+        configSql.tables.users_myuptime.columns[1] + " VARCHAR(255), " +
+        configSql.tables.users_myuptime.columns[2] + " BIGINT, " +
+        configSql.tables.users_myuptime.columns[3] + " BIGINT, " +
+        configSql.tables.users_myuptime.columns[4] + " BIGINT, " +
+        configSql.tables.users_myuptime.columns[5] + " BIGINT, " +
+        configSql.tables.users_myuptime.columns[6] + " BIGINT, " +
+        configSql.tables.users_myuptime.columns[7] + " BIGINT)";
+    database.query(request, function (err, result) {
+        if (err) {
+            Logs.logError(err);
+            throw err;
+        }
+        if (result.warningCount === 0) {
+            Logs.logSystem("[MYSQL] - Table : " + configSql.tables.users_myuptime.table + " crée");
+            console.log("[MYSQL] - Table : " + configSql.tables.users_myuptime.table + " crée");
         }
     });
 }

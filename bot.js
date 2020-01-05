@@ -38,7 +38,7 @@ FunixBot.on('message', function (target, user, msg, self) {
     msg = msg.toLowerCase();
     let args = msg.split(' ');
     commands.giveaway.participant(FunixBot, user, args[0]);
-    database.messageUserXP(user, FunixBot, target, Twitch, config);
+    database.messageUser(user, FunixBot, target, Twitch, config);
     if (args[0].charAt(0) === prefix) {
         let cmd = args[0].substr(1);
         args.shift();
@@ -69,6 +69,9 @@ FunixBot.on('message', function (target, user, msg, self) {
                 break;
             case 'uptime':
                 StatusLive.uptime(config.api.twitch, FunixBot, target);
+                break;
+            case 'myuptime':
+                database.getUptimeUser(user, FunixBot, target);
                 break;
             default:
                 database.getChatCommand(cmd, function (message) {
@@ -191,6 +194,7 @@ process.stdin.on('data', function (msg) {
 setInterval(function () {
     Twitch.getChatters(config.funixbot.channels[0], FunixBot, function (users) {
         database.timeUsersXP(users, FunixBot, config.funixbot.channels[0], Twitch, config);
+        database.addWatchTimeUser(users, FunixBot, Twitch, config);
     });
 }, 300000);
 
