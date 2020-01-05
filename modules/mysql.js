@@ -297,8 +297,11 @@ class Mysql {
     }
 
     getUserClassment(cb) {
-        const request = "SELECT " + configSql.tables.users_xp.columns[1] + "," + configSql.tables.users_xp.columns[2] + "," + configSql.tables.users_xp.columns[4] +
-            " FROM " + configSql.tables.users_xp.table + " ORDER BY " + configSql.tables.users_xp.columns[4] + " DESC, " + configSql.tables.users_xp.columns[2] + " DESC LIMIT 100";
+        const request = "SELECT * FROM " + configSql.tables.users_xp.table + " INNER JOIN " +
+            configSql.tables.users_myuptime.table + " ON " + configSql.tables.users_xp.table + "." +
+            configSql.tables.users_xp.columns[0] + " = " + configSql.tables.users_myuptime.table + "." +
+            configSql.tables.users_myuptime.columns[0] + " ORDER BY " + configSql.tables.users_xp.columns[4] +
+            " DESC, " + configSql.tables.users_xp.columns[2] + " DESC LIMIT 100";
         this.database.query(request, function (err, result) {
             if (err) {
                 Logs.logError(err);
