@@ -8,7 +8,6 @@ class WebServer {
     constructor(config, database) {
         const port = config.settings.webserverPort;
         const debug = config.funixbot.options.debug;
-        this.config = config;
         this.database = database;
         this.server = app.listen(port, function () {
             if (debug) {
