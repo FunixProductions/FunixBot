@@ -45,6 +45,9 @@ class Mysql {
                 const userName = user['username'];
                 const now = Date.now();
                 const requestCommand = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
+                if (parseInt(userId) === config.settings.streamerId) {
+                    return;
+                }
                 database.query(requestCommand, function (err, result) {
                     if (err) {
                         Logs.logError(err);
@@ -108,23 +111,25 @@ class Mysql {
                     }
                     let updateXP = [];
                     for (let i = 0; i < result.length; ++i) {
-                        let userXp = {
-                            userId: result[i].user_id,
-                            xp: result[i].xp,
-                            xpNext: result[i].xp_next_level,
-                            level: result[i].level
-                        };
-                        userXp.xp += 5 + parseInt(userXp.level / 2);
-                        if (userXp.xp >= userXp.xpNext) {
-                            userXp.level++;
-                            userXp.xpNext += 30 + userXp.level;
-                            userXp.xp = 0;
-                            Logs.logSystem("[LEVEL] " + result[i].username + " est passé au niveau " + userXp.level);
-                            if (userXp.level % 5 === 0) {
-                                client.say(channel, "imGlitch " + result[i].username + " est passé au niveau " + userXp.level + ' ! imGlitch');
+                        if (result[i].user_id !== config.settings.streamerId) {
+                            let userXp = {
+                                userId: result[i].user_id,
+                                xp: result[i].xp,
+                                xpNext: result[i].xp_next_level,
+                                level: result[i].level
+                            };
+                            userXp.xp += 5 + parseInt(userXp.level / 2);
+                            if (userXp.xp >= userXp.xpNext) {
+                                userXp.level++;
+                                userXp.xpNext += 30 + userXp.level;
+                                userXp.xp = 0;
+                                Logs.logSystem("[LEVEL] " + result[i].username + " est passé au niveau " + userXp.level);
+                                if (userXp.level % 5 === 0) {
+                                    client.say(channel, "imGlitch " + result[i].username + " est passé au niveau " + userXp.level + ' ! imGlitch');
+                                }
                             }
+                            updateXP.push(userXp);
                         }
-                        updateXP.push(userXp);
                     }
                     let updateValues = "";
                     for (let i = 0; i < updateXP.length; ++i) {
@@ -152,16 +157,24 @@ class Mysql {
     }
 
     getUserExp(userId, cb) {
+        const database = this.database;
         const request = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "=" + userId;
-        this.database.query(request, function (err, result) {
+        database.query(request, function (err, result) {
             if (err) {
                 Logs.logError(err);
                 throw err;
             }
-            if (result.length !== 0)
-                cb(result[0]);
-            else
+            if (result.length !== 0) {
+                getUserRank(database, userId, function (userRank) {
+                    const data = {
+                        result: result[0],
+                        userRank: userRank
+                    };
+                    cb(data);
+                });
+            } else {
                 cb(null);
+            }
         })
     }
 
@@ -194,6 +207,23 @@ class Mysql {
             }
         });
     }
+}
+
+function getUserRank(database, userId, cb) {
+    const request = "SELECT * FROM " + configSql.tables.users_xp.table + " ORDER BY " + configSql.tables.users_xp.columns[4] + " DESC, " + configSql.tables.users_xp.columns[2] + " DESC";
+    database.query(request, function (err, result) {
+        if (err) {
+            Logs.logError(err);
+            throw err;
+        }
+        for (let i = 0; i < result.length; ++i) {
+            if (result[i].user_id === parseInt(userId)) {
+                cb(i + 1);
+                return;
+            }
+        }
+        cb(-1);
+    });
 }
 
 function createUserXpTable(database) {

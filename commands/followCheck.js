@@ -32,7 +32,7 @@ function callUserApi(config, client, userId, cb) {
             Logs.logError(err);
             throw err;
         }
-        if (body.data > 1)
+        if (body.data.length > 0)
             cb(body.data[0].followed_at);
         else
             cb(null);
