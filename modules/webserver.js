@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 let url = '';
-let topUsers = [{}];
+let topUsers = [];
 
 class WebServer {
     constructor(config, database) {
@@ -10,7 +10,7 @@ class WebServer {
         const debug = config.funixbot.options.debug;
         this.config = config;
         this.database = database;
-        this.server = app.listen(7000, function () {
+        this.server = app.listen(port, function () {
             if (debug) {
                 url = 'http://localhost:' + port;
                 console.log("Webserver running on " + url);
