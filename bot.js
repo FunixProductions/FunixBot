@@ -142,9 +142,7 @@ setInterval(function () {
 
 setInterval(function () {
     StatusLive.checkStatus(config.api.twitch, FunixBot, config.funixbot.channels[0]);
-    database.getUserClassment(function (data) {
-        WebServer.updateTopUsers(data);
-    });
+    WebServer.updateTopUsers();
 }, 10000);
 
 setInterval(function () {

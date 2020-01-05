@@ -18,10 +18,16 @@ class WebServer {
                 url = 'http://funixgaming.fr:' + port;
                 console.log("Webserver running on " + url);
             }
+            database.getUserClassment(function (data) {
+                topUsers = data;
+            });
         });
     }
-    updateTopUsers(topUsersJson) {
-        topUsers = topUsersJson;
+
+    updateTopUsers() {
+        this.database.getUserClassment(function (data) {
+            topUsers = data;
+        });
     }
 }
 
