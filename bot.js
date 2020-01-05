@@ -168,6 +168,13 @@ process.stdin.on('data', function (msg) {
                 console.log("Commande incorrecte, tapez help pour avoir la liste des commandes");
             }
             break;
+        case 'reset':
+            if (args[0] === 'week' || args[0] === 'month') {
+                database.resetUptimeUser(args[0]);
+            } else {
+                console.log("Commande incorrecte : reset week|month");
+            }
+            break;
         case 'help':
             const helpMessage = [{
                 command: "stop",

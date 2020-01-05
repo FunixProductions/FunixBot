@@ -296,6 +296,41 @@ class Mysql {
         })
     }
 
+    resetUptimeUser(status) {
+        if (status === 'week') {
+            const request1 = "UPDATE " + configSql.tables.users_myuptime.table + " SET " + configSql.tables.users_myuptime.columns[4] + " = 0";
+            const request2 = "UPDATE " + configSql.tables.users_myuptime.table + " SET " + configSql.tables.users_myuptime.columns[7] + " = 0";
+            this.database.query(request1, function (err) {
+                if (err) {
+                    Logs.logError(err);
+                    throw err;
+                }
+            });
+            this.database.query(request2, function (err) {
+                if (err) {
+                    Logs.logError(err);
+                    throw err;
+                }
+            });
+        }
+        if (status === 'month') {
+            const request1 = "UPDATE " + configSql.tables.users_myuptime.table + " SET " + configSql.tables.users_myuptime.columns[3] + " = 0";
+            const request2 = "UPDATE " + configSql.tables.users_myuptime.table + " SET " + configSql.tables.users_myuptime.columns[6] + " = 0";
+            this.database.query(request1, function (err) {
+                if (err) {
+                    Logs.logError(err);
+                    throw err;
+                }
+            });
+            this.database.query(request2, function (err) {
+                if (err) {
+                    Logs.logError(err);
+                    throw err;
+                }
+            });
+        }
+    }
+
     getUserClassment(cb) {
         const request = "SELECT * FROM " + configSql.tables.users_xp.table + " INNER JOIN " +
             configSql.tables.users_myuptime.table + " ON " + configSql.tables.users_xp.table + "." +
