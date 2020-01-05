@@ -129,8 +129,62 @@ process.stdin.on('data', function (msg) {
                 console.log(logsDeleted + " logs ont été supprimés");
             });
             break;
+        case 'apiKey':
+            const dataFolderPath = './data/';
+            const apiKeyPath = dataFolderPath + 'apikey.txt';
+            if (args[0] === "generate") {
+                const apiKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                if (!fs.existsSync(dataFolderPath)) {
+                    fs.mkdirSync(dataFolderPath);
+                }
+                if (!fs.existsSync(apiKeyPath)) {
+                    fs.appendFile(apiKeyPath, apiKey, function () {
+                        console.log("[ApiKey] - Nouvelle clé générée : " + apiKey);
+                    });
+                } else {
+                    fs.writeFile(apiKeyPath, apiKey, function () {
+                        console.log("[ApiKey] - Nouvelle clé générée : " + apiKey);
+                    });
+                }
+            } else if (args[0] === "show") {
+                if (!fs.existsSync(dataFolderPath)) {
+                    fs.mkdirSync(dataFolderPath);
+                }
+                if (!fs.existsSync(apiKeyPath)) {
+                    console.log("[ApiKey] - Pas de clef générée");
+                    return;
+                }
+                fs.readFile(apiKeyPath, function (err, data) {
+                    if (err) {
+                        Logs.logError(err);
+                        throw err;
+                    }
+                    console.log(data.toString('utf-8'));
+                });
+            } else {
+                console.log("Commande incorrecte, tapez help pour avoir la liste des commandes");
+            }
+            break;
+        case 'help':
+            const helpMessage = [{
+                command: "stop",
+                do: "Stoppe le bot."
+            }, {
+                command: "say [message]",
+                do: "Envoie un message sur le chat."
+            }, {
+                command: "purgeLogs",
+                do: "Supprime les logs qui ont plus d'un mois d'ancienneté"
+            }, {
+                command: "apiKey [generate|show]",
+                do: "Génère ou supprime la clé API"
+            }];
+            for (let i = 0; i < helpMessage.length; ++i) {
+                console.log(helpMessage[i].command + " : " + helpMessage[i].do);
+            }
+            break;
         default:
-            console.log("Commande non reconnue : " + cmd);
+            console.log("Commande non reconnue : " + cmd + ". Tapez help pour avoir la liste des commandes");
     }
 });
 
@@ -142,7 +196,6 @@ setInterval(function () {
 
 setInterval(function () {
     StatusLive.checkStatus(config.api.twitch, FunixBot, config.funixbot.channels[0]);
-    WebServer.updateTopUsers();
 }, 10000);
 
 setInterval(function () {

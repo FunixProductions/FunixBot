@@ -10,7 +10,11 @@ let commandsIncluded = [
 
 class Help {
     static command(client, database, channel) {
-        database.getCommandList(function (commandList) {
+        database.getCommandList(function (result) {
+            let commandList = [];
+            for (let i = 0; i < result.length; ++i) {
+                commandList.push(result[i].command);
+            }
             let message = "Voici la liste des commandes (précédées d'un !) -> ";
             for (let i = 0; i < commandList.length; ++i) {
                 message += commandList[i] + ' ';

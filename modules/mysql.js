@@ -193,17 +193,13 @@ class Mysql {
     }
 
     getCommandList(cb) {
-        const requestCommand = "SELECT " + configSql.tables.chat_commands.columns[1] + " FROM " + configSql.tables.chat_commands.table;
+        const requestCommand = "SELECT " + configSql.tables.chat_commands.columns[1] + "," + configSql.tables.chat_commands.columns[2] + " FROM " + configSql.tables.chat_commands.table;
         this.database.query(requestCommand, function (err, result) {
             if (err) {
                 Logs.logError(err);
                 throw err;
             }
-            let commandList = [];
-            for (let i = 0; i < result.length; ++i) {
-                commandList.push(result[i].command);
-            }
-            cb(commandList);
+            cb(result);
         });
     }
 
