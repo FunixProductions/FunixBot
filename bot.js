@@ -5,7 +5,6 @@ console.log("\x1b[33mDémarrage du bot...\x1b[0m");
 const fs = require('fs');
 
 const Logs = require('./modules/logs');
-Logs.logSystem("Démarrage du bot.");
 const Mysql = require('./modules/mysql');
 const Twitch = require('./modules/twitch');
 const NewFollowerClass = require('./modules/newFollower');
