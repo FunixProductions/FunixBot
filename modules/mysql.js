@@ -74,6 +74,7 @@ class Mysql {
                                 xp_next += 30 + level;
                                 xp = 0;
                                 Logs.logSystem("[LEVEL] " + user['display-name'] + " est passé au niveau " + level);
+                                console.log("[LEVEL] " + user['display-name'] + " est passé au niveau " + level);
                                 if (level % 5 === 0) {
                                     client.say(channel, "imGlitch " + user['display-name'] + " est passé au niveau " + level + ' ! imGlitch');
                                 }
@@ -124,6 +125,7 @@ class Mysql {
                                 userXp.xpNext += 30 + userXp.level;
                                 userXp.xp = 0;
                                 Logs.logSystem("[LEVEL] " + result[i].username + " est passé au niveau " + userXp.level);
+                                console.log("[LEVEL] " + result[i].username + " est passé au niveau " + userXp.level);
                                 if (userXp.level % 5 === 0) {
                                     client.say(channel, "imGlitch " + result[i].username + " est passé au niveau " + userXp.level + ' ! imGlitch');
                                 }
