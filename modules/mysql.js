@@ -236,6 +236,7 @@ function createCommandsTable(database) {
                 "('twitter', 'Mon twitter : https://twitter.com/funixgaming')," +
                 "('instagram', 'Mon instagram : https://instagram.com/funixgaming_')," +
                 "('youtube', 'Ma chaine YouTube : https://youtube.com/c/funixgaming')," +
+                "('utip', 'Mon utip : https://utip.io/funixgaming (me soutenir via les pubs)')," +
                 "('don', \"La donnation est un moyen d'aider et de me soutenir : https://streamlabs.com/funixgaming\")," +
                 "('sub', \"LE SUB C'EST VRAIMENT SUPER ! : https://www.twitch.tv/products/funixgaming <3\")," +
                 "('battlenet', \"Pour m'ajouter en ami sur BattleNet : FunixGaming#2154\")";
