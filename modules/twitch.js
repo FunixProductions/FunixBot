@@ -79,6 +79,11 @@ function callTwitchApi(config, client, cb) {
             Logs.logError(err);
             throw err;
         }
+        if (body.length < 1) {
+            dataApi.isStreaming = false;
+            cb(dataApi);
+            return;
+        }
         if (body.data.length === 0) {
             dataApi.isStreaming = false;
             cb(dataApi);
