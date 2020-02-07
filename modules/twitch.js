@@ -80,8 +80,7 @@ function callTwitchApi(config, client, cb) {
             throw err;
         }
         if (body.length < 1) {
-            dataApi.isStreaming = false;
-            cb(dataApi);
+            cb(null);
             return;
         }
         if (body.data.length === 0) {
@@ -109,7 +108,12 @@ function getGameName(client, options) {
                 Logs.logError(err);
                 throw err;
             }
-            callback(body.data[0].name);
+            if (body.length < 1) {
+                cb(null);
+                return;
+            }
+            if (body.data.length > 0)
+                callback(body.data[0].name);
         });
     };
 }
