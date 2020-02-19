@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const Logs = require('./logs');
+const StatusLive = require('./statusLive');
 
 const configSql = {
     tables: {
@@ -44,93 +45,92 @@ class Mysql {
 
     messageUser(user, client, channel, Twitch, config) {
         const database = this.database;
-        Twitch.callApi(config.api.twitch, client, function (data) {
-            if (data.isStreaming) {
-                const userId = user['user-id'];
-                const userName = user['username'];
-                const now = Date.now();
-                const requestCommandXp = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
-                const requestCommandNbrMessage = "SELECT * FROM " + configSql.tables.users_myuptime.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
-                if (parseInt(userId) === config.settings.streamerId) {
-                    return;
-                }
-                database.query(requestCommandNbrMessage, function (err, result) {
-                    if (err) {
-                        Logs.logError(err);
-                        throw err;
-                    }
-                    if (result.length < 1) {
-                        const insertNbrMessages = "INSERT INTO " + configSql.tables.users_myuptime.table + " VALUES (" + userId + ",'" + userName + "',0,0,0,1,1,1)";
-                        database.query(insertNbrMessages, function (err) {
-                            if (err) {
-                                Logs.logError(err);
-                                throw err;
-                            }
-                        });
-                    } else {
-                        const requestMessageUpdate = "UPDATE " + configSql.tables.users_myuptime.table + " SET " +
-                            configSql.tables.users_myuptime.columns[1] + "= '" + userName + "', " +
-                            configSql.tables.users_myuptime.columns[5] + "=" + (result[0].messages_global += 1) + ", " +
-                            configSql.tables.users_myuptime.columns[6] + "=" + (result[0].messages_month += 1) + ", " +
-                            configSql.tables.users_myuptime.columns[7] + "=" + (result[0].messages_week += 1) +
-                            " WHERE " + configSql.tables.users_myuptime.columns[0] + "=" + userId;
-                        database.query(requestMessageUpdate, function (err) {
-                            if (err) {
-                                Logs.logError(err);
-                                throw err;
-                            }
-                        });
-                    }
-                });
-                database.query(requestCommandXp, function (err, result) {
-                    if (err) {
-                        Logs.logError(err);
-                        throw err;
-                    }
-                    if (result.length < 1) {
-                        const requestInsert = "INSERT INTO " + configSql.tables.users_xp.table + " VALUES (" + userId + ", '" + userName + "', 0, 50, 0, " + now + ")";
-                        database.query(requestInsert, function (err) {
-                            if (err) {
-                                Logs.logError(err);
-                                throw err;
-                            }
-                        });
-                    } else {
-                        let xp = result[0].xp;
-                        let xp_next = result[0].xp_next_level;
-                        let level = result[0].level;
-                        let lastMessageTimestamp = result[0].last_message_time;
-                        const now = Date.now();
-                        if ((now - lastMessageTimestamp) / 1000 >= 210) {
-                            xp += 10 + parseInt(level / 2);
-                            if (xp >= xp_next) {
-                                level++;
-                                xp_next += 30 + level;
-                                xp = 0;
-                                Logs.logSystem("[LEVEL] " + user['display-name'] + " est passé au niveau " + level);
-                                console.log("[LEVEL] " + user['display-name'] + " est passé au niveau " + level);
-                                if (level % 5 === 0) {
-                                    client.say(channel, "imGlitch " + user['display-name'] + " est passé au niveau " + level + ' ! imGlitch');
-                                }
-                            }
-                            const requestXpUpdate = "UPDATE " + configSql.tables.users_xp.table + " SET " +
-                                configSql.tables.users_xp.columns[1] + "= '" + userName + "', " +
-                                configSql.tables.users_xp.columns[2] + "=" + xp + ", " +
-                                configSql.tables.users_xp.columns[3] + "=" + xp_next + ", " +
-                                configSql.tables.users_xp.columns[4] + "=" + level + ", " +
-                                configSql.tables.users_xp.columns[5] + "=" + now +
-                                " WHERE " + configSql.tables.users_xp.columns[0] + "=" + userId;
-                            database.query(requestXpUpdate, function (err) {
-                                if (err) {
-                                    Logs.logError(err);
-                                    throw err;
-                                }
-                            });
-                        }
-                    }
-                });
+        if (StatusLive.getStatus() === true) {
+            const userId = user['user-id'];
+            if (userId === 19264788 || userId === 52268235) return; //Ban wizebot and nightbot
+            const userName = user['username'];
+            const now = Date.now();
+            const requestCommandXp = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
+            const requestCommandNbrMessage = "SELECT * FROM " + configSql.tables.users_myuptime.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
+            if (parseInt(userId) === config.settings.streamerId) {
+                return;
             }
-        });
+            database.query(requestCommandNbrMessage, function (err, result) {
+                if (err) {
+                    Logs.logError(err);
+                    throw err;
+                }
+                if (result.length < 1) {
+                    const insertNbrMessages = "INSERT INTO " + configSql.tables.users_myuptime.table + " VALUES (" + userId + ",'" + userName + "',0,0,0,1,1,1)";
+                    database.query(insertNbrMessages, function (err) {
+                        if (err) {
+                            Logs.logError(err);
+                            throw err;
+                        }
+                    });
+                } else {
+                    const requestMessageUpdate = "UPDATE " + configSql.tables.users_myuptime.table + " SET " +
+                        configSql.tables.users_myuptime.columns[1] + "= '" + userName + "', " +
+                        configSql.tables.users_myuptime.columns[5] + "=" + (result[0].messages_global += 1) + ", " +
+                        configSql.tables.users_myuptime.columns[6] + "=" + (result[0].messages_month += 1) + ", " +
+                        configSql.tables.users_myuptime.columns[7] + "=" + (result[0].messages_week += 1) +
+                        " WHERE " + configSql.tables.users_myuptime.columns[0] + "=" + userId;
+                    database.query(requestMessageUpdate, function (err) {
+                        if (err) {
+                            Logs.logError(err);
+                            throw err;
+                        }
+                    });
+                }
+            });
+            database.query(requestCommandXp, function (err, result) {
+                if (err) {
+                    Logs.logError(err);
+                    throw err;
+                }
+                if (result.length < 1) {
+                    const requestInsert = "INSERT INTO " + configSql.tables.users_xp.table + " VALUES (" + userId + ", '" + userName + "', 0, 50, 0, " + now + ")";
+                    database.query(requestInsert, function (err) {
+                        if (err) {
+                            Logs.logError(err);
+                            throw err;
+                        }
+                    });
+                } else {
+                    let xp = result[0].xp;
+                    let xp_next = result[0].xp_next_level;
+                    let level = result[0].level;
+                    let lastMessageTimestamp = result[0].last_message_time;
+                    const now = Date.now();
+                    if ((now - lastMessageTimestamp) / 1000 >= 210) {
+                        xp += 10 + parseInt(level / 2);
+                        if (xp >= xp_next) {
+                            level++;
+                            xp_next += 30 + level;
+                            xp = 0;
+                            Logs.logSystem("[LEVEL] " + user['display-name'] + " est passé au niveau " + level);
+                            console.log("[LEVEL] " + user['display-name'] + " est passé au niveau " + level);
+                            if (level % 5 === 0) {
+                                client.say(channel, "imGlitch " + user['display-name'] + " est passé au niveau " + level + ' ! imGlitch');
+                            }
+                        }
+                        const requestXpUpdate = "UPDATE " + configSql.tables.users_xp.table + " SET " +
+                            configSql.tables.users_xp.columns[1] + "= '" + userName + "', " +
+                            configSql.tables.users_xp.columns[2] + "=" + xp + ", " +
+                            configSql.tables.users_xp.columns[3] + "=" + xp_next + ", " +
+                            configSql.tables.users_xp.columns[4] + "=" + level + ", " +
+                            configSql.tables.users_xp.columns[5] + "=" + now +
+                            " WHERE " + configSql.tables.users_xp.columns[0] + "=" + userId;
+                        database.query(requestXpUpdate, function (err) {
+                            if (err) {
+                                Logs.logError(err);
+                                throw err;
+                            }
+                        });
+                    }
+                }
+            });
+        }
     }
 
     getUptimeUser(user, client, target) {
@@ -225,7 +225,7 @@ class Mysql {
                     }
                     let updateXP = [];
                     for (let i = 0; i < result.length; ++i) {
-                        if (result[i].user_id !== config.settings.streamerId) {
+                        if (result[i].user_id !== config.settings.streamerId && result[i].user_id !== 19264788 && result[i].user_id !== 52268235) { //ban streamer wizebot and nightbot
                             let userXp = {
                                 userId: result[i].user_id,
                                 xp: result[i].xp,

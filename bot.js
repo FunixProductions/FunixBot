@@ -207,8 +207,5 @@ setInterval(function () {
 
 setInterval(function () {
     StatusLive.checkStatus(config.api.twitch, FunixBot, config.funixbot.channels[0]);
-}, 10000);
-
-setInterval(function () {
     NewFollower.checkNewFollower();
-}, 5000);
+}, 10000);

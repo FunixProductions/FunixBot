@@ -7,6 +7,7 @@ let title = '';
 let nbrMessages = 0;
 
 class StatusLive {
+    static getStatus() { return isStreaming; }
     static checkStatus(config, client, target) {
         Twitch.callApi(config, client, function (data) {
             if (data.isStreaming && !isStreaming) {

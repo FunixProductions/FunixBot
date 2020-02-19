@@ -79,10 +79,6 @@ function callTwitchApi(config, client, cb) {
             Logs.logError(err);
             throw err;
         }
-        if (body.length < 1) {
-            cb(null);
-            return;
-        }
         if (body.data.length === 0) {
             dataApi.isStreaming = false;
             cb(dataApi);
@@ -107,10 +103,6 @@ function getGameName(client, options) {
             if (err) {
                 Logs.logError(err);
                 throw err;
-            }
-            if (body.length < 1) {
-                cb(null);
-                return;
             }
             if (body.data.length > 0)
                 callback(body.data[0].name);
