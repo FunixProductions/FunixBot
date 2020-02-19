@@ -47,7 +47,7 @@ class Mysql {
         const database = this.database;
         if (StatusLive.getStatus() === true) {
             const userId = user['user-id'];
-            if (userId === 19264788 || userId === 52268235) return; //Ban wizebot and nightbot
+            if (userId === '19264788' || userId === '52268235') return; //Ban wizebot and nightbot
             const userName = user['username'];
             const now = Date.now();
             const requestCommandXp = "SELECT * FROM " + configSql.tables.users_xp.table + " WHERE " + configSql.tables.users_xp.columns[0] + "='" + userId + "'";
