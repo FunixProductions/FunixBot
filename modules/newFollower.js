@@ -49,6 +49,8 @@ function getLastFollower(client, config, cb) {
             Logs.logError(err);
             throw err;
         }
+        if (!body.data)
+            return;
         const data = {
             userName: body.data[0].from_name,
             userId: parseInt(body.data[0].from_id),
