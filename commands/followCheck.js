@@ -34,6 +34,11 @@ function callUserApi(config, client, userId, cb) {
                 Logs.logError(err);
                 throw err;
             }
+            if (!body.data) {
+                console.log("\x1b[31mERROR - FETCH TWITCH FOLLOWS DATA (More info in logs)\x1b[0m");
+                Logs.logError("Error when fetching twitch follow api: " + JSON.stringify(body));
+                return;
+            }
             if (body.data.length > 0)
                 cb(body.data[0].followed_at);
             else
