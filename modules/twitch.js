@@ -1,5 +1,9 @@
 const tmi = require('tmi.js');
 const Logs = require('./logs');
+const dataDirPath = './data/';
+const bearerTokenFilePath = dataDirPath + 'bearerToken.json';
+const fs = require('fs');
+const fetch = require('node-fetch');
 
 class Twitch {
     constructor(config) {
@@ -59,42 +63,85 @@ function getChatters(channel, client, cb) {
     });
 }
 
+function getBearerToken(config) {
+    return function (callback) {
+        if (!fs.existsSync(dataDirPath))
+            fs.mkdirSync(dataDirPath);
+        if (!fs.existsSync(bearerTokenFilePath))
+            fs.appendFileSync(bearerTokenFilePath, '{"notGenerated": true}');
+        const bearerStored = JSON.parse(fs.readFileSync(bearerTokenFilePath));
+        if (bearerStored.notGenerated || (new Date().getTime() - bearerStored.generated_timestamp >= bearerStored.expires_in - 60)) {
+            let url = 'https://id.twitch.tv/oauth2/token?client_id=' + config.apiKey +
+                '&client_secret=' + config.clientSecret +
+                '&grant_type=client_credentials' +
+                '&scope=bits:read channel:edit:commercial channel:read:subscriptions channel:moderate chat:edit chat:read whispers:read whispers:edit clips:edit user:edit user:edit:broadcast user:edit:follows';
+            let options = {
+                method: "POST"
+            };
+            fetch(url, options)
+                .then(res => res.json())
+                .then((body) => {
+                    if (!body.access_token || !body.expires_in) {
+                        console.log("\x1b[31mERROR - FETCH BEARER TOKEN (More info in logs)\x1b[0m");
+                        Logs.logError("Error while get new bearer token: " + JSON.stringify(body));
+                        return;
+                    }
+                    const toFile = {
+                        "generated_timestamp": new Date().getTime(),
+                        "access_token": body.access_token,
+                        "expires_in": body.expires_in
+                    }
+                    fs.writeFileSync(bearerTokenFilePath, JSON.stringify(toFile), 'utf8');
+                    callback(body.access_token);
+                });
+        } else {
+            callback(bearerStored.access_token);
+        }
+    }
+}
+
 function callTwitchApi(config, client, cb) {
-    let options = {
-        url: 'https://api.twitch.tv/helix/streams?user_login=' + config.channel,
-        method: "GET",
-        headers: {
-            'Client-ID': config.apiKey
-        }
-    };
-    client.api(options, function (err, res, body) {
-        let dataApi = {
-            isStreaming: "null",
-            title: "null",
-            game_id: 0,
-            game: "null",
-            viewers: 0
+    getBearerToken(config)((bearerToken) => {
+        let options = {
+            url: 'https://api.twitch.tv/helix/streams?user_login=' + config.channel,
+            method: "GET",
+            headers: {
+                'Client-ID': config.apiKey,
+                'Authorization' : 'Bearer ' + bearerToken
+            }
         };
-        if (err) {
-            Logs.logError(err);
-            throw err;
-        }
-        if (!body.data)
-            return;
-        if (body.data.length === 0) {
-            dataApi.isStreaming = false;
-            cb(dataApi);
-            return;
-        }
-        let live = body.data[0];
-        dataApi.isStreaming = true;
-        dataApi.title = live.title;
-        dataApi.viewers = live.viewer_count;
-        dataApi.game_id = live.game_id;
-        options.url = 'https://api.twitch.tv/helix/games?id=' + live.game_id;
-        getGameName(client, options)((gameName) => {
-            dataApi.game = gameName;
-            cb(dataApi);
+        client.api(options, function (err, res, body) {
+            let dataApi = {
+                isStreaming: "null",
+                title: "null",
+                game_id: 0,
+                game: "null",
+                viewers: 0
+            };
+            if (err) {
+                Logs.logError(err);
+                throw err;
+            }
+            if (!body.data) {
+                console.log("\x1b[31mERROR - FETCH TWITCH STREAM DATA (More info in logs)\x1b[0m");
+                Logs.logError("Error when fetching twitch streams api: " + JSON.stringify(body));
+                return;
+            }
+            if (body.data.length === 0) {
+                dataApi.isStreaming = false;
+                cb(dataApi);
+                return;
+            }
+            let live = body.data[0];
+            dataApi.isStreaming = true;
+            dataApi.title = live.title;
+            dataApi.viewers = live.viewer_count;
+            dataApi.game_id = live.game_id;
+            options.url = 'https://api.twitch.tv/helix/games?id=' + live.game_id;
+            getGameName(client, options)((gameName) => {
+                dataApi.game = gameName;
+                cb(dataApi);
+            });
         });
     });
 }
@@ -106,8 +153,11 @@ function getGameName(client, options) {
                 Logs.logError(err);
                 throw err;
             }
-            if (!body.data)
+            if (!body.data) {
+                console.log("\x1b[31mERROR - FETCH TWITCH STREAM DATA (More info in logs)\x1b[0m");
+                Logs.logError("Error when fetching twitch streams api: " + JSON.stringify(body));
                 return;
+            }
             if (body.data.length > 0)
                 callback(body.data[0].name);
         });
@@ -120,3 +170,4 @@ module.exports.isSub = isSub;
 module.exports.isStreamer = isStreamer;
 module.exports.callApi = callTwitchApi;
 module.exports.getChatters = getChatters;
+module.exports.getBearerToken = getBearerToken;

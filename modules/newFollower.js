@@ -2,6 +2,7 @@ const Logs = require('./logs');
 const dataDirPath = './data/';
 const followersFilePath = dataDirPath + 'followers.json';
 const fs = require('fs');
+const Twitch = require('../modules/twitch');
 
 class NewFollower {
     constructor(client, config) {
@@ -37,27 +38,33 @@ function hasAlreadyFollowed(userId) {
 }
 
 function getLastFollower(client, config, cb) {
-    const options = {
-        url: 'https://api.twitch.tv/helix/users/follows?to_id=' + config.settings.streamerId + '&first=1',
-        method: "GET",
-        headers: {
-            'Client-ID': config.api.twitch.apiKey
-        }
-    };
-    client.api(options, function (err, res, body) {
-        if (err) {
-            Logs.logError(err);
-            throw err;
-        }
-        if (!body.data)
-            return;
-        const data = {
-            userName: body.data[0].from_name,
-            userId: parseInt(body.data[0].from_id),
-            nbrFollows: body.total
+    Twitch.getBearerToken(config.api.twitch)((bearerToken) => {
+        const options = {
+            url: 'https://api.twitch.tv/helix/users/follows?to_id=' + config.settings.streamerId + '&first=1',
+            method: "GET",
+            headers: {
+                'Client-ID': config.api.twitch.apiKey,
+                'Authorization' : 'Bearer ' + bearerToken
+            }
         };
-        cb(data);
-    });
+        client.api(options, function (err, res, body) {
+            if (err) {
+                Logs.logError(err);
+                throw err;
+            }
+            if (!body.data || body.data.length < 1) {
+                console.log("\x1b[31mERROR - FETCH TWITCH STREAM LAST FOLLOWER (More info in logs)\x1b[0m");
+                Logs.logError("Error when fetching twitch last follow api: " + JSON.stringify(body));
+                return;
+            }
+            const data = {
+                userName: body.data[0].from_name,
+                userId: parseInt(body.data[0].from_id),
+                nbrFollows: body.total
+            };
+            cb(data);
+        });
+    })
 }
 
 function checkFollowersFile() {

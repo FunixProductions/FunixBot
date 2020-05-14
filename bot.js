@@ -4,6 +4,7 @@ console.log("\x1b[33mDémarrage du bot...\x1b[0m");
 
 const fs = require('fs');
 
+const config = require('./.env.json');
 const Logs = require('./modules/logs');
 const Mysql = require('./modules/mysql');
 const Twitch = require('./modules/twitch');
@@ -11,9 +12,9 @@ const NewFollowerClass = require('./modules/newFollower');
 const AutoMessagesClass = require('./modules/autoMessages');
 const StatusLive = require('./modules/statusLive');
 const WebServerClass = require('./modules/webserver');
-const config = require('./.env.json');
 
 let database = new Mysql(config.mysql);
+database.init();
 let FunixBot = new Twitch(config.funixbot).client;
 let AutoMessages = new AutoMessagesClass(config.settings.autoMessages);
 let NewFollower = new NewFollowerClass(FunixBot, config);

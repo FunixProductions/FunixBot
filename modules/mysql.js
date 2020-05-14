@@ -36,11 +36,14 @@ class Mysql {
                 throw err;
             }
             console.log("[MYSQL] - Base SQL : " + host + "/" + databaseName + " connectée.");
-            createCommandsTable(database);
-            createUserXpTable(database);
-            createUserUptimetable(database);
         });
         this.database = database;
+    }
+
+    init() {
+        createCommandsTable(this.database);
+        createUserXpTable(this.database);
+        createUserUptimetable(this.database);
     }
 
     messageUser(user, client, channel, Twitch, config) {
