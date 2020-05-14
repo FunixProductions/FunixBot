@@ -44,6 +44,8 @@ FunixBot.on('message', function (target, user, msg, self) {
         let cmd = args[0].substr(1);
         args.shift();
         switch (cmd) {
+            case 'play':
+                break;
             case 'prime':
                 commands.prime.command(FunixBot, user['display-name']);
                 break;
