@@ -20,23 +20,26 @@ class FollowCheck {
 }
 
 function callUserApi(config, client, userId, cb) {
-    let options = {
-        url: 'https://api.twitch.tv/helix/users/follows?to_id=' + config.settings.streamerId + '&from_id=' + userId,
-        method: "GET",
-        headers: {
-            'Client-ID': config.api.twitch.apiKey
-        }
-    };
-    client.api(options, function (err, res, body) {
-        if (err) {
-            Logs.logError(err);
-            throw err;
-        }
-        if (body.data.length > 0)
-            cb(body.data[0].followed_at);
-        else
-            cb(null);
-    })
+    Twitch.getBearerToken(config.api.twitch)((bearerToken) => {
+        let options = {
+            url: 'https://api.twitch.tv/helix/users/follows?to_id=' + config.settings.streamerId + '&from_id=' + userId,
+            method: "GET",
+            headers: {
+                'Client-ID': config.api.twitch.apiKey,
+                'Authorization' : 'Bearer ' + bearerToken
+            }
+        };
+        client.api(options, function (err, res, body) {
+            if (err) {
+                Logs.logError(err);
+                throw err;
+            }
+            if (body.data.length > 0)
+                cb(body.data[0].followed_at);
+            else
+                cb(null);
+        })
+    });
 }
 
 function getFollowTime(date) {
