@@ -1,4 +1,5 @@
 const Logs = require('../modules/logs');
+const Twitch = require('../modules/twitch');
 
 class FollowCheck {
     static command(client, user, target, Twitch, config) {
