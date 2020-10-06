@@ -1,5 +1,5 @@
 const ip = "play.pacifista.fr";
-const version = "1.15.2";
+const version = "1.16.3";
 
 class Ip {
     static command(client, channel) {

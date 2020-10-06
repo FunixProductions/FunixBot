@@ -74,7 +74,7 @@ function getBearerToken(config) {
             let url = 'https://id.twitch.tv/oauth2/token?client_id=' + config.apiKey +
                 '&client_secret=' + config.clientSecret +
                 '&grant_type=client_credentials' +
-                '&scope=bits:read channel:edit:commercial channel:read:subscriptions channel:moderate chat:edit chat:read whispers:read whispers:edit clips:edit user:edit user:edit:broadcast user:edit:follows';
+                '&scope=bits:read channel:edit:commercial channel:read:redemptions channel:read:subscriptions channel:moderate chat:edit chat:read whispers:read whispers:edit clips:edit user:edit user:edit:broadcast user:edit:follows';
             let options = {
                 method: "POST"
             };
