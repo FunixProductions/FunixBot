@@ -23,7 +23,7 @@ class WebServer {
 }
 
 app.get('/twitch/sounds', function (req, res) {
-    res.render('twitch/sounds', {locals: {config: JSON.stringify(config)}});
+    res.render('twitch/sounds', {locals: {channelID: config.settings.streamerId}});
 });
 
 app.get('/api/topusers', function (req, res) {

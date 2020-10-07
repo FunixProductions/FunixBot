@@ -40,7 +40,7 @@ function connectTwitchPubSub() {
         console.log("Connected to twitch pubsub !")
         heartbeat();
         heartbeatHandle = setInterval(heartbeat, heartbeatInterval);
-        listen(['channel-points-channel-v1.' + config.settings.streamerId]);
+        listen(['channel-points-channel-v1.' + config]);
     }
 
     ws.onerror = function (error) {
@@ -56,7 +56,7 @@ function connectTwitchPubSub() {
             if (message.error.length > 0)
                 console.log("response: " + message.error);
         } else if (message.type === 'MESSAGE') {
-            if (message.data.topic === 'channel-points-channel-v1.' + config.settings.streamerId) {
+            if (message.data.topic === 'channel-points-channel-v1.' + config) {
                 let redemption = JSON.parse(message.data.message);
                 if (redemption.data.redemption.reward.id === '1b48b6e2-83f3-4af6-bf4b-25843910176a') {
                     playSound('sound');
