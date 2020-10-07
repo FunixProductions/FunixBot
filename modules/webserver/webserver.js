@@ -8,6 +8,7 @@ const app = express();
 app.engine('html', es6Renderer);
 app.set('views', './modules/webserver/views/');
 app.set('view engine', 'html');
+app.use(express.static('modules/webserver/public'));
 
 let database;
 

@@ -35,7 +35,7 @@ function connect() {
             } else if (serverMsg.type === 'MESSAGE') {
                 if (serverMsg.data.topic === 'channel-points-channel-v1.' + config.settings.streamerId) {
                     let redemption = serverMsg.data.message;
-                    console.log("Channel point !");//TODO Make more work on it
+                    //console.log("Channel point !");//TODO Make more work on it
                 }
             }
         });

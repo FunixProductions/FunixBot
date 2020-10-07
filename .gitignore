@@ -4,3 +4,5 @@ node_modules/
 package-lock.json
 logs/*.log
 data/*
+
+modules/webserver/public/sounds/*.mp3
