@@ -3,6 +3,7 @@
   "lockfileVersion": 1,
   "dependencies": {
     "express": "^4.17.1",
+    "express-es6-template-engine": "^2.2.3",
     "mysql": "^2.17.1",
     "node-fetch": "^2.6.1",
     "tmi.js": "^1.5.0",

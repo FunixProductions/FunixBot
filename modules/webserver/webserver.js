@@ -1,39 +1,37 @@
 const express = require('express');
+const es6Renderer = require('express-es6-template-engine');
 const fs = require('fs');
-const Logs = require('../modules/logs');
+const Logs = require('../logs');
+const config = require('../../.env.json');
 
 const app = express();
+app.engine('html', es6Renderer);
+app.set('views', './modules/webserver/views/');
+app.set('view engine', 'html');
+
 let database;
 
-let url = '';
-let topUsers = [];
-
 class WebServer {
-    constructor(config, db) {
+    constructor(db) {
         const port = config.settings.webserverPort;
-        const debug = config.funixbot.options.debug;
         database = db;
         app.listen(port, function () {
-            if (debug) {
-                url = 'http://localhost:' + port;
-                console.log("Webserver running on " + url);
-            } else {
-                url = 'http://funixgaming.fr:' + port;
-                console.log("Webserver running on " + url);
-            }
-            database.getUserClassment(function (data) {
-                topUsers = data;
-            });
+            console.log("Webserver running on port: " + port);
         });
     }
 }
+
+app.get('/twitch/sounds', function (req, res) {
+    res.render('twitch/sounds', {locals: {config: JSON.stringify(config)}});
+});
 
 app.get('/api/topusers', function (req, res) {
     const apiKeyHeader = req.header('api-key');
     checkApiKey(apiKeyHeader, req, res, function (status) {
         if (status) {
             database.getUserClassment(function (data) {
-                res.send(data);
+                res.type('json');
+                res.json(data);
             });
         }
     });
@@ -45,7 +43,7 @@ app.get('/api/commandlist', function (req, res) {
         if (status) {
             database.getCommandList(function (data) {
                 res.type('json');
-                res.send(data);
+                res.json(data);
             });
         }
     });

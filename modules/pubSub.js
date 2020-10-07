@@ -1,4 +1,3 @@
-const Twitch = require('./twitch');
 const config = require('../.env.json');
 const WebSocketClient = require('websocket').client;
 
@@ -49,17 +48,15 @@ function connect() {
         }
 
         function listen(topic) {
-            Twitch.getBearerToken(config.api.twitch)(bearer => {
-                let message = {
-                    type: 'LISTEN',
-                    nonce: nonce(15),
-                    data: {
-                        topics: topic,
-                        auth_token: 'k8qm0y4b9b2ks148jds88c2x2reo4t'
-                    }
-                };
-                connection.sendUTF(JSON.stringify(message));
-            });
+            let message = {
+                type: 'LISTEN',
+                nonce: nonce(15),
+                data: {
+                    topics: topic,
+                    auth_token: 'k8qm0y4b9b2ks148jds88c2x2reo4t'
+                }
+            };
+            connection.sendUTF(JSON.stringify(message));
         }
 
         heartbeat();

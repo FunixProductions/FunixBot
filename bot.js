@@ -11,14 +11,14 @@ const Twitch = require('./modules/twitch');
 const NewFollowerClass = require('./modules/newFollower');
 const AutoMessagesClass = require('./modules/autoMessages');
 const StatusLive = require('./modules/statusLive');
-const WebServerClass = require('./modules/webserver');
+const WebServerClass = require('./modules/webserver/webserver');
 
 let database = new Mysql(config.mysql);
 database.init();
 let FunixBot = new Twitch(config.funixbot).client;
 let AutoMessages = new AutoMessagesClass(config.settings.autoMessages);
 let NewFollower = new NewFollowerClass(FunixBot, config);
-let WebServer = new WebServerClass(config, database);
+let WebServer = new WebServerClass(database);
 
 require('./modules/pubSub');
 
