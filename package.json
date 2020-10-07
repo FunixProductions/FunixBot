@@ -5,7 +5,8 @@
     "express": "^4.17.1",
     "mysql": "^2.17.1",
     "node-fetch": "^2.6.1",
-    "tmi.js": "^1.5.0"
+    "tmi.js": "^1.5.0",
+    "websocket": "^1.0.32"
   },
   "name": "funixbot",
   "version": "1.0.0",

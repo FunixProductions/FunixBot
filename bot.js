@@ -20,6 +20,8 @@ let AutoMessages = new AutoMessagesClass(config.settings.autoMessages);
 let NewFollower = new NewFollowerClass(FunixBot, config);
 let WebServer = new WebServerClass(config, database);
 
+require('./modules/pubSub');
+
 let commands = {
     prime: require('./commands/prime'),
     discord: require('./commands/discord'),
