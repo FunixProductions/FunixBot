@@ -58,8 +58,11 @@ function connectTwitchPubSub() {
         } else if (message.type === 'MESSAGE') {
             if (message.data.topic === 'channel-points-channel-v1.' + config) {
                 let redemption = JSON.parse(message.data.message);
-                if (redemption.data.redemption.reward.id === '1b48b6e2-83f3-4af6-bf4b-25843910176a') {
-                    playSound('sound');
+                let rewardID = redemption.data.redemption.reward.id;
+                if (rewardID === '1b48b6e2-83f3-4af6-bf4b-25843910176a') {
+                    playSound('funixSounds/robloxOOF');
+                } else if (rewardID === 'ee099003-c44a-4128-bb94-0fbb1a346a6e') {
+                    playSound('funixSounds/tcon');
                 }
             }
         }
@@ -75,6 +78,5 @@ function connectTwitchPubSub() {
 document.onload = connectTwitchPubSub();
 
 function playSound(soundName) {
-    let sound = new Audio("/sounds/" + soundName + '.mp3');
-    sound.play();
+    new Audio("/sounds/" + soundName + '.mp3').play();
 }
