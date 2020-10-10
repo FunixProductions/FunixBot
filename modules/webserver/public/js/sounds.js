@@ -63,6 +63,8 @@ function connectTwitchPubSub() {
                     playSound('funixSounds/robloxOOF');
                 } else if (rewardID === 'ee099003-c44a-4128-bb94-0fbb1a346a6e') {
                     playSound('funixSounds/tcon');
+                } else if (rewardID === '063ae6ea-ed45-4ca5-90ff-6d33fe2c1ae4') {
+                    playSound('funixSounds/rene-balek');
                 }
             }
         }
