@@ -1,8 +1,1 @@
-node_modules/
 .idea
-.env.json
-package-lock.json
-logs/*.log
-data/*
-
-modules/webserver/public/sounds/*.mp3
