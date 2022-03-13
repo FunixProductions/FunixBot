@@ -16,7 +16,6 @@ public class FunixBotEvents implements TwitchEvents {
     public void onUserChat(UserChatEvent event) {
         final ChatMessage chatMessage = event.getChatMessage();
 
-        System.out.println(chatMessage.getOwner().getDisplayName() + " > " + chatMessage.getMessage());
         bot.sendMessageToChannel("funixgaming", "COUCOU " + chatMessage.getOwner().getDisplayName());
     }
 }
