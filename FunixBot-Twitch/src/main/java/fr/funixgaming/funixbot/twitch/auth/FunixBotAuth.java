@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.Scanner;
 
 public class FunixBotAuth {
 
@@ -18,13 +19,22 @@ public class FunixBotAuth {
 
     private TwitchAuth twitchAuth;
 
+    private FunixBotAuth() {
+        new Thread(() -> {
+
+        }).start();
+    }
+
     public static FunixBotAuth getInstance() throws FunixBotException {
         try {
             if (instance == null) {
+                final Scanner scanner = new Scanner(System.in);
                 final String clientId = System.getenv("CLIENT_ID");
                 final String clientSecret = System.getenv("CLIENT_SECRET");
-                final String oauthCode = System.getenv("OAUTH_CODE");
                 final String redirectUrl = System.getenv("REDIRECT_URL");
+
+                System.out.println("Enter the bot oauthToken : ");
+                final String oauthCode = scanner.nextLine();
                 instance = new FunixBotAuth();
 
                 if (authFile.exists()) {
@@ -40,7 +50,7 @@ public class FunixBotAuth {
                             oauthCode,
                             redirectUrl
                     );
-                    Files.writeString(authFile.toPath(), instance.twitchAuth.toJson(true), StandardOpenOption.TRUNCATE_EXISTING);
+                    saveInFile();
                 }
             }
 
@@ -51,6 +61,10 @@ public class FunixBotAuth {
         } catch (TwitchApiException twitchApiException) {
             throw new FunixBotException("An error occurred while getting twitch tokens.", twitchApiException);
         }
+    }
+
+    private static void saveInFile() throws IOException {
+        Files.writeString(authFile.toPath(), instance.twitchAuth.toJson(true), StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     public TwitchAuth getTwitchAuth() {
