@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <artifactId>FunixBot</artifactId>
+        <groupId>fr.funixgaming.funixbot</groupId>
+        <version>1.0.0</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.funixgaming.funixbot.twitch</groupId>
+    <artifactId>FunixBot-Twitch</artifactId>
+    <version>1.0.1</version>
+
+    <properties>
+        <java.version>17</java.version>
+        <twitchApi.version>1.1.0</twitchApi.version>
+
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>fr.funixgaming.twitch.api</groupId>
+            <artifactId>TwitchAPI</artifactId>
+            <version>${twitchApi.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>
