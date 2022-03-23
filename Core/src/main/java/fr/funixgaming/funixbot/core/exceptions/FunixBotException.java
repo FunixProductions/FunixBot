@@ -1,4 +1,4 @@
-package fr.funixgaming.funixbot.twitch.exceptions;
+package fr.funixgaming.funixbot.core.exceptions;
 
 public class FunixBotException extends Exception {
     public FunixBotException(String message) {
