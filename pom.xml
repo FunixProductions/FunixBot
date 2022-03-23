@@ -27,6 +27,7 @@
         <unitTest.version>5.7.1</unitTest.version>
         <commons.io.version>2.11.0</commons.io.version>
         <slf4j.version>1.7.36</slf4j.version>
+        <unitTestBuild.version>2.22.2</unitTestBuild.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -64,5 +65,15 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${unitTestBuild.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
