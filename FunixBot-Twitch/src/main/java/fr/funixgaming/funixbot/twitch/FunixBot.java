@@ -17,8 +17,6 @@ public class FunixBot extends TwitchBot {
         this.botConfiguration = botConfiguration;
         super.joinChannel(this.botConfiguration.getBotProperties().getStreamerUsername());
         super.addEventListener(new FunixBotEvents(this));
-
-        super.sendMessageToChannel(botConfiguration.getBotProperties().getBotUsername(), "test");
     }
 
     public void stopBot() {
