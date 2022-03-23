@@ -1,31 +1,39 @@
 package fr.funixgaming.funixbot.twitch;
 
-import fr.funixgaming.funixbot.twitch.auth.FunixBotAuth;
+import fr.funixgaming.funixbot.core.enums.BotProfile;
+import fr.funixgaming.funixbot.twitch.config.FunixBotConfiguration;
 import fr.funixgaming.funixbot.twitch.events.FunixBotEvents;
-import fr.funixgaming.funixbot.twitch.exceptions.FunixBotException;
-import fr.funixgaming.twitch.api.auth.TwitchAuth;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
 import fr.funixgaming.twitch.api.exceptions.TwitchIRCException;
 
-import java.io.File;
-
 public class FunixBot extends TwitchBot {
-    public static final File DATA_FOLDER = new File("data");
     private static volatile FunixBot instance = null;
 
-    private FunixBot(final TwitchAuth auth) throws TwitchIRCException {
-        super("testfunix", auth);
-        super.joinChannel("funixgaming");
+    private final FunixBotConfiguration botConfiguration;
+
+    private FunixBot(final FunixBotConfiguration botConfiguration) throws TwitchIRCException {
+        super(botConfiguration.getBotProperties().getBotUsername(), botConfiguration.getTwitchAuth().getAuth());
+
+        this.botConfiguration = botConfiguration;
+        super.joinChannel(this.botConfiguration.getBotProperties().getStreamerUsername());
         super.addEventListener(new FunixBotEvents(this));
+
+        super.sendMessageToChannel(botConfiguration.getBotProperties().getBotUsername(), "test");
     }
 
+    public void stopBot() {
+        this.botConfiguration.getTwitchAuth().stop();
+        super.closeConnection();
+    }
+
+    /**
+     * @param args Program arguments --profile={@link BotProfile} check enum, if not specified or invalid it will use production mode<br/>
+     */
     public static void main(final String[] args) {
         try {
-            if (!DATA_FOLDER.exists() && !DATA_FOLDER.mkdir()) {
-                throw new FunixBotException("The data folder can't be created.");
-            }
+            FunixBotConfiguration.init(args);
 
-            instance = new FunixBot(FunixBotAuth.getInstance().getTwitchAuth());
+            instance = new FunixBot(FunixBotConfiguration.getInstance());
             while (instance.isConnected());
         } catch (Exception e) {
             e.printStackTrace();
