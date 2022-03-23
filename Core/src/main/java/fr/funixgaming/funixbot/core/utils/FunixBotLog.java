@@ -11,8 +11,8 @@ import java.util.Arrays;
 
 public class FunixBotLog {
     private static final FunixBotLog instance = new FunixBotLog();
-    private static final File logFolder = new File(DataFiles.getInstance().getDataFolder(), "logs");
 
+    private final File logFolder = new File(DataFiles.getInstance().getDataFolder(), "logs");
     private final Logger logger;
 
     private FunixBotLog() {

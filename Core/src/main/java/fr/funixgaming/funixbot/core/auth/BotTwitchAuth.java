@@ -25,14 +25,14 @@ public class BotTwitchAuth {
      * Needs this env vars to work
      * TWITCH_CLIENT_ID
      * TWITCH_CLIENT_SECRET
-     * TWITCH_REDIRECT_URL
+     * TWITCH_REDIRECT_URI
      * TWITCH_OAUTH_CODE
      * @throws FunixBotException error
      */
     public BotTwitchAuth() throws FunixBotException {
         final String clientId = System.getenv("TWITCH_CLIENT_ID");
         final String clientSecret = System.getenv("TWITCH_CLIENT_SECRET");
-        final String redirectUrl = System.getenv("TWITCH_REDIRECT_URL");
+        final String redirectUrl = System.getenv("TWITCH_REDIRECT_URI");
         final String oauthCode = System.getenv("TWITCH_OAUTH_CODE");
 
         if (clientId == null || clientSecret == null || redirectUrl == null || oauthCode == null) {
