@@ -16,7 +16,6 @@ import fr.funixgaming.twitch.api.exceptions.TwitchIRCException;
 import lombok.Getter;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @Getter
@@ -39,13 +38,13 @@ public class FunixBot extends TwitchBot implements Bot {
 
     private void configureCommands() throws FunixBotException {
         final String channelToSend = botConfiguration.getBotProperties().getStreamerUsername();
-        final Map<String, String> simpleCommands = SimpleCommand.getCommandsFromClasspath();
+        final Set<SimpleCommand> simpleCommands = SimpleCommand.getCommandsFromClasspath();
 
-        for (final Map.Entry<String, String> command : simpleCommands.entrySet()) {
-            final String commandName = command.getKey();
-            final String response = command.getValue();
+        for (final SimpleCommand command : simpleCommands) {
+            command.setChannelToSend(channelToSend);
+            command.setBot(this);
 
-            addNewCommand(new SimpleCommand(this, commandName, response, channelToSend));
+            addNewCommand(command);
         }
 
         addNewCommand(new CommandGiveaway(this));

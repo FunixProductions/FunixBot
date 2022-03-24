@@ -3,7 +3,7 @@ package fr.funixgaming.funixbot.core.commands;
 import fr.funixgaming.funixbot.core.commands.entities.SimpleCommand;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,20 +39,29 @@ public class CommandHandlerTests {
 
     @Test
     public void testGetCommandsFromClassPath() throws Exception {
-        final Map<String, String> commands = SimpleCommand.getCommandsFromClasspath();
-        boolean firstCommand = true;
+        final Set<SimpleCommand> commands = SimpleCommand.getCommandsFromClasspath();
+        int checked = 0;
 
-        assertEquals(2, commands.size());
-        for (final Map.Entry<String, String> entry : commands.entrySet()) {
-            if (firstCommand) {
-                assertEquals("site", entry.getKey());
-                assertEquals("Site web : funixgaming.fr", entry.getValue());
-                firstCommand = false;
-            } else {
-                assertEquals("discord", entry.getKey());
-                assertEquals("Discord de la commu : discord.funixgaming.fr", entry.getValue());
+        assertEquals(3, commands.size());
+        for (final SimpleCommand command : commands) {
+            if (command.getCommandName().equals("site")) {
+                assertEquals("site", command.getCommandName());
+                assertEquals("Site web : funixgaming.fr", command.getResponse());
+                ++checked;
+            } else if (command.getCommandName().equals("pacifista")) {
+                assertEquals("pacifista", command.getCommandName());
+                assertEquals("Minecraft server", command.getResponse());
+                assertEquals(2, command.getAliases().length);
+                assertEquals("ip", command.getAliases()[0]);
+                assertEquals("serveur", command.getAliases()[1]);
+                ++checked;
+            } else if (command.getCommandName().equals("discord")) {
+                assertEquals("discord", command.getCommandName());
+                assertEquals("Discord de la commu : discord.funixgaming.fr", command.getResponse());
+                ++checked;
             }
         }
+        assertEquals(3, checked);
     }
 
 }

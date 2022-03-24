@@ -7,6 +7,14 @@
     {
       "command": "site",
       "response": "Site web : funixgaming.fr"
+    },
+    {
+      "command": "pacifista",
+      "aliases": [
+        "ip",
+        "serveur"
+      ],
+      "response": "Minecraft server"
     }
   ]
 }
