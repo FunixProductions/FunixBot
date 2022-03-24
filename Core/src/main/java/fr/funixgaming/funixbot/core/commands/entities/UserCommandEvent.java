@@ -1,4 +1,4 @@
-package fr.funixgaming.funixbot.core.commands;
+package fr.funixgaming.funixbot.core.commands.entities;
 
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import lombok.NonNull;
