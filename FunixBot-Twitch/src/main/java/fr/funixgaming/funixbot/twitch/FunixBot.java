@@ -8,6 +8,7 @@ import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.enums.BotProfile;
 import fr.funixgaming.funixbot.twitch.commands.CommandGiveaway;
 import fr.funixgaming.funixbot.core.commands.entities.StaticCommand;
+import fr.funixgaming.funixbot.twitch.commands.CommandHelp;
 import fr.funixgaming.funixbot.twitch.config.FunixBotConfiguration;
 import fr.funixgaming.funixbot.twitch.events.FunixBotEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
@@ -15,6 +16,7 @@ import fr.funixgaming.twitch.api.exceptions.TwitchIRCException;
 import lombok.Getter;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Getter
@@ -26,16 +28,28 @@ public class FunixBot extends TwitchBot implements Bot {
 
     private final FunixBotConfiguration botConfiguration;
 
-    private FunixBot(final FunixBotConfiguration botConfiguration) throws TwitchIRCException {
+    private FunixBot(final FunixBotConfiguration botConfiguration) throws TwitchIRCException, FunixBotException {
         super(botConfiguration.getBotProperties().getBotUsername(), botConfiguration.getTwitchAuth().getAuth());
         super.joinChannel(botConfiguration.getBotProperties().getStreamerUsername());
         super.addEventListener(new FunixBotEvents(this));
 
         this.botConfiguration = botConfiguration;
+        configureCommands();
+    }
 
+    private void configureCommands() throws FunixBotException {
         final String channelToSend = botConfiguration.getBotProperties().getStreamerUsername();
+        final Map<String, String> simpleCommands = SimpleCommand.getCommandsFromClasspath();
+
+        for (final Map.Entry<String, String> command : simpleCommands.entrySet()) {
+            final String commandName = command.getKey();
+            final String response = command.getValue();
+
+            addNewCommand(commandName, new SimpleCommand(this, commandName, response, channelToSend));
+        }
+
         addNewCommand("giveaway", new CommandGiveaway(this));
-        addNewCommand("discord", new SimpleCommand("discord", this, "Discord de la commu : discord.funixgaming.fr", channelToSend));
+        addNewCommand("help", new CommandHelp(this));
     }
 
     @Override

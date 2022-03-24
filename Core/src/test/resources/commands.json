@@ -1,0 +1,12 @@
+{
+  "data" : [
+    {
+      "command": "discord",
+      "response": "Discord de la commu : discord.funixgaming.fr"
+    },
+    {
+      "command": "site",
+      "response": "Site web : funixgaming.fr"
+    }
+  ]
+}
