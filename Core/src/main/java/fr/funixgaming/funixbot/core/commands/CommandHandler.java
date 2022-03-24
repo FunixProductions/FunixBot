@@ -1,5 +1,6 @@
 package fr.funixgaming.funixbot.core.commands;
 
+import fr.funixgaming.funixbot.core.commands.entities.UserCommandEvent;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import fr.funixgaming.twitch.api.tools.TwitchThreadPool;
 
