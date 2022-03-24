@@ -45,11 +45,11 @@ public class FunixBot extends TwitchBot implements Bot {
             final String commandName = command.getKey();
             final String response = command.getValue();
 
-            addNewCommand(commandName, new SimpleCommand(this, commandName, response, channelToSend));
+            addNewCommand(new SimpleCommand(this, commandName, response, channelToSend));
         }
 
-        addNewCommand("giveaway", new CommandGiveaway(this));
-        addNewCommand("help", new CommandHelp(this));
+        addNewCommand(new CommandGiveaway(this));
+        addNewCommand(new CommandHelp(this));
     }
 
     @Override
@@ -58,9 +58,9 @@ public class FunixBot extends TwitchBot implements Bot {
     }
 
     @Override
-    public void addNewCommand(final String commandName, final BotCommand command) {
+    public void addNewCommand(final BotCommand command) {
         this.commands.add(command);
-        this.commandHandler.addListener(commandName, command);
+        this.commandHandler.addListener(command);
     }
 
     @Override

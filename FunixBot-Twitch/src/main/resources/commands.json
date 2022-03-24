@@ -7,6 +7,14 @@
     {
       "command": "site",
       "response": "Site web : funixgaming.fr"
+    },
+    {
+      "command": "pacifista",
+      "response": "Pacifista mon serveur Minecraft. Pour rejoindre -> play.pacifista.fr (Java uniquement et non cracks)"
+    },
+    {
+      "command": "site",
+      "response": "Site web : funixgaming.fr"
     }
   ]
 }
