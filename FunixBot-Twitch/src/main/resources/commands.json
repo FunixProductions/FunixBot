@@ -2,19 +2,82 @@
   "data" : [
     {
       "command": "discord",
-      "response": "Discord de la commu : discord.funixgaming.fr"
+      "response": "GlitchCat Discord : discord.funixgaming.fr"
     },
     {
       "command": "site",
-      "response": "Site web : funixgaming.fr"
+      "response": "TehePelo Site web : funixgaming.fr"
     },
     {
       "command": "pacifista",
-      "response": "Pacifista mon serveur Minecraft. Pour rejoindre -> play.pacifista.fr (Java uniquement et non cracks)"
+      "aliases": [
+        "serveur",
+        "ip",
+        "minecraft"
+      ],
+      "response": "SSSsss Pacifista mon serveur Minecraft. Pour rejoindre -> play.pacifista.fr (Java uniquement et non cracks)"
     },
     {
-      "command": "site",
-      "response": "Site web : funixgaming.fr"
+      "command": "onlyfans",
+      "aliases": [
+        "onlyfan"
+      ],
+      "response": "Onlyfans : https://cutt.ly/HSM0uKi"
+    },
+    {
+      "command": "instantgaming",
+      "aliases": [
+        "ig"
+      ],
+      "response": "Achetez vos jeux moins chers ! Jusqu'a moins 70% https://www.instant-gaming.com/?igr=FunixGaming (Vos achats me font gagner 3% du prix du jeu acheté)"
+    },
+    {
+      "command": "twitter",
+      "response": "Twitter : twitter.com/funixgaming"
+    },
+    {
+      "command": "instagram",
+      "aliases": [
+        "insta"
+      ],
+      "response": "Instagram : instagram.com/funixgaming_"
+    },
+    {
+      "command": "youtube",
+      "aliases": [
+        "yt"
+      ],
+      "response": "YouTube : youtube.com/c/funixgaming"
+    },
+    {
+      "command": "don",
+      "response": "Faire un don pour la chaine twitch : https://streamlabs.com/funixgaming"
+    },
+    {
+      "command": "sub",
+      "response": "Soutenez la chaine avec un abonnement : https://www.twitch.tv/products/funixgaming"
+    },
+    {
+      "command": "steam",
+      "response": "Mon code ami steam : 191346325"
+    },
+    {
+      "command": "playlist",
+      "aliases": [
+        "spotify"
+      ],
+      "response": "La playlist du stream : https://open.spotify.com/playlist/4bkcuaYbR6LNBwLp6WItmA?si=f161351cde404dcf"
+    },
+    {
+      "command": "tiktok",
+      "response": "TikTok : https://www.tiktok.com/@_funix"
+    },
+    {
+      "command": "setup",
+      "aliases": [
+        "config"
+      ],
+      "response": "Ma vidéo setup : https://youtu.be/vrE8QFB7dV0"
     }
   ]
 }
