@@ -20,11 +20,11 @@ public class DataFilesTests {
         if (!testFile.exists() && !testFile.createNewFile()) {
             throw new IOException("err");
         }
-        Files.writeString(testFile.toPath(), "", StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     @Test
     public void testSetInFile() throws Exception {
+        Files.writeString(testFile.toPath(), "", StandardOpenOption.TRUNCATE_EXISTING);
         DataFiles.setInFile(testFile, "test");
 
         final String res = Files.readString(testFile.toPath());
@@ -33,6 +33,7 @@ public class DataFilesTests {
 
     @Test
     public void testAppendFile() throws Exception {
+        Files.writeString(testFile.toPath(), "", StandardOpenOption.TRUNCATE_EXISTING);
         DataFiles.appendInFile(testFile, "test");
         final String res = Files.readString(testFile.toPath());
         assertEquals("test", res);
