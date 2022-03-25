@@ -39,7 +39,7 @@ public class SimpleCommand extends BotCommand {
      * @return Map -> command name, command response
      */
     public static Set<SimpleCommand> getCommandsFromClasspath() throws FunixBotException {
-        final String read = DataFiles.readFileFromClasspath("/commands.json");
+        final String read = DataFiles.readFileFromClasspath("/json/commands.json");
         final JsonObject json = JsonParser.parseString(read).getAsJsonObject();
         final JsonArray data = json.get("data").getAsJsonArray();
         final Set<SimpleCommand> commands = new HashSet<>();
