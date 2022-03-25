@@ -1,6 +1,7 @@
 package fr.funixgaming.funixbot.twitch.events;
 
 import fr.funixgaming.funixbot.core.commands.CommandHandler;
+import fr.funixgaming.funixbot.core.utils.FunixBotLog;
 import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
@@ -11,10 +12,12 @@ public class FunixBotEvents implements TwitchEvents {
 
     private final FunixBot bot;
     private final CommandHandler commandHandler;
+    private final FunixBotLog log;
 
     public FunixBotEvents(final FunixBot bot) {
         this.bot = bot;
         this.commandHandler = CommandHandler.getInstance();
+        this.log = FunixBotLog.getInstance();
     }
 
     @Override
@@ -24,5 +27,6 @@ public class FunixBotEvents implements TwitchEvents {
         final String message = chatMessage.getMessage();
 
         commandHandler.onNewChat(chatMember, message);
+        log.logInfo("[" + chatMember.getDisplayName() + "] " + message);
     }
 }
