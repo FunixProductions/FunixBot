@@ -11,8 +11,6 @@
     <version>1.0.0</version>
 
     <modules>
-        <module>libs/twitchLib</module>
-
         <module>Core</module>
         <module>FunixBot-Twitch</module>
     </modules>
@@ -37,7 +35,7 @@
     <dependencies>
         <dependency>
             <groupId>fr.funixgaming.twitch.api</groupId>
-            <artifactId>TwitchAPI</artifactId>
+            <artifactId>twitch-api</artifactId>
             <version>${twitchApi.version}</version>
             <scope>compile</scope>
         </dependency>
