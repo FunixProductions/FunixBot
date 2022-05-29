@@ -10,6 +10,12 @@
     <packaging>pom</packaging>
     <version>1.0.0</version>
 
+    <parent>
+        <artifactId>funix-api</artifactId>
+        <groupId>fr.funixgaming.api</groupId>
+        <version>1.0.3</version>
+    </parent>
+
     <modules>
         <module>Core</module>
         <module>FunixBot-Twitch</module>
@@ -21,11 +27,7 @@
         <twitchApi.version>1.1.1</twitchApi.version>
         <funixbot.core.version>1.0.0</funixbot.core.version>
 
-        <lombok.version>1.18.22</lombok.version>
-        <unitTest.version>5.8.2</unitTest.version>
         <commons.io.version>2.11.0</commons.io.version>
-        <slf4j.version>1.7.36</slf4j.version>
-        <unitTestBuild.version>2.22.2</unitTestBuild.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -46,32 +48,6 @@
             <artifactId>commons-io</artifactId>
             <version>${commons.io.version}</version>
         </dependency>
-
-        <!-- Lomok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Unit test -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${unitTest.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${unitTestBuild.version}</version>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
