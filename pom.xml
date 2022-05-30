@@ -42,6 +42,13 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>fr.funixgaming.api.client</groupId>
+            <artifactId>funix-api-client</artifactId>
+            <version>${funixgaming.api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
