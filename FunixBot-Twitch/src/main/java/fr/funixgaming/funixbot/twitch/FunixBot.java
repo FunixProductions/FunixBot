@@ -5,38 +5,57 @@ import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
 import fr.funixgaming.funixbot.core.commands.CommandHandler;
 import fr.funixgaming.funixbot.core.commands.entities.SimpleCommand;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
-import fr.funixgaming.funixbot.core.enums.BotProfile;
+import fr.funixgaming.funixbot.core.twitch.auth.BotTwitchAuth;
 import fr.funixgaming.funixbot.twitch.commands.CommandGiveaway;
 import fr.funixgaming.funixbot.core.commands.entities.StaticCommand;
 import fr.funixgaming.funixbot.twitch.commands.CommandHelp;
+import fr.funixgaming.funixbot.twitch.config.TwitchBotConfig;
 import fr.funixgaming.funixbot.twitch.events.FunixBotEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
 import fr.funixgaming.twitch.api.exceptions.TwitchIRCException;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Getter
-public class FunixBot extends TwitchBot implements Bot {
-    private static volatile FunixBot instance = null;
+@Service
+public class FunixBot implements Bot, ServletContextListener {
 
-    private final CommandHandler commandHandler = CommandHandler.getInstance();
+    private final TwitchBot twitchBot;
+    private final BotTwitchAuth botTwitchAuth;
+    private final TwitchBotConfig botConfig;
+    private final CommandHandler commandHandler;
+
     private final Set<BotCommand> commands = new HashSet<>();
 
-    private final FunixBotConfiguration botConfiguration;
+    public FunixBot(TwitchBotConfig botConfig,
+                    CommandHandler commandHandler,
+                    FunixBotEvents funixBotEvents) throws FunixBotException, TwitchIRCException {
+        try {
+            this.botConfig = botConfig;
+            this.commandHandler = commandHandler;
 
-    private FunixBot(final FunixBotConfiguration botConfiguration) throws TwitchIRCException, FunixBotException {
-        super(botConfiguration.getBotProperties().getBotUsername(), botConfiguration.getTwitchAuth().getAuth());
-        super.joinChannel(botConfiguration.getBotProperties().getStreamerUsername());
-        super.addEventListener(new FunixBotEvents(this));
+            this.botTwitchAuth = new BotTwitchAuth(botConfig.getClientId(), botConfig.getClientSecret(), botConfig.getRedirectUrl(), botConfig.getOauthCode());
+            this.twitchBot = new TwitchBot(botConfig.getBotUsername(), this.botTwitchAuth.getAuth());
 
-        this.botConfiguration = botConfiguration;
-        configureCommands();
+            this.twitchBot.joinChannel(botConfig.getStreamerUsername());
+            this.twitchBot.addEventListener(funixBotEvents);
+
+            configureCommands();
+        } catch (FunixBotException | TwitchIRCException e) {
+            log.error("Une erreur est survenue lors du start du bot twitch. Erreur: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     private void configureCommands() throws FunixBotException {
-        final String channelToSend = botConfiguration.getBotProperties().getStreamerUsername();
+        final String channelToSend = botConfig.getStreamerUsername();
         final Set<SimpleCommand> simpleCommands = SimpleCommand.getCommandsFromClasspath();
 
         for (final SimpleCommand command : simpleCommands) {
@@ -52,7 +71,7 @@ public class FunixBot extends TwitchBot implements Bot {
 
     @Override
     public void sendChatMessage(final String channel, final String message) {
-        super.sendMessageToChannel(channel, message);
+        this.twitchBot.sendMessageToChannel(channel, message);
     }
 
     @Override
@@ -68,7 +87,12 @@ public class FunixBot extends TwitchBot implements Bot {
 
     @Override
     public void stopBot() {
-        this.botConfiguration.getTwitchAuth().stop();
-        super.closeConnection();
+        this.botTwitchAuth.stop();
+        this.twitchBot.closeConnection();
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        this.stopBot();
     }
 }
