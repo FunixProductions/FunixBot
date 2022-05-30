@@ -9,7 +9,6 @@ import fr.funixgaming.funixbot.core.enums.BotProfile;
 import fr.funixgaming.funixbot.twitch.commands.CommandGiveaway;
 import fr.funixgaming.funixbot.core.commands.entities.StaticCommand;
 import fr.funixgaming.funixbot.twitch.commands.CommandHelp;
-import fr.funixgaming.funixbot.twitch.config.FunixBotConfiguration;
 import fr.funixgaming.funixbot.twitch.events.FunixBotEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
 import fr.funixgaming.twitch.api.exceptions.TwitchIRCException;
@@ -71,27 +70,5 @@ public class FunixBot extends TwitchBot implements Bot {
     public void stopBot() {
         this.botConfiguration.getTwitchAuth().stop();
         super.closeConnection();
-    }
-
-    /**
-     * @param args Program arguments --profile={@link BotProfile} check enum, if not specified or invalid it will use production mode<br/>
-     */
-    public static void main(final String[] args) {
-        try {
-            FunixBotConfiguration.init(args);
-
-            instance = new FunixBot(FunixBotConfiguration.getInstance());
-            while (instance.isConnected());
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    public static FunixBot getInstance() throws FunixBotException {
-        if (instance == null) {
-            throw new FunixBotException("Le bot twitch n'est pas encore chargé.");
-        }
-        return instance;
     }
 }
