@@ -1,40 +1,28 @@
-package fr.funixgaming.funixbot.core.auth;
+package fr.funixgaming.funixbot.core.twitch.auth;
 
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.DataFiles;
-import fr.funixgaming.funixbot.core.utils.FunixBotLog;
 import fr.funixgaming.twitch.api.auth.TwitchAuth;
 import fr.funixgaming.twitch.api.exceptions.TwitchApiException;
-import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-@Getter
+@Slf4j
 public class BotTwitchAuth {
     private static final File authFile = new File(DataFiles.getInstance().getDataFolder(), "botTwitchAuth.json");
 
-    private final FunixBotLog log = FunixBotLog.getInstance();
     private final TwitchAuth auth;
     private final Thread checkThread;
     private boolean working = true;
 
-    /**
-     * Needs this env vars to work
-     * TWITCH_CLIENT_ID
-     * TWITCH_CLIENT_SECRET
-     * TWITCH_REDIRECT_URI
-     * TWITCH_OAUTH_CODE
-     * @throws FunixBotException error
-     */
-    public BotTwitchAuth() throws FunixBotException {
-        final String clientId = System.getenv("TWITCH_CLIENT_ID");
-        final String clientSecret = System.getenv("TWITCH_CLIENT_SECRET");
-        final String redirectUrl = System.getenv("TWITCH_REDIRECT_URI");
-        final String oauthCode = System.getenv("TWITCH_OAUTH_CODE");
-
+    public BotTwitchAuth(final String clientId,
+                         final String clientSecret,
+                         final String redirectUrl,
+                         final String oauthCode) throws FunixBotException {
         if (clientId == null || clientSecret == null || redirectUrl == null || oauthCode == null) {
             throw new FunixBotException("Vous n'avez pas spécifié dans les variables d'env les tokens twitch. TWITCH_CLIENT_ID TWITCH_CLIENT_SECRET TWITCH_REDIRECT_URL TWITCH_OAUTH_CODE");
         }
@@ -70,10 +58,10 @@ public class BotTwitchAuth {
                         saveInFile();
                     }
 
-                    Thread.sleep(60000);
+                    Thread.sleep(20000);
                 } catch (InterruptedException ignored) {
                 } catch (TwitchApiException | IOException e) {
-                    log.logError(e);
+                    log.error("Erreur lors ", e);
                 }
             }
         });
@@ -83,6 +71,10 @@ public class BotTwitchAuth {
     public void stop() {
         this.working = false;
         this.checkThread.interrupt();
+    }
+
+    public TwitchAuth getAuth() {
+        return auth;
     }
 
     private void saveInFile() throws IOException {

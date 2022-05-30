@@ -6,17 +6,21 @@ import com.google.gson.JsonParser;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.DataFiles;
 import fr.funixgaming.funixbot.twitch.FunixBot;
+import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
+@Component
 public class AutoMessages {
     private static final int LIMIT_MESSAGES = 20;
+
+    private final FunixBot funixBot;
 
     private final String[] messages;
     private int count = 0;
     private int selected = 0;
 
-    public AutoMessages() throws FunixBotException {
+    public AutoMessages(FunixBot funixBot) throws FunixBotException {
+        this.funixBot = funixBot;
+
         final String data = DataFiles.readFileFromClasspath("/json/autoMessages.json");
         final JsonObject obj = JsonParser.parseString(data).getAsJsonObject();
         final JsonArray array = obj.get("messages").getAsJsonArray();
@@ -29,12 +33,11 @@ public class AutoMessages {
     }
 
     public void userMessage() throws FunixBotException {
-        final FunixBot bot = FunixBot.getInstance();
         ++this.count;
 
         if (this.count > LIMIT_MESSAGES) {
             this.count = 0;
-            bot.sendChatMessage(bot.getBotConfiguration().getBotProperties().getStreamerUsername(), messages[selected]);
+            funixBot.sendChatMessage(funixBot.getBotConfig().getStreamerUsername(), messages[selected]);
 
             ++this.selected;
             if (this.selected >= this.messages.length) {

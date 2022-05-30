@@ -3,12 +3,12 @@ package fr.funixgaming.funixbot.core.commands;
 import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import fr.funixgaming.twitch.api.tools.TwitchThreadPool;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class CommandHandler {
-    private static final CommandHandler instance = new CommandHandler();
-
     private final Set<BotCommand> listeners = new HashSet<>();
     private final TwitchThreadPool threadPool = new TwitchThreadPool(4);
 
@@ -45,9 +45,5 @@ public class CommandHandler {
             }
         }
         return false;
-    }
-
-    public static CommandHandler getInstance() {
-        return instance;
     }
 }

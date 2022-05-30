@@ -1,7 +1,10 @@
 package fr.funixgaming.funixbot.core.commands;
 
+import fr.funixgaming.funixbot.core.TestApp;
 import fr.funixgaming.funixbot.core.commands.entities.SimpleCommand;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -9,12 +12,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SpringBootTest(
+        classes = {
+                TestApp.class
+        }
+)
 public class CommandHandlerTests {
 
-    private final CommandHandler commandHandler = CommandHandler.getInstance();
+    private final CommandHandler commandHandler;
     private final AtomicBoolean eventTriggered = new AtomicBoolean(false);
 
-    public CommandHandlerTests() {
+    @Autowired
+    public CommandHandlerTests(CommandHandler commandHandler) {
+        this.commandHandler = commandHandler;
+
         final TestCommand botCommand = new TestCommand("test", eventTriggered, "t");
         commandHandler.addListener(botCommand);
     }
