@@ -26,6 +26,7 @@ import java.util.Set;
 @Getter
 @Service
 public class FunixBot implements Bot, ServletContextListener {
+    private static volatile FunixBot instance = null;
 
     private final TwitchBot twitchBot;
     private final BotTwitchAuth botTwitchAuth;
@@ -48,6 +49,8 @@ public class FunixBot implements Bot, ServletContextListener {
             this.twitchBot.addEventListener(funixBotEvents);
 
             configureCommands();
+
+            instance = this;
         } catch (FunixBotException | TwitchIRCException e) {
             log.error("Une erreur est survenue lors du start du bot twitch. Erreur: {}", e.getMessage(), e);
             throw e;
@@ -94,5 +97,13 @@ public class FunixBot implements Bot, ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         this.stopBot();
+    }
+
+    public static FunixBot getInstance() throws FunixBotException {
+        if (instance == null) {
+            throw new FunixBotException("Le bot n'est pas encore chargé.");
+        } else {
+            return instance;
+        }
     }
 }

@@ -46,7 +46,7 @@ public class BotTwitchAuth {
         } catch (IOException e) {
             throw new FunixBotException("Une erreur est survenue lors de la lecture/écriture des fichiers.", e);
         } catch (TwitchApiException e) {
-            throw new FunixBotException("Une erreur est survenue lors de la connecxion à l'api twitch.", e);
+            throw new FunixBotException("Une erreur est survenue lors de la connexion à l'api twitch.", e);
         }
 
         this.checkThread = new Thread(() -> {
