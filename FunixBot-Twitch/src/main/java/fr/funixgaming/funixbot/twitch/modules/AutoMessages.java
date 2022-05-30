@@ -12,15 +12,11 @@ import org.springframework.stereotype.Component;
 public class AutoMessages {
     private static final int LIMIT_MESSAGES = 20;
 
-    private final FunixBot funixBot;
-
     private final String[] messages;
     private int count = 0;
     private int selected = 0;
 
-    public AutoMessages(FunixBot funixBot) throws FunixBotException {
-        this.funixBot = funixBot;
-
+    public AutoMessages() throws FunixBotException {
         final String data = DataFiles.readFileFromClasspath("/json/autoMessages.json");
         final JsonObject obj = JsonParser.parseString(data).getAsJsonObject();
         final JsonArray array = obj.get("messages").getAsJsonArray();
@@ -33,6 +29,8 @@ public class AutoMessages {
     }
 
     public void userMessage() throws FunixBotException {
+        final FunixBot funixBot = FunixBot.getInstance();
+
         ++this.count;
 
         if (this.count > LIMIT_MESSAGES) {
