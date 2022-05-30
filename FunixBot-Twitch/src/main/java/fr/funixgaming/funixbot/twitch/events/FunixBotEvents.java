@@ -2,6 +2,7 @@ package fr.funixgaming.funixbot.twitch.events;
 
 import fr.funixgaming.funixbot.core.commands.CommandHandler;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
+import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.funixbot.twitch.modules.AutoMessages;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
@@ -26,7 +27,7 @@ public class FunixBotEvents implements TwitchEvents {
         final String message = chatMessage.getMessage();
 
         try {
-            commandHandler.onNewChat(chatMember, message);
+            commandHandler.onNewChat(chatMember, message, FunixBot.getInstance(), chatMember.getChannelName());
             autoMessages.userMessage();
 
             log.info("[" + chatMember.getDisplayName() + "] " + message);
