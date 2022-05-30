@@ -1,5 +1,6 @@
 package fr.funixgaming.funixbot.core.commands;
 
+import fr.funixgaming.funixbot.core.BotTest;
 import fr.funixgaming.funixbot.core.TestApp;
 import fr.funixgaming.funixbot.core.commands.entities.SimpleCommand;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class CommandHandlerTests {
     @Test
     public void testChatCommand() throws InterruptedException {
         final String message = "!test salut les potes";
-        commandHandler.onNewChat(null, message);
+        commandHandler.onNewChat(null, message, new BotTest(), "test");
 
         Thread.sleep(1000);
         assertTrue(eventTriggered.get());
@@ -42,7 +43,7 @@ public class CommandHandlerTests {
     @Test
     public void testChatCommandAlias() throws InterruptedException {
         final String message = "!t salut les potes";
-        commandHandler.onNewChat(null, message);
+        commandHandler.onNewChat(null, message, new BotTest(), "test");
 
         Thread.sleep(1000);
         assertTrue(eventTriggered.get());
