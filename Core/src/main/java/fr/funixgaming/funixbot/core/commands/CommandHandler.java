@@ -1,5 +1,6 @@
 package fr.funixgaming.funixbot.core.commands;
 
+import feign.FeignException;
 import fr.funixgaming.api.client.funixbot.clients.FunixBotCommandClient;
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotCommandDTO;
 import fr.funixgaming.funixbot.core.Bot;
@@ -7,10 +8,12 @@ import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import fr.funixgaming.twitch.api.tools.TwitchThreadPool;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CommandHandler {
@@ -38,11 +41,14 @@ public class CommandHandler {
                         }
                     }
 
-                    final List<FunixBotCommandDTO> search = this.funixBotCommandClient.search(String.format("command:%s", commandName), "0", "1");
-                    System.out.println(search.size());
-                    if (!search.isEmpty()) {
-                        final FunixBotCommandDTO commandApi = search.get(0);
-                        bot.sendChatMessage(channelSendMessage, commandApi.getMessage());
+                    try {
+                        final List<FunixBotCommandDTO> search = this.funixBotCommandClient.search(String.format("command:%s", commandName), "0", "1");
+                        if (!search.isEmpty()) {
+                            final FunixBotCommandDTO commandApi = search.get(0);
+                            bot.sendChatMessage(channelSendMessage, commandApi.getMessage());
+                        }
+                    } catch (FeignException e) {
+                        log.error("Une erreur est survenue lors de la recherche de la commande ({}) twitch sur la funix api. Erreur code: {} msg: {}", commandName, e.status(), e.contentUTF8());
                     }
                 }
             });
