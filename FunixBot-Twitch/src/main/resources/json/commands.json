@@ -2,20 +2,22 @@
   "data" : [
     {
       "command": "discord",
-      "response": "GlitchCat Discord : discord.funixgaming.fr"
+      "response": "Serveur discord : discord.gg/0u58pdR1VzgnH5ZY"
     },
     {
       "command": "site",
-      "response": "TehePelo Site web : funixgaming.fr"
+      "response": "Mon site web : funixgaming.fr"
     },
     {
       "command": "pacifista",
       "aliases": [
         "serveur",
+        "serv",
+        "mc",
         "ip",
         "minecraft"
       ],
-      "response": "SSSsss Pacifista mon serveur Minecraft. Pour rejoindre -> play.pacifista.fr (Java uniquement et non cracks)"
+      "response": "SSSsss Pacifista mon serveur Minecraft. Pour rejoindre -> play.pacifista.fr (Java uniquement et non cracks). Site web: pacifista.fr"
     },
     {
       "command": "onlyfans",
@@ -29,7 +31,7 @@
       "aliases": [
         "ig"
       ],
-      "response": "Achetez vos jeux moins chers ! Jusqu'a moins 70% https://www.instant-gaming.com/?igr=FunixGaming (Vos achats me font gagner 3% du prix du jeu acheté)"
+      "response": "Achetez vos jeux moins chers ! Jusqu'a moins 70% https://www.instant-gaming.com?igr=FunixGaming (Vos achats me font gagner 3% du prix du jeu acheté)."
     },
     {
       "command": "twitter",
