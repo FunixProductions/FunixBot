@@ -5,12 +5,12 @@ import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import lombok.NonNull;
 
-public class CommandGiveaway extends BotCommand {
+public class CommandUptime extends BotCommand {
 
     private final FunixBot bot;
 
-    public CommandGiveaway(final FunixBot funixBot) {
-        super("giveaway");
+    public CommandUptime(final FunixBot funixBot) {
+        super("uptime");
         this.bot = funixBot;
     }
 
@@ -18,4 +18,5 @@ public class CommandGiveaway extends BotCommand {
     public void onUserCommand(@NonNull ChatMember user, @NonNull String command, @NonNull String[] args) {
 
     }
+
 }

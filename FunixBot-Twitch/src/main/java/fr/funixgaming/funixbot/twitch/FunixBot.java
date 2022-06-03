@@ -1,14 +1,18 @@
 package fr.funixgaming.funixbot.twitch;
 
+import fr.funixgaming.api.client.funixbot.clients.FunixBotCommandClient;
+import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
 import fr.funixgaming.funixbot.core.Bot;
 import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
 import fr.funixgaming.funixbot.core.commands.CommandHandler;
 import fr.funixgaming.funixbot.core.commands.entities.SimpleCommand;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.twitch.auth.BotTwitchAuth;
+import fr.funixgaming.funixbot.twitch.commands.CommandFollowCheck;
 import fr.funixgaming.funixbot.twitch.commands.CommandGiveaway;
 import fr.funixgaming.funixbot.core.commands.entities.StaticCommand;
 import fr.funixgaming.funixbot.twitch.commands.CommandHelp;
+import fr.funixgaming.funixbot.twitch.commands.LevelCommand;
 import fr.funixgaming.funixbot.twitch.config.TwitchBotConfig;
 import fr.funixgaming.funixbot.twitch.events.FunixBotEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
@@ -33,14 +37,21 @@ public class FunixBot implements Bot, ServletContextListener {
     private final TwitchBotConfig botConfig;
     private final CommandHandler commandHandler;
 
+    private final FunixBotCommandClient funixBotCommandClient;
+    private final FunixBotUserExperienceClient funixBotUserExperienceClient;
+
     private final Set<BotCommand> commands = new HashSet<>();
 
     public FunixBot(TwitchBotConfig botConfig,
                     CommandHandler commandHandler,
-                    FunixBotEvents funixBotEvents) throws FunixBotException, TwitchIRCException {
+                    FunixBotEvents funixBotEvents,
+                    FunixBotCommandClient funixBotCommandClient,
+                    FunixBotUserExperienceClient funixBotUserExperienceClient) throws FunixBotException, TwitchIRCException {
         try {
             this.botConfig = botConfig;
             this.commandHandler = commandHandler;
+            this.funixBotCommandClient = funixBotCommandClient;
+            this.funixBotUserExperienceClient = funixBotUserExperienceClient;
 
             this.botTwitchAuth = new BotTwitchAuth(botConfig.getClientId(), botConfig.getClientSecret(), botConfig.getRedirectUrl(), botConfig.getOauthCode());
             this.twitchBot = new TwitchBot(botConfig.getBotUsername(), this.botTwitchAuth.getAuth());
@@ -70,6 +81,8 @@ public class FunixBot implements Bot, ServletContextListener {
 
         addNewCommand(new CommandGiveaway(this));
         addNewCommand(new CommandHelp(this));
+        addNewCommand(new CommandFollowCheck(this));
+        addNewCommand(new LevelCommand(this));
     }
 
     @Override
