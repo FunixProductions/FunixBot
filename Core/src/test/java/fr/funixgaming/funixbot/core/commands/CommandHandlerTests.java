@@ -26,13 +26,13 @@ public class CommandHandlerTests {
     @Autowired
     public CommandHandlerTests(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
-
-        final TestCommand botCommand = new TestCommand("test", eventTriggered, "t");
-        commandHandler.addListener(botCommand);
     }
 
     @Test
     public void testChatCommand() throws InterruptedException {
+        final TestCommand botCommand = new TestCommand("test", eventTriggered, "t");
+        commandHandler.addListener(botCommand);
+
         final String message = "!test salut les potes";
         commandHandler.onNewChat(null, message, new BotTest(), "test");
 
@@ -42,6 +42,9 @@ public class CommandHandlerTests {
 
     @Test
     public void testChatCommandAlias() throws InterruptedException {
+        final TestCommand botCommand = new TestCommand("test", eventTriggered, "t");
+        commandHandler.addListener(botCommand);
+
         final String message = "!t salut les potes";
         commandHandler.onNewChat(null, message, new BotTest(), "test");
 
