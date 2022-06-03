@@ -16,6 +16,7 @@ import fr.funixgaming.funixbot.twitch.config.TwitchBotConfig;
 import fr.funixgaming.funixbot.twitch.events.FunixBotEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
 import fr.funixgaming.twitch.api.exceptions.TwitchIRCException;
+import fr.funixgaming.twitch.api.reference.TwitchApi;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ public class FunixBot implements Bot, ServletContextListener {
     private final TwitchBot twitchBot;
     private final BotTwitchAuth botTwitchAuth;
     private final TwitchBotConfig botConfig;
+    private final TwitchApi twitchApi;
     private final CommandHandler commandHandler;
 
     private final FunixBotCommandClient funixBotCommandClient;
@@ -54,6 +56,7 @@ public class FunixBot implements Bot, ServletContextListener {
 
             this.botTwitchAuth = new BotTwitchAuth(botConfig.getClientId(), botConfig.getClientSecret(), botConfig.getRedirectUrl(), botConfig.getOauthCode());
             this.twitchBot = new TwitchBot(botConfig.getBotUsername(), this.botTwitchAuth.getAuth());
+            this.twitchApi = new TwitchApi(this.botTwitchAuth.getAuth());
 
             this.twitchBot.joinChannel(botConfig.getStreamerUsername());
             this.twitchBot.addEventListener(funixBotEvents);
