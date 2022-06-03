@@ -55,9 +55,9 @@ public class BotTwitchAuth {
                     this.auth.isUsable();
                     if (!this.auth.isValid()) {
                         this.auth.refresh();
-                        saveInFile();
                     }
 
+                    saveInFile();
                     Thread.sleep(20000);
                 } catch (InterruptedException ignored) {
                 } catch (TwitchApiException | IOException e) {
