@@ -27,9 +27,20 @@ public class LevelCommand extends BotCommand {
 
     @Override
     public void onUserCommand(@NonNull ChatMember user, @NonNull String command, @NotNull @NonNull String[] args) {
+        final String channel = user.getChannelName();
         final List<FunixBotUserExperienceDTO> experience = userExperienceClient.search(String.format("twitchUserId:%d", user.getUserId()), "0", "1");
 
-        if (!experience.isEmpty()) {
+        if (experience.isEmpty()) {
+            funixBot.sendChatMessage(channel, String.format("%s n'a pas encore de niveau sur ce stream.", user.getDisplayName()));
+        } else {
+            final FunixBotUserExperienceDTO userExperience = experience.get(0);
+            funixBot.sendChatMessage(channel, String.format(
+                    "%s niveau %d (%d/%d)",
+                    user.getDisplayName(),
+                    userExperience.getLevel(),
+                    userExperience.getXp(),
+                    userExperience.getXpNextLevel())
+            );
         }
     }
 }
