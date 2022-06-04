@@ -40,7 +40,7 @@ public class TwitchStreamStatus {
     @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
     public void refreshStreamStatus() {
         try {
-            final Set<Stream> streams = twitchApi.getStreamsByUserNames(Set.of("zerator"));
+            final Set<Stream> streams = twitchApi.getStreamsByUserNames(Set.of(botConfig.getStreamerUsername()));
 
             if (streams.isEmpty()) {
                 this.stream = null;

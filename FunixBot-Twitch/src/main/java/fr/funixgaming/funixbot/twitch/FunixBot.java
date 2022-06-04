@@ -44,6 +44,8 @@ public class FunixBot implements Bot, ServletContextListener {
 
     private final Set<BotCommand> commands = new HashSet<>();
 
+    private boolean running = true;
+
     public FunixBot(TwitchBotConfig botConfig,
                     CommandHandler commandHandler,
                     FunixBotEvents funixBotEvents,
@@ -106,6 +108,7 @@ public class FunixBot implements Bot, ServletContextListener {
 
     @Override
     public void stopBot() {
+        this.running = false;
         this.botTwitchAuth.stop();
         this.twitchBot.closeConnection();
     }
