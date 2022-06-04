@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AutoMessages {
-    private static final int LIMIT_MESSAGES = 20;
+    private static final int LIMIT_MESSAGES = 15;
 
     private final String[] messages;
     private int count = 0;

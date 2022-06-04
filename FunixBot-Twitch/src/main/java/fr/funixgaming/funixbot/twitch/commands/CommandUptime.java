@@ -7,7 +7,6 @@ import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.funixbot.twitch.modules.TwitchStreamStatus;
 import fr.funixgaming.funixbot.twitch.utils.TwitchEmotes;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
-import fr.funixgaming.twitch.api.reference.TwitchApi;
 import fr.funixgaming.twitch.api.reference.entities.responses.channel.Stream;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +19,10 @@ import java.util.List;
 public class CommandUptime extends BotCommand {
 
     private final FunixBot bot;
-    private final TwitchApi twitchApi;
 
     public CommandUptime(final FunixBot funixBot) {
         super("uptime");
         this.bot = funixBot;
-        this.twitchApi = funixBot.getTwitchApi();
     }
 
     @Override
