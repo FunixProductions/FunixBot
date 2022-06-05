@@ -82,10 +82,20 @@ public class ChatExpGain {
         }
     }
 
-    @Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
     public void saveExp() {
         final List<FunixBotUserExperienceDTO> toSave = this.userExperienceCache.stream().toList();
         this.funixBotUserExperienceClient.update(toSave);
+    }
+
+    /**
+     * Every day at 10am flush memory
+     */
+    @Scheduled(cron = "0 10 * * * *")
+    public void saveAndFlushMemory() {
+        saveExp();
+        log.info("ChatExp Memory Flush {} entités supprimées.", this.userExperienceCache.size());
+        this.userExperienceCache.clear();
     }
 
     @Async
