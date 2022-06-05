@@ -8,11 +8,8 @@ import fr.funixgaming.funixbot.core.commands.CommandHandler;
 import fr.funixgaming.funixbot.core.commands.entities.SimpleCommand;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.twitch.auth.BotTwitchAuth;
-import fr.funixgaming.funixbot.twitch.commands.CommandFollowCheck;
-import fr.funixgaming.funixbot.twitch.commands.CommandGiveaway;
+import fr.funixgaming.funixbot.twitch.commands.*;
 import fr.funixgaming.funixbot.core.commands.entities.StaticCommand;
-import fr.funixgaming.funixbot.twitch.commands.CommandUptime;
-import fr.funixgaming.funixbot.twitch.commands.LevelCommand;
 import fr.funixgaming.funixbot.twitch.config.TwitchBotConfig;
 import fr.funixgaming.funixbot.twitch.events.FunixBotEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
@@ -88,6 +85,7 @@ public class FunixBot implements Bot, ServletContextListener {
         addNewCommand(new CommandFollowCheck(this));
         addNewCommand(new LevelCommand(this));
         addNewCommand(new CommandUptime(this));
+        addNewCommand(new MultiTwitchCommand(this));
     }
 
     @Override
