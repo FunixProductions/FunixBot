@@ -4,6 +4,7 @@ import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotUserExperienceDTO;
 import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
 import fr.funixgaming.funixbot.twitch.FunixBot;
+import fr.funixgaming.funixbot.twitch.utils.TwitchEmotes;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,8 @@ public class LevelCommand extends BotCommand {
         } else {
             final FunixBotUserExperienceDTO userExperience = experience.get(0);
             funixBot.sendChatMessage(channel, String.format(
-                    "%s niveau %d (%d/%d)",
+                    "%s %s niveau %d (%d/%d)",
+                    TwitchEmotes.TWITCH_LOGO,
                     user.getDisplayName(),
                     userExperience.getLevel(),
                     userExperience.getXp(),
