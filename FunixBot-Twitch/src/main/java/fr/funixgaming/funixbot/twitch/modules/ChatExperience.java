@@ -26,8 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
-public class ChatExpGain {
+public class ChatExperience {
+    private static volatile ChatExperience instance = null;
 
     private final TwitchStreamStatus streamStatus;
     private final TwitchBotConfig twitchBotConfig;
@@ -35,6 +35,15 @@ public class ChatExpGain {
 
     private final TmiTwitchApi tmiTwitchApi = new TmiTwitchApi();
     private final Set<FunixBotUserExperienceDTO> userExperienceCache = new HashSet<>();
+
+    public ChatExperience(TwitchStreamStatus twitchStreamStatus,
+                          TwitchBotConfig twitchBotConfig,
+                          FunixBotUserExperienceClient funixBotUserExperienceClient) {
+        this.streamStatus = twitchStreamStatus;
+        this.twitchBotConfig = twitchBotConfig;
+        this.funixBotUserExperienceClient = funixBotUserExperienceClient;
+        instance = this;
+    }
 
     public void userChatExp(final ChatMember user) {
         if (user.getDisplayName().equalsIgnoreCase(twitchBotConfig.getStreamerUsername()) ||
@@ -60,6 +69,16 @@ public class ChatExpGain {
         } catch (FunixBotException e) {
             log.error("Une erreur est survenue lors du gain d'exp message user: {} Erreur: {}", user.getDisplayName(), e.getMessage());
         }
+    }
+
+    public void giveUserExp(final String twitchUserId, final String userName, final int expToGive) throws FunixBotException {
+        if (userName.equalsIgnoreCase(twitchBotConfig.getStreamerUsername()) ||
+                userName.equalsIgnoreCase(twitchBotConfig.getBotUsername())) {
+            return;
+        }
+
+        final FunixBotUserExperienceDTO experienceDTO = findExpByUserId(twitchUserId);
+        addExp(experienceDTO, userName, expToGive);
     }
 
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
@@ -154,4 +173,10 @@ public class ChatExpGain {
         }
     }
 
+    public static ChatExperience getInstance() throws FunixBotException {
+        if (instance == null) {
+            throw new FunixBotException("Chat Experience pas chargé.");
+        }
+        return instance;
+    }
 }
