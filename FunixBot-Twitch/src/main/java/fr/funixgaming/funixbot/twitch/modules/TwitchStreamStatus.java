@@ -4,7 +4,6 @@ import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.funixbot.twitch.config.TwitchBotConfig;
 import fr.funixgaming.twitch.api.exceptions.TwitchApiException;
-import fr.funixgaming.twitch.api.reference.TwitchApi;
 import fr.funixgaming.twitch.api.reference.entities.responses.channel.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
