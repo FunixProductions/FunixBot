@@ -21,6 +21,42 @@
         <module>FunixBot-Twitch</module>
     </modules>
 
+    <description>FunixBot, Twitch and Discord</description>
+    <url>https://github.com/FunixProductions/FunixBot</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Antoine PRONNIER</name>
+            <email>antoine.pronnier@gmail.com</email>
+            <organization>FunixProductions</organization>
+            <organizationUrl>https://funixgaming.fr</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/FunixProductions/FunixBot.git</connection>
+        <developerConnection>scm:git:ssh://github.com:FunixProductions/FunixBot.git</developerConnection>
+        <url>http://github.com/FunixProductions/FunixBot/tree/master</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <java.version>17</java.version>
 

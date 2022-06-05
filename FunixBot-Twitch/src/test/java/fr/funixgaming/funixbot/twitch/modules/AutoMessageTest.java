@@ -14,6 +14,7 @@ public class AutoMessageTest {
 
     @Test
     public void testGettingJson() {
+        System.out.println(autoMessages.getMessages().length + " messages");
         assertEquals(4, autoMessages.getMessages().length);
     }
 }
