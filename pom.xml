@@ -13,7 +13,7 @@
     <parent>
         <artifactId>funix-api</artifactId>
         <groupId>fr.funixgaming.api</groupId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
     </parent>
 
     <modules>
@@ -24,7 +24,7 @@
     <properties>
         <java.version>17</java.version>
 
-        <twitchApi.version>1.2.0</twitchApi.version>
+        <twitchApi.version>1.2.1</twitchApi.version>
 
         <funixbot.core.version>1.1.0</funixbot.core.version>
 
