@@ -24,11 +24,11 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Cache data folder
-      id: cache-primes
+    - name: Cache data twitch folder
+      id: cache-twitch-bot
       uses: actions/cache@v3
       with:
-        path: data
+        path: FunixBot-Twitch/data
         key: botTwitchAuth
 
     - name: Build with Maven
