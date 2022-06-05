@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.funixgaming.funixbot</groupId>
-    <artifactId>FunixBot</artifactId>
+    <artifactId>funix-bot</artifactId>
     <name>FunixBot</name>
     <packaging>pom</packaging>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 
     <parent>
         <artifactId>funix-api</artifactId>
@@ -62,7 +62,7 @@
 
         <twitchApi.version>1.2.1</twitchApi.version>
 
-        <funixbot.core.version>1.1.1</funixbot.core.version>
+        <funixbot.core.version>1.1.2</funixbot.core.version>
 
         <commons.io.version>2.11.0</commons.io.version>
 
