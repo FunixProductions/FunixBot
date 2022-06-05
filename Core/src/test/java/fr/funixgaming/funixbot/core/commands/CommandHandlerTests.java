@@ -5,6 +5,7 @@ import fr.funixgaming.funixbot.core.TestApp;
 import fr.funixgaming.funixbot.core.commands.entities.SimpleCommand;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import fr.funixgaming.twitch.api.chatbot_irc.parsers.TagParser;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,17 +38,6 @@ public class CommandHandlerTests {
     @Test
     public void testChatCommand() {
         final String message = "!test salut les potes";
-        commandHandler.onNewChat(null, message, new BotTest(), "test");
-
-        final Instant start = Instant.now().plusSeconds(20);
-        while (!eventTriggered.get() && Instant.now().isBefore(start));
-
-        assertTrue(eventTriggered.get());
-    }
-
-    @Test
-    public void testChatCommandAlias() {
-        final String message = "!t salut les potes";
         commandHandler.onNewChat(null, message, new BotTest(), "test");
 
         final Instant start = Instant.now().plusSeconds(20);
