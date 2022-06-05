@@ -37,6 +37,11 @@ public class ChatExpGain {
     private final Set<FunixBotUserExperienceDTO> userExperienceCache = new HashSet<>();
 
     public void userChatExp(final ChatMember user) {
+        if (user.getDisplayName().equalsIgnoreCase(twitchBotConfig.getStreamerUsername()) ||
+                user.getDisplayName().equalsIgnoreCase(twitchBotConfig.getBotUsername())) {
+            return;
+        }
+
         try {
             if (streamStatus.getStream() != null) {
                 final FunixBotUserExperienceDTO experience = findExpByUserId(Integer.toString(user.getUserId()));
