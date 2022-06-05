@@ -25,7 +25,6 @@ public class CommandHandlerTests {
 
     private final CommandHandler commandHandler;
     private final AtomicBoolean eventTriggered = new AtomicBoolean(false);
-    private final ChatMember chatMember = new ChatMember(new TagParser("@badge-info=;badges=broadcaster/1;client-nonce=28e05b1c83f1e916ca1710c44b014515;color=#0000FF;display-name=foofoo;emotes=62835:0-10;first-msg=0;flags=;id=f80a19d6-e35a-4273-82d0-cd87f614e767;mod=0;room-id=713936733;subscriber=0;tmi-sent-ts=1642696567751;turbo=0;user-id=713936733;user-type= :foofoo!foofoo@foofoo.tmi.twitch.tv PRIVMSG #bar :bleedPurple"));
 
     @Autowired
     public CommandHandlerTests(CommandHandler commandHandler) {
@@ -38,7 +37,7 @@ public class CommandHandlerTests {
     @Test
     public void testChatCommand() {
         final String message = "!test salut les potes";
-        commandHandler.onNewChat(chatMember, message, new BotTest(), "test");
+        commandHandler.onNewChat(null, message, new BotTest(), "test");
 
         final Instant start = Instant.now().plusSeconds(20);
         while (!eventTriggered.get() && Instant.now().isBefore(start));
@@ -49,7 +48,7 @@ public class CommandHandlerTests {
     @Test
     public void testChatCommandAlias() {
         final String message = "!t salut les potes";
-        commandHandler.onNewChat(chatMember, message, new BotTest(), "test");
+        commandHandler.onNewChat(null, message, new BotTest(), "test");
 
         final Instant start = Instant.now().plusSeconds(20);
         while (!eventTriggered.get() && Instant.now().isBefore(start));
