@@ -18,7 +18,7 @@ public class TestCommand extends BotCommand {
     }
 
     @Override
-    public void onUserCommand(ChatMember user, @NonNull String command, @NotNull String[] args) {
+    public void onUserCommand(@NonNull ChatMember user, @NonNull String command, @NotNull String[] args) {
         assertEquals(3, args.length);
         assertEquals("salut", args[0]);
         assertEquals("les", args[1]);
