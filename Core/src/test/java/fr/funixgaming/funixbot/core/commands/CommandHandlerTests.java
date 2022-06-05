@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CommandHandlerTests {
 
     private final CommandHandler commandHandler;
-    private final AtomicBoolean eventTriggered = new AtomicBoolean(false);
 
     @Autowired
     public CommandHandlerTests(CommandHandler commandHandler) {
@@ -30,6 +29,7 @@ public class CommandHandlerTests {
 
     @Test
     public void testChatCommand() throws InterruptedException {
+        final AtomicBoolean eventTriggered = new AtomicBoolean(false);
         final TestCommand botCommand = new TestCommand("test", eventTriggered, "t");
         commandHandler.addListener(botCommand);
 
@@ -42,6 +42,7 @@ public class CommandHandlerTests {
 
     @Test
     public void testChatCommandAlias() throws InterruptedException {
+        final AtomicBoolean eventTriggered = new AtomicBoolean(false);
         final TestCommand botCommand = new TestCommand("test", eventTriggered, "t");
         commandHandler.addListener(botCommand);
 
