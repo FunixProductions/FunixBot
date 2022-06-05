@@ -19,16 +19,11 @@ import java.util.concurrent.TimeUnit;
 public class TwitchStreamStatus {
     private static volatile TwitchStreamStatus instance;
 
-    private final FunixBot funixBot;
     private final TwitchBotConfig botConfig;
-    private final TwitchApi twitchApi;
     private Stream stream;
 
-    public TwitchStreamStatus(FunixBot funixBot,
-                              TwitchBotConfig twitchBotConfig) {
-        this.funixBot = funixBot;
+    public TwitchStreamStatus(TwitchBotConfig twitchBotConfig) {
         this.botConfig = twitchBotConfig;
-        this.twitchApi = funixBot.getTwitchApi();
         instance = this;
     }
 
@@ -40,7 +35,7 @@ public class TwitchStreamStatus {
     @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
     public void refreshStreamStatus() {
         try {
-            final Set<Stream> streams = twitchApi.getStreamsByUserNames(Set.of(botConfig.getStreamerUsername()));
+            final Set<Stream> streams = FunixBot.getInstance().getTwitchApi().getStreamsByUserNames(Set.of(botConfig.getStreamerUsername()));
 
             if (streams.isEmpty()) {
                 this.stream = null;
@@ -49,7 +44,7 @@ public class TwitchStreamStatus {
                     this.stream = stream;
                 }
             }
-        } catch (TwitchApiException e) {
+        } catch (TwitchApiException | FunixBotException e) {
             log.error("Une erreur est survenue lors du refresh du statut stream. {}", e.getMessage());
         }
     }

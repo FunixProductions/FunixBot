@@ -16,6 +16,6 @@ public class CommandGiveaway extends BotCommand {
 
     @Override
     public void onUserCommand(@NonNull ChatMember user, @NonNull String command, @NonNull String[] args) {
-
+        //TODO impl giveaway
     }
 }

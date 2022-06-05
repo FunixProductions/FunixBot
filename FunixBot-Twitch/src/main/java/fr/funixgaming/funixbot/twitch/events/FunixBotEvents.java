@@ -4,6 +4,7 @@ import fr.funixgaming.funixbot.core.commands.CommandHandler;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.funixbot.twitch.modules.AutoMessages;
+import fr.funixgaming.funixbot.twitch.modules.ChatExpGain;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMessage;
@@ -19,6 +20,7 @@ public class FunixBotEvents implements TwitchEvents {
 
     private final CommandHandler commandHandler;
     private final AutoMessages autoMessages;
+    private final ChatExpGain chatExpGain;
 
     @Override
     public void onUserChat(UserChatEvent event) {
@@ -29,6 +31,7 @@ public class FunixBotEvents implements TwitchEvents {
         try {
             commandHandler.onNewChat(chatMember, message, FunixBot.getInstance(), chatMember.getChannelName());
             autoMessages.userMessage();
+            chatExpGain.userChatExp(chatMember);
 
             log.info("[" + chatMember.getDisplayName() + "] " + message);
         } catch (FunixBotException e) {
