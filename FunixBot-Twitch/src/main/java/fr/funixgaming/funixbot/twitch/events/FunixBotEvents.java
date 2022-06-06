@@ -31,9 +31,12 @@ public class FunixBotEvents implements TwitchEvents {
 
         try {
             commandHandler.onNewChat(chatMember, message, FunixBot.getInstance(), chatMember.getChannelName());
-            autoMessages.userMessage();
             chatExperience.userChatExp(chatMember);
             CommandGiveaway.getInstance().onUserChat(chatMessage);
+
+            if (!message.startsWith("!")) {
+                autoMessages.userMessage();
+            }
 
             log.info("[" + chatMember.getDisplayName() + "] " + message);
         } catch (FunixBotException e) {

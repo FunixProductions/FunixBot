@@ -106,10 +106,7 @@ public class ChatExperience {
         this.funixBotUserExperienceClient.update(toSave);
     }
 
-    /**
-     * Every day at 10am flush memory
-     */
-    @Scheduled(cron = "0 10 * * * *")
+    @Scheduled(fixedRate = 12, timeUnit = TimeUnit.HOURS)
     public void saveAndFlushMemory() {
         saveExp();
         log.info("ChatExp Memory Flush {} entités supprimées.", this.userExperienceCache.size());
