@@ -8,6 +8,9 @@ import fr.funixgaming.funixbot.core.utils.DataFiles;
 import fr.funixgaming.funixbot.twitch.FunixBot;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 @Component
 public class AutoMessages {
     private static final int LIMIT_MESSAGES = 20;
@@ -15,6 +18,7 @@ public class AutoMessages {
     private final String[] messages;
     private int count = 0;
     private int selected = 0;
+    private Instant lastMessageTime = Instant.now();
 
     public AutoMessages() throws FunixBotException {
         final String data = DataFiles.readFileFromClasspath("/json/autoMessages.json");
@@ -30,11 +34,14 @@ public class AutoMessages {
 
     public void userMessage() throws FunixBotException {
         final FunixBot funixBot = FunixBot.getInstance();
+        final Instant now = Instant.now();
 
         ++this.count;
 
-        if (this.count > LIMIT_MESSAGES) {
+        if (this.count > LIMIT_MESSAGES && lastMessageTime.plus(10, ChronoUnit.MINUTES).isBefore(now)) {
+            this.lastMessageTime = now;
             this.count = 0;
+
             funixBot.sendChatMessage(funixBot.getBotConfig().getStreamerUsername(), messages[selected]);
 
             ++this.selected;
