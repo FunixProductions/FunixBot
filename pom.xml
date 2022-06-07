@@ -19,6 +19,7 @@
     <modules>
         <module>Core</module>
         <module>FunixBot-Twitch</module>
+        <module>FunixBot-Discord</module>
     </modules>
 
     <description>FunixBot, Twitch and Discord</description>
@@ -61,10 +62,12 @@
         <java.version>17</java.version>
 
         <twitchApi.version>1.2.1</twitchApi.version>
-
         <funixbot.core.version>1.1.4</funixbot.core.version>
 
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <commons.io.version>2.11.0</commons.io.version>
+        <!-- https://github.com/DV8FromTheWorld/JDA -->
+        <discord.jda.version>5.0.0-alpha.12</discord.jda.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -73,20 +76,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>fr.funixgaming.twitch.api</groupId>
-            <artifactId>twitch-api</artifactId>
-            <version>${twitchApi.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>fr.funixgaming.api.client</groupId>
             <artifactId>funix-api-client</artifactId>
             <version>${funixgaming.api.version}</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

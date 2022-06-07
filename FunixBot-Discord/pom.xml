@@ -11,8 +11,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.funixgaming.funixbot.twitch</groupId>
-    <artifactId>funix-bot-twitch</artifactId>
+    <groupId>fr.funixgaming.funixbot.discord</groupId>
+    <artifactId>funix-bot-discord</artifactId>
     <version>1.1.4</version>
 
     <dependencies>
@@ -24,10 +24,9 @@
         </dependency>
 
         <dependency>
-            <groupId>fr.funixgaming.twitch.api</groupId>
-            <artifactId>twitch-api</artifactId>
-            <version>${twitchApi.version}</version>
-            <scope>compile</scope>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>${discord.jda.version}</version>
         </dependency>
     </dependencies>
 
