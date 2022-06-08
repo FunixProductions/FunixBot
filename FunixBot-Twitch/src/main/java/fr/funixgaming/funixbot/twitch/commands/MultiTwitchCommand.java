@@ -3,7 +3,7 @@ package fr.funixgaming.funixbot.twitch.commands;
 import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.twitch.FunixBot;
-import fr.funixgaming.funixbot.twitch.modules.TwitchStreamStatus;
+import fr.funixgaming.funixbot.core.modules.TwitchStreamStatus;
 import fr.funixgaming.funixbot.twitch.utils.TwitchEmotes;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import fr.funixgaming.twitch.api.reference.entities.responses.channel.Stream;
@@ -38,7 +38,7 @@ public class MultiTwitchCommand extends BotCommand {
                     bot.sendChatMessage(user.getChannelName(), String.format(
                             "%s MultiTwitch -> %s/%s",
                             TwitchEmotes.TWITCH_LOGO,
-                            MULTISTREAM_URL + bot.getBotConfig().getStreamerUsername(),
+                            MULTISTREAM_URL + bot.getTwitchConfig().getStreamerUsername(),
                             String.join("/", streamersTitle)
                     ));
                 }
