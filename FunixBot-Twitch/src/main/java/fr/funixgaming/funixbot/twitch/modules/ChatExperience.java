@@ -109,7 +109,10 @@ public class ChatExperience {
     @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
     public void saveExp() {
         final List<FunixBotUserExperienceDTO> toSave = this.userExperienceCache.stream().toList();
-        this.funixBotUserExperienceClient.update(toSave);
+
+        if (!toSave.isEmpty()) {
+            this.funixBotUserExperienceClient.update(toSave);
+        }
     }
 
     @Scheduled(fixedRate = 12, timeUnit = TimeUnit.HOURS)
