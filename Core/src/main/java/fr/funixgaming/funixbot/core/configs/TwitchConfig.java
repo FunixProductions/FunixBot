@@ -1,4 +1,4 @@
-package fr.funixgaming.funixbot.twitch.config;
+package fr.funixgaming.funixbot.core.configs;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties("twitch.bot.config")
-public class TwitchBotConfig {
-    private String botUsername;
+@ConfigurationProperties("twitch.config")
+public class TwitchConfig {
     private String streamerUsername;
     private String clientId;
     private String clientSecret;

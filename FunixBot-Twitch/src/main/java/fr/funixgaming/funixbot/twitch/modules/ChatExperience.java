@@ -3,9 +3,11 @@ package fr.funixgaming.funixbot.twitch.modules;
 import feign.FeignException;
 import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotUserExperienceDTO;
+import fr.funixgaming.funixbot.core.configs.TwitchConfig;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
+import fr.funixgaming.funixbot.core.modules.TwitchStreamStatus;
 import fr.funixgaming.funixbot.twitch.FunixBot;
-import fr.funixgaming.funixbot.twitch.config.TwitchBotConfig;
+import fr.funixgaming.funixbot.twitch.config.BotConfig;
 import fr.funixgaming.funixbot.twitch.utils.TwitchEmotes;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import fr.funixgaming.twitch.api.exceptions.TwitchApiException;
@@ -28,25 +30,29 @@ import java.util.concurrent.TimeUnit;
 public class ChatExperience {
     private static volatile ChatExperience instance = null;
 
+    private final BotConfig botConfig;
+    private final TwitchConfig twitchConfig;
     private final TwitchStreamStatus streamStatus;
-    private final TwitchBotConfig twitchBotConfig;
     private final FunixBotUserExperienceClient funixBotUserExperienceClient;
 
     private final TmiTwitchApi tmiTwitchApi = new TmiTwitchApi();
     private final Set<FunixBotUserExperienceDTO> userExperienceCache = new HashSet<>();
 
-    public ChatExperience(TwitchStreamStatus twitchStreamStatus,
-                          TwitchBotConfig twitchBotConfig,
+    public ChatExperience(BotConfig botConfig,
+                          TwitchConfig twitchConfig,
+                          TwitchStreamStatus twitchStreamStatus,
                           FunixBotUserExperienceClient funixBotUserExperienceClient) {
+        this.botConfig = botConfig;
+        this.twitchConfig = twitchConfig;
         this.streamStatus = twitchStreamStatus;
-        this.twitchBotConfig = twitchBotConfig;
         this.funixBotUserExperienceClient = funixBotUserExperienceClient;
+
         instance = this;
     }
 
     public void userChatExp(final ChatMember user) {
-        if (user.getDisplayName().equalsIgnoreCase(twitchBotConfig.getStreamerUsername()) ||
-                user.getDisplayName().equalsIgnoreCase(twitchBotConfig.getBotUsername())) {
+        if (user.getDisplayName().equalsIgnoreCase(twitchConfig.getStreamerUsername()) ||
+                user.getDisplayName().equalsIgnoreCase(botConfig.getBotUsername())) {
             return;
         }
 
@@ -71,8 +77,8 @@ public class ChatExperience {
     }
 
     public void giveUserExp(final String twitchUserId, final String userName, final int expToGive) throws FunixBotException {
-        if (userName.equalsIgnoreCase(twitchBotConfig.getStreamerUsername()) ||
-                userName.equalsIgnoreCase(twitchBotConfig.getBotUsername())) {
+        if (userName.equalsIgnoreCase(twitchConfig.getStreamerUsername()) ||
+                userName.equalsIgnoreCase(botConfig.getBotUsername())) {
             return;
         }
 
@@ -85,12 +91,12 @@ public class ChatExperience {
         try {
             if (streamStatus.getStream() != null) {
                 final FunixBot funixBot = FunixBot.getInstance();
-                final Set<String> usernames = new HashSet<>(tmiTwitchApi.getUsernamesConnectedOnChat(twitchBotConfig.getStreamerUsername()));
-                final Set<User> ids = funixBot.getTwitchApi().getUsersByUserName(usernames);
+                final Set<String> usernames = new HashSet<>(tmiTwitchApi.getUsernamesConnectedOnChat(twitchConfig.getStreamerUsername()));
+                final Set<User> ids = funixBot.getBotTwitchAuth().getTwitchApi().getUsersByUserName(usernames);
 
                 for (final User user : ids) {
-                    if (!user.getName().equalsIgnoreCase(twitchBotConfig.getStreamerUsername()) &&
-                            !user.getName().equalsIgnoreCase(twitchBotConfig.getBotUsername())) {
+                    if (!user.getName().equalsIgnoreCase(twitchConfig.getStreamerUsername()) &&
+                            !user.getName().equalsIgnoreCase(botConfig.getBotUsername())) {
                         addExp(findExpByUserId(user.getId()), user.getDisplayName(), 5);
                     }
                 }
@@ -161,7 +167,7 @@ public class ChatExperience {
                 log.info("Level UP pour {} (Niveau {})", username, experience.getLevel());
                 if (experience.getLevel() % 5 == 0) {
                     FunixBot.getInstance().sendChatMessage(
-                            this.twitchBotConfig.getStreamerUsername(),
+                            this.twitchConfig.getStreamerUsername(),
                             String.format("%s Level UP pour %s (Niveau %d)", TwitchEmotes.TWITCH_LOGO, username, experience.getLevel())
                     );
                 }

@@ -1,8 +1,7 @@
-package fr.funixgaming.funixbot.twitch.modules;
+package fr.funixgaming.funixbot.core.modules;
 
+import fr.funixgaming.funixbot.core.configs.TwitchConfig;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
-import fr.funixgaming.funixbot.twitch.FunixBot;
-import fr.funixgaming.funixbot.twitch.config.TwitchBotConfig;
 import fr.funixgaming.twitch.api.exceptions.TwitchApiException;
 import fr.funixgaming.twitch.api.reference.entities.responses.channel.Stream;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +17,14 @@ import java.util.concurrent.TimeUnit;
 public class TwitchStreamStatus {
     private static volatile TwitchStreamStatus instance;
 
-    private final TwitchBotConfig botConfig;
+    private final TwitchConfig twitchConfig;
+    private final BotTwitchAuth twitchAuth;
     private Stream stream;
 
-    public TwitchStreamStatus(TwitchBotConfig twitchBotConfig) {
-        this.botConfig = twitchBotConfig;
+    public TwitchStreamStatus(TwitchConfig twitchConfig,
+                              BotTwitchAuth botTwitchAuth) {
+        this.twitchConfig = twitchConfig;
+        this.twitchAuth = botTwitchAuth;
         instance = this;
     }
 
@@ -34,7 +36,7 @@ public class TwitchStreamStatus {
     @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
     public void refreshStreamStatus() {
         try {
-            final Set<Stream> streams = FunixBot.getInstance().getTwitchApi().getStreamsByUserNames(Set.of(botConfig.getStreamerUsername()));
+            final Set<Stream> streams = twitchAuth.getTwitchApi().getStreamsByUserNames(Set.of(twitchConfig.getStreamerUsername()));
 
             if (streams.isEmpty()) {
                 this.stream = null;
@@ -43,7 +45,7 @@ public class TwitchStreamStatus {
                     this.stream = stream;
                 }
             }
-        } catch (TwitchApiException | FunixBotException e) {
+        } catch (TwitchApiException e) {
             log.error("Une erreur est survenue lors du refresh du statut stream. {}", e.getMessage());
         }
     }

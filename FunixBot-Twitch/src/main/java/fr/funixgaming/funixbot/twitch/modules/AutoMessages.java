@@ -42,7 +42,7 @@ public class AutoMessages {
             this.lastMessageTime = now;
             this.count = 0;
 
-            funixBot.sendChatMessage(funixBot.getBotConfig().getStreamerUsername(), messages[selected]);
+            funixBot.sendChatMessage(funixBot.getTwitchConfig().getStreamerUsername(), messages[selected]);
 
             ++this.selected;
             if (this.selected >= this.messages.length) {

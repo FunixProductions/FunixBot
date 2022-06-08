@@ -28,7 +28,7 @@ public class CommandFollowCheck extends BotCommand {
     public CommandFollowCheck(final FunixBot bot) {
         super("followcheck", "fc");
         this.bot = bot;
-        this.twitchApi = bot.getTwitchApi();
+        this.twitchApi = bot.getBotTwitchAuth().getTwitchApi();
 
         new Thread(this::processCommands).start();
     }

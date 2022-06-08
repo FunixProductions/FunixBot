@@ -83,6 +83,13 @@
         </dependency>
 
         <dependency>
+            <groupId>fr.funixgaming.twitch.api</groupId>
+            <artifactId>twitch-api</artifactId>
+            <version>${twitchApi.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons.io.version}</version>

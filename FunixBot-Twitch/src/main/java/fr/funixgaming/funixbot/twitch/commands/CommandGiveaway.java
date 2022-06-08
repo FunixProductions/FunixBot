@@ -123,7 +123,7 @@ public class CommandGiveaway extends BotCommand {
                 }
             }
 
-            bot.sendChatMessage(bot.getBotConfig().getStreamerUsername(), String.format(
+            bot.sendChatMessage(bot.getTwitchConfig().getStreamerUsername(), String.format(
                     "%s Début du giveaway ! Mot clé -> %s",
                     TwitchEmotes.GIFT,
                     this.triggerWord
@@ -131,7 +131,7 @@ public class CommandGiveaway extends BotCommand {
 
         } catch (FunixBotException e) {
             endGiveaway();
-            bot.sendChatMessage(bot.getBotConfig().getStreamerUsername(), String.format(
+            bot.sendChatMessage(bot.getTwitchConfig().getStreamerUsername(), String.format(
                     "%s Giveaway erreur -> %s",
                     TwitchEmotes.GIFT,
                     e.getMessage()
