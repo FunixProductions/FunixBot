@@ -12,9 +12,11 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.springframework.stereotype.Component;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletContextEvent;
@@ -24,6 +26,7 @@ import java.util.Set;
 
 @Slf4j
 @Getter
+@Component
 public class FunixBot implements Bot, ServletContextListener {
     private static volatile FunixBot instance = null;
 
@@ -43,6 +46,7 @@ public class FunixBot implements Bot, ServletContextListener {
             this.botConfig = botConfig;
             this.botTwitchAuth = botTwitchAuth;
             this.jda = buildBot(botMessagesEvents, botSlashCommandsEvents, botGuildEvents);
+            log.info("Discord bot prêt ! Lien d'invitation : {}", this.jda.getInviteUrl(Permission.ADMINISTRATOR));
 
             instance = this;
         } catch (Exception e) {
@@ -83,6 +87,7 @@ public class FunixBot implements Bot, ServletContextListener {
 
     @Override
     public void stopBot() {
+        log.info("Arrêt du bot.");
         this.running = false;
         this.jda.shutdown();
     }
