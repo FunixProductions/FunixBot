@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletContextEvent;
@@ -26,7 +26,7 @@ import java.util.Set;
 
 @Slf4j
 @Getter
-@Component
+@Service
 public class FunixBot implements Bot, ServletContextListener {
     private static volatile FunixBot instance = null;
 
