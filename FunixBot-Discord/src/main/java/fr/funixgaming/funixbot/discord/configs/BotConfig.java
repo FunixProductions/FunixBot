@@ -13,5 +13,6 @@ public class BotConfig {
     private String botToken;
 
     private String twitchChannelId;
+    private String logChannelId;
     private String twitchRoleNotificationId;
 }
