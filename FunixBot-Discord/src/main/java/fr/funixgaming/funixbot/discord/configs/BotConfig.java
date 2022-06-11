@@ -11,4 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("discord.bot.config")
 public class BotConfig {
     private String botToken;
+
+    private String twitchChannelId;
+    private String twitchRoleNotificationId;
 }

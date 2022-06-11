@@ -2,6 +2,7 @@ package fr.funixgaming.funixbot.discord;
 
 import fr.funixgaming.funixbot.core.Bot;
 import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
+import fr.funixgaming.funixbot.core.configs.TwitchConfig;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.modules.BotTwitchAuth;
 import fr.funixgaming.funixbot.discord.configs.BotConfig;
@@ -15,6 +16,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.springframework.stereotype.Service;
 
@@ -32,18 +34,21 @@ public class FunixBot implements Bot, ServletContextListener {
 
     private final JDA jda;
     private final BotConfig botConfig;
+    private final TwitchConfig twitchConfig;
     private final BotTwitchAuth botTwitchAuth;
 
     private boolean running = true;
     private final Set<BotCommand> commands = new HashSet<>();
 
     public FunixBot(BotConfig botConfig,
+                    TwitchConfig twitchConfig,
                     BotTwitchAuth botTwitchAuth,
                     BotMessagesEvents botMessagesEvents,
                     BotSlashCommandsEvents botSlashCommandsEvents,
                     BotGuildEvents botGuildEvents) throws Exception {
         try {
             this.botConfig = botConfig;
+            this.twitchConfig = twitchConfig;
             this.botTwitchAuth = botTwitchAuth;
             this.jda = buildBot(botMessagesEvents, botSlashCommandsEvents, botGuildEvents);
             log.info("Discord bot prêt ! Lien d'invitation : {}", this.jda.getInviteUrl(Permission.ADMINISTRATOR));
@@ -62,17 +67,30 @@ public class FunixBot implements Bot, ServletContextListener {
 
         jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS);
         jdaBuilder.addEventListeners(botMessagesEvents, botSlashCommandsEvents, botGuildEvents);
-        jdaBuilder.setActivity(Activity.of(Activity.ActivityType.WATCHING, "twitch.tv/funixgaming", "https://twitch.tv/funixgaming"));
+        jdaBuilder.setActivity(Activity.of(
+                Activity.ActivityType.WATCHING,
+                String.format("twitch.tv/%s", twitchConfig.getStreamerUsername()),
+                String.format("https://twitch.tv/%s", twitchConfig.getStreamerUsername()))
+        );
+
         return jdaBuilder.build().awaitReady();
     }
 
     @Override
-    public void sendChatMessage(String channel, String message) {
+    public void sendChatMessage(String channelId, String message) {
+        final TextChannel channel = this.jda.getTextChannelById(channelId);
 
+        if (channel != null) {
+            channel.sendMessage(message).queue();
+        }
     }
 
-    public void sendChatMessage(String channel, MessageEmbed messageEmbed) {
+    public void sendChatMessage(String channelId, MessageEmbed messageEmbed) {
+        final TextChannel channel = this.jda.getTextChannelById(channelId);
 
+        if (channel != null) {
+            channel.sendMessageEmbeds(messageEmbed).queue();
+        }
     }
 
     @Override
