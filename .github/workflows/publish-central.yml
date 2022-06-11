@@ -41,6 +41,13 @@ jobs:
           path: FunixBot-Twitch/data
           key: botTwitchAuth
 
+      - name: Cache data discord folder
+        id: cache-discord-bot
+        uses: actions/cache@v3
+        with:
+          path: FunixBot-Discord/data
+          key: botTwitchAuth
+
       - name: Publish to the Maven Central Repository
         run: mvn --batch-mode clean deploy
         env:
@@ -48,5 +55,6 @@ jobs:
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
           TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
           TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
-          TWITCH_OAUTH_CODE: ${{ secrets.TWITCH_OAUTH_CODE2 }}
+          TWITCH_OAUTH_CODE: ${{ secrets.TWITCH_OAUTH_CODE3 }}
+          TWITCH_OAUTH_CODE2: ${{ secrets.TWITCH_OAUTH_CODE4 }}
           TWITCH_REDIRECT_URL: ${{ secrets.TWITCH_REDIRECT_URL }}
