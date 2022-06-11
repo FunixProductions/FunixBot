@@ -1,8 +1,9 @@
 package fr.funixgaming.funixbot.discord.events;
 
+import fr.funixgaming.funixbot.discord.configs.BotConfig;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.GuildUnbanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
@@ -12,16 +13,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
+@AllArgsConstructor
 public class BotGuildEvents extends ListenerAdapter {
 
-    @Override
-    public void onGuildJoin(@NotNull GuildJoinEvent event) {
-    }
-
-    @Override
-    public void onGuildLeave(@NotNull GuildLeaveEvent event) {
-    }
+    private final BotConfig botConfig;
 
     @Override
     public void onGuildBan(@NotNull GuildBanEvent event) {
@@ -45,5 +42,9 @@ public class BotGuildEvents extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleRemove(@NotNull GuildMemberRoleRemoveEvent event) {
+    }
+
+    private void guildMemberEventLog() {
+
     }
 }
