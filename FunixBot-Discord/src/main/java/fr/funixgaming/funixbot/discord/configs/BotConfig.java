@@ -19,5 +19,7 @@ public class BotConfig {
     private String generalChannelId;
     private String rolesChannelId;
 
-    private String twitchRoleId;
+    private String twitchNotifRoleId;
+    private String youtubeNotifRoleId;
+    private String tiktokNotifRoleId;
 }
