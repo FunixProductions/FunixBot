@@ -7,6 +7,7 @@ import fr.funixgaming.funixbot.discord.enums.GuildEventType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.GuildUnbanEvent;
@@ -44,6 +45,15 @@ public class BotGuildEvents extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
         guildMemberEventLog(event.getUser(), GuildEventType.JOIN);
+
+        try {
+            final FunixBot funixBot = FunixBot.getInstance();
+            final Guild guild = funixBot.getBotGuild();
+
+            guild.addRoleToMember(event.getUser(), funixBot.getBotRoles().getFollowerRole()).queue();
+        } catch (FunixBotException e) {
+            log.error("Erreur pendant l'ajout d'un membre au discord {}.", e.getMessage());
+        }
     }
 
     private void guildMemberEventLog(final User user, final GuildEventType eventType) {
