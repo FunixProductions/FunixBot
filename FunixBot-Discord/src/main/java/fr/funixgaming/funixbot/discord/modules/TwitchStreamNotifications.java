@@ -1,6 +1,5 @@
 package fr.funixgaming.funixbot.discord.modules;
 
-import fr.funixgaming.funixbot.core.configs.TwitchConfig;
 import fr.funixgaming.funixbot.core.modules.BotTwitchAuth;
 import fr.funixgaming.funixbot.core.modules.TwitchStreamStatus;
 import fr.funixgaming.funixbot.core.utils.BotColors;
@@ -73,7 +72,7 @@ public class TwitchStreamNotifications {
                 .setFooter("Notification de stream", funixBot.getJda().getSelfUser().getAvatarUrl());
 
         log.info("Envoi de la notification de stream pour {}", stream.getUserDisplayName());
-        funixBot.sendChatMessage(botConfig.getTwitchChannelId(), String.format("%s est en live sur Twitch ! <@&%s>", stream.getUserDisplayName(), botConfig.getTwitchRoleNotificationId()));
+        funixBot.sendChatMessage(botConfig.getTwitchChannelId(), String.format("%s est en live sur Twitch ! <@&%s>", stream.getUserDisplayName(), botConfig.getTwitchRoleId()));
         funixBot.sendChatMessage(botConfig.getTwitchChannelId(), embedBuilder.build());
         lastNotificationTime = Instant.now();
     }

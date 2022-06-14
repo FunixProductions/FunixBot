@@ -4,6 +4,8 @@ import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import lombok.Getter;
 import org.apache.commons.io.IOUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +46,16 @@ public class DataFiles {
             return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new FunixBotException("Impossible de lire le ficher classpath " + path, e);
+        }
+    }
+
+    public static BufferedImage getImageFromClasspath(final String path) throws IOException {
+        final InputStream inputStream = DataFiles.class.getResourceAsStream(path);
+
+        if (inputStream != null) {
+            return ImageIO.read(inputStream);
+        } else {
+            throw new IOException("L'image n'existe pas.");
         }
     }
 

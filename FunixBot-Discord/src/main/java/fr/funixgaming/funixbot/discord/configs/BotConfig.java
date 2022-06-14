@@ -12,8 +12,12 @@ import org.springframework.context.annotation.Configuration;
 public class BotConfig {
     private String botToken;
 
+    private String guildId;
+
     private String twitchChannelId;
     private String logChannelId;
     private String generalChannelId;
-    private String twitchRoleNotificationId;
+    private String rolesChannelId;
+
+    private String twitchRoleId;
 }
