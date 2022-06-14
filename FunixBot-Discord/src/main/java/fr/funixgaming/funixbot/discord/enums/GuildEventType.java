@@ -4,5 +4,6 @@ public enum GuildEventType {
     JOIN,
     LEAVE,
     KICK,
-    BAN
+    BAN,
+    UNBAN
 }

@@ -1,7 +1,9 @@
 package fr.funixgaming.funixbot.discord.events;
 
-import net.dv8tion.jda.api.events.message.MessageBulkDeleteEvent;
-import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
+import lombok.extern.slf4j.Slf4j;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
@@ -12,23 +14,26 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class BotMessagesEvents extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        final User user = event.getAuthor();
+        final Message message = event.getMessage();
+        final TextChannel textChannel = event.getTextChannel();
+
+        log.info("[{} > {}] {}", user.getAsTag(), textChannel.getName(), message.getContentRaw());
     }
 
     @Override
     public void onMessageUpdate(@NotNull MessageUpdateEvent event) {
-    }
+        final User user = event.getAuthor();
+        final Message message = event.getMessage();
+        final TextChannel textChannel = event.getTextChannel();
 
-    @Override
-    public void onMessageDelete(@NotNull MessageDeleteEvent event) {
-    }
-
-    @Override
-    public void onMessageBulkDelete(@NotNull MessageBulkDeleteEvent event) {
+        log.info("UPDATE [{} > {}] {}", user.getAsTag(), textChannel.getName(), message.getContentRaw());
     }
 
     @Override
