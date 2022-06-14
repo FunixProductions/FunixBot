@@ -9,6 +9,8 @@ import fr.funixgaming.funixbot.discord.configs.BotConfig;
 import fr.funixgaming.funixbot.discord.events.BotGuildEvents;
 import fr.funixgaming.funixbot.discord.events.BotMessagesEvents;
 import fr.funixgaming.funixbot.discord.events.BotSlashCommandsEvents;
+import fr.funixgaming.funixbot.discord.modules.BotEmotes;
+import fr.funixgaming.funixbot.discord.modules.RoleMessageHandler;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
@@ -34,6 +36,7 @@ public class FunixBot implements Bot, ServletContextListener {
 
     private final JDA jda;
     private final BotConfig botConfig;
+    private final BotEmotes botEmotes;
     private final TwitchConfig twitchConfig;
     private final BotTwitchAuth botTwitchAuth;
 
@@ -45,12 +48,16 @@ public class FunixBot implements Bot, ServletContextListener {
                     BotTwitchAuth botTwitchAuth,
                     BotMessagesEvents botMessagesEvents,
                     BotSlashCommandsEvents botSlashCommandsEvents,
-                    BotGuildEvents botGuildEvents) throws Exception {
+                    BotGuildEvents botGuildEvents,
+                    RoleMessageHandler roleMessageHandler) throws Exception {
         try {
             this.botConfig = botConfig;
             this.twitchConfig = twitchConfig;
             this.botTwitchAuth = botTwitchAuth;
             this.jda = buildBot(botMessagesEvents, botSlashCommandsEvents, botGuildEvents);
+            this.botEmotes = new BotEmotes(this);
+            roleMessageHandler.setMessageRoleChoice(this);
+
             log.info("Discord bot prêt ! Lien d'invitation : {}", this.jda.getInviteUrl(Permission.ADMINISTRATOR));
 
             instance = this;

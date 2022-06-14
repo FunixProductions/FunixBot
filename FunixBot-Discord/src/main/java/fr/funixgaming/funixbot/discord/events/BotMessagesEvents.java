@@ -1,5 +1,7 @@
 package fr.funixgaming.funixbot.discord.events;
 
+import fr.funixgaming.funixbot.discord.configs.BotConfigGenerated;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -16,7 +18,10 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class BotMessagesEvents extends ListenerAdapter {
+
+    private final BotConfigGenerated botConfigGenerated;
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
