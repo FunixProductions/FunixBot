@@ -7,15 +7,12 @@ import lombok.Getter;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Icon;
-import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.List;
 
 @Getter
@@ -29,15 +26,11 @@ public class BotEmotes {
 
     public BotEmotes(final FunixBot funixBot) throws FunixBotException {
         this.funixBot = funixBot;
-        final Guild guild = funixBot.getJda().getGuildById(funixBot.getBotConfig().getGuildId());
+        final Guild guild = funixBot.getBotGuild();
 
-        if (guild != null) {
-            this.twitchEmote = searchEmote("twitch", guild);
-            this.youtubeEmote = searchEmote("youtube", guild);
-            this.tiktokEmote = searchEmote("tiktok", guild);
-        } else {
-            throw new FunixBotException("La guilde spécifiée dans la config n'existe pas.");
-        }
+        this.twitchEmote = searchEmote("twitch", guild);
+        this.youtubeEmote = searchEmote("youtube", guild);
+        this.tiktokEmote = searchEmote("tiktok", guild);
     }
 
     private static Emote searchEmote(@NonNull final String emoteName, @NonNull final Guild guild) throws FunixBotException {

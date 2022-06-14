@@ -7,12 +7,14 @@ import fr.funixgaming.funixbot.discord.configs.BotConfig;
 import fr.funixgaming.funixbot.discord.configs.BotConfigGenerated;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RoleMessageHandler {
@@ -39,6 +41,40 @@ public class RoleMessageHandler {
                     throw new FunixBotException(String.format("Impossible d'envoyer le message de choix de roles. Erreur: %s", responseException.getMessage()));
                 }
             }
+        }
+    }
+
+    public void manageRolesByReactions(final User user, final MessageReaction messageReaction, boolean addReaction) {
+        try {
+            final String messageId = messageReaction.getMessageId();
+
+            if (this.botConfigGenerated.getMessageRolesChoiceId().equals(messageId)) {
+                final FunixBot funixBot = FunixBot.getInstance();
+                final BotEmotes botEmotes = funixBot.getBotEmotes();
+                final BotRoles botRoles = funixBot.getBotRoles();
+                final Guild guild = funixBot.getBotGuild();
+                final Emote emote = messageReaction.getReactionEmote().getEmote();
+
+                if (addReaction) {
+                    if (emote.equals(botEmotes.getTwitchEmote())) {
+                        guild.addRoleToMember(user, botRoles.getTwitchNotifRole()).queue();
+                    } else if (emote.equals(botEmotes.getYoutubeEmote())) {
+                        guild.addRoleToMember(user, botRoles.getYoutubeNotifRole()).queue();
+                    } else if (emote.equals(botEmotes.getTiktokEmote())) {
+                        guild.addRoleToMember(user, botRoles.getTiktokNotifRole()).queue();
+                    }
+                } else {
+                    if (emote.equals(botEmotes.getTwitchEmote())) {
+                        guild.removeRoleFromMember(user, botRoles.getTwitchNotifRole()).queue();
+                    } else if (emote.equals(botEmotes.getYoutubeEmote())) {
+                        guild.removeRoleFromMember(user, botRoles.getYoutubeNotifRole()).queue();
+                    } else if (emote.equals(botEmotes.getTiktokEmote())) {
+                        guild.removeRoleFromMember(user, botRoles.getTiktokNotifRole()).queue();
+                    }
+                }
+            }
+        } catch (FunixBotException e) {
+            log.error("Le funixbot n'est pas chargé.");
         }
     }
 

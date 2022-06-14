@@ -10,6 +10,7 @@ import fr.funixgaming.funixbot.discord.events.BotGuildEvents;
 import fr.funixgaming.funixbot.discord.events.BotMessagesEvents;
 import fr.funixgaming.funixbot.discord.events.BotSlashCommandsEvents;
 import fr.funixgaming.funixbot.discord.modules.BotEmotes;
+import fr.funixgaming.funixbot.discord.modules.BotRoles;
 import fr.funixgaming.funixbot.discord.modules.RoleMessageHandler;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -37,6 +39,8 @@ public class FunixBot implements Bot, ServletContextListener {
     private final JDA jda;
     private final BotConfig botConfig;
     private final BotEmotes botEmotes;
+    private final BotRoles botRoles;
+    private final Guild botGuild;
     private final TwitchConfig twitchConfig;
     private final BotTwitchAuth botTwitchAuth;
 
@@ -55,7 +59,14 @@ public class FunixBot implements Bot, ServletContextListener {
             this.twitchConfig = twitchConfig;
             this.botTwitchAuth = botTwitchAuth;
             this.jda = buildBot(botMessagesEvents, botSlashCommandsEvents, botGuildEvents);
+
+            this.botGuild = jda.getGuildById(botConfig.getGuildId());
+            if (this.botGuild == null) {
+                throw new FunixBotException("La guilde id du bot est invalide.");
+            }
+
             this.botEmotes = new BotEmotes(this);
+            this.botRoles = new BotRoles(this);
             roleMessageHandler.setMessageRoleChoice(this);
 
             log.info("Discord bot prêt ! Lien d'invitation : {}", this.jda.getInviteUrl(Permission.ADMINISTRATOR));
