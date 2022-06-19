@@ -4,8 +4,8 @@ import fr.funixgaming.funixbot.discord.modules.RoleMessageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageReaction;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
@@ -26,7 +26,7 @@ public class BotMessagesEvents extends ListenerAdapter {
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         final User user = event.getAuthor();
         final Message message = event.getMessage();
-        final TextChannel textChannel = event.getTextChannel();
+        final MessageChannel textChannel = event.getChannel();
 
         log.info("[{} > {}] {}", user.getAsTag(), textChannel.getName(), message.getContentRaw());
     }
@@ -35,7 +35,7 @@ public class BotMessagesEvents extends ListenerAdapter {
     public void onMessageUpdate(@NotNull MessageUpdateEvent event) {
         final User user = event.getAuthor();
         final Message message = event.getMessage();
-        final TextChannel textChannel = event.getTextChannel();
+        final MessageChannel textChannel = event.getChannel();
 
         log.info("UPDATE [{} > {}] {}", user.getAsTag(), textChannel.getName(), message.getContentRaw());
     }

@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.springframework.stereotype.Service;
 
@@ -96,7 +93,7 @@ public class FunixBot implements Bot, ServletContextListener {
 
     @Override
     public void sendChatMessage(String channelId, String message) {
-        final TextChannel channel = this.jda.getTextChannelById(channelId);
+        final MessageChannel channel = this.jda.getChannelById(MessageChannel.class, channelId);
 
         if (channel != null) {
             channel.sendMessage(message).queue();
@@ -104,7 +101,7 @@ public class FunixBot implements Bot, ServletContextListener {
     }
 
     public void sendChatMessage(String channelId, MessageEmbed messageEmbed) {
-        final TextChannel channel = this.jda.getTextChannelById(channelId);
+        final MessageChannel channel = this.jda.getChannelById(MessageChannel.class, channelId);
 
         if (channel != null) {
             channel.sendMessageEmbeds(messageEmbed).queue();
