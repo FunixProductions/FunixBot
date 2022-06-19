@@ -6,14 +6,14 @@
     <parent>
         <artifactId>funix-bot</artifactId>
         <groupId>fr.funixgaming.funixbot</groupId>
-        <version>1.1.6</version>
+        <version>1.1.7</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.funixgaming.funixbot.twitch</groupId>
     <artifactId>funix-bot-twitch</artifactId>
-    <version>1.1.6</version>
+    <version>1.1.7</version>
 
     <dependencies>
         <dependency>
