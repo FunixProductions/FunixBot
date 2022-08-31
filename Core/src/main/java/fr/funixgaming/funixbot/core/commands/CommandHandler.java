@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.*;
 
 @Slf4j
@@ -19,6 +20,7 @@ import java.util.*;
 public class CommandHandler {
     private final Set<BotCommand> listeners = new HashSet<>();
     private final TwitchThreadPool threadPool = new TwitchThreadPool(4);
+    private final Map<UUID, Instant> cooldownsApiCommands = new HashMap<>();
 
     private final FunixBotCommandClient funixBotCommandClient;
 
@@ -35,7 +37,7 @@ public class CommandHandler {
                     final String commandName = args[0].substring(1).toLowerCase();
 
                     for (final BotCommand command : listeners) {
-                        if (isUserEnteredCommand(commandName, command)) {
+                        if (isUserEnteredCommand(commandName, command) && command.canUseCommand()) {
                             command.onUserCommand(member, commandName, Arrays.copyOfRange(args, 1, args.length));
                             return;
                         }
@@ -43,15 +45,36 @@ public class CommandHandler {
 
                     try {
                         final List<FunixBotCommandDTO> search = this.funixBotCommandClient.search(String.format("command:%s", commandName), "0", "1");
+
                         if (!search.isEmpty()) {
                             final FunixBotCommandDTO commandApi = search.get(0);
-                            bot.sendChatMessage(channelSendMessage, commandApi.getMessage());
+
+                            if (canExcecuteApiCommand(commandApi)) {
+                                bot.sendChatMessage(channelSendMessage, commandApi.getMessage());
+                            }
                         }
                     } catch (FeignException e) {
                         log.error("Une erreur est survenue lors de la recherche de la commande ({}) twitch sur la funix api. Erreur code: {} msg: {}", commandName, e.status(), e.contentUTF8());
                     }
                 }
             });
+        }
+    }
+
+    private boolean canExcecuteApiCommand(final FunixBotCommandDTO commandDTO) {
+        final Instant now = Instant.now();
+        final Instant lastExecution = cooldownsApiCommands.get(commandDTO.getId());
+
+        if (lastExecution == null) {
+            cooldownsApiCommands.put(commandDTO.getId(), now);
+            return true;
+        } else {
+            if (now.isAfter(lastExecution.plusSeconds(3))) {
+                cooldownsApiCommands.put(commandDTO.getId(), now);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
