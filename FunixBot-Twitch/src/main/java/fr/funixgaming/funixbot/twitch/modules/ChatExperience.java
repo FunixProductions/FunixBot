@@ -118,7 +118,6 @@ public class ChatExperience {
     @Scheduled(fixedRate = 12, timeUnit = TimeUnit.HOURS)
     public void saveAndFlushMemory() {
         saveExp();
-        log.info("ChatExp Memory Flush {} entités supprimées.", this.userExperienceCache.size());
         this.userExperienceCache.clear();
     }
 
