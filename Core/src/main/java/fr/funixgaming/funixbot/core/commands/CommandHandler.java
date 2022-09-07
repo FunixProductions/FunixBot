@@ -3,12 +3,14 @@ package fr.funixgaming.funixbot.core.commands;
 import feign.FeignException;
 import fr.funixgaming.api.client.funixbot.clients.FunixBotCommandClient;
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotCommandDTO;
+import fr.funixgaming.api.core.crud.enums.SearchOperation;
 import fr.funixgaming.funixbot.core.Bot;
 import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import fr.funixgaming.twitch.api.tools.TwitchThreadPool;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -44,10 +46,10 @@ public class CommandHandler {
                     }
 
                     try {
-                        final List<FunixBotCommandDTO> search = this.funixBotCommandClient.search(String.format("command:%s", commandName), "0", "1");
+                        final Page<FunixBotCommandDTO> search = this.funixBotCommandClient.getAll("0", "1", String.format("command:%s:%s", SearchOperation.EQUALS, commandName), "");
 
                         if (!search.isEmpty()) {
-                            final FunixBotCommandDTO commandApi = search.get(0);
+                            final FunixBotCommandDTO commandApi = search.getContent().get(0);
 
                             if (canExcecuteApiCommand(commandApi)) {
                                 bot.sendChatMessage(channelSendMessage, commandApi.getMessage());
