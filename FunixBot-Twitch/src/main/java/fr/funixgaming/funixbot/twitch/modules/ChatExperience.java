@@ -3,6 +3,7 @@ package fr.funixgaming.funixbot.twitch.modules;
 import feign.FeignException;
 import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotUserExperienceDTO;
+import fr.funixgaming.api.core.crud.enums.SearchOperation;
 import fr.funixgaming.funixbot.core.configs.TwitchConfig;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.modules.TwitchStreamStatus;
@@ -14,6 +15,7 @@ import fr.funixgaming.twitch.api.exceptions.TwitchApiException;
 import fr.funixgaming.twitch.api.reference.TmiTwitchApi;
 import fr.funixgaming.twitch.api.reference.entities.responses.twitch.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -146,12 +148,12 @@ public class ChatExperience {
             }
         }
 
-        final List<FunixBotUserExperienceDTO> search = funixBotUserExperienceClient.search(String.format("twitchUserId:%s", twitchUserId), "0", "1");
+        final Page<FunixBotUserExperienceDTO> search = funixBotUserExperienceClient.getAll("0", "1", String.format("twitchUserId:%s:%s", SearchOperation.EQUALS.getOperation(), twitchUserId), "");
 
         if (search.isEmpty()) {
             return null;
         } else {
-            final FunixBotUserExperienceDTO experience = search.get(0);
+            final FunixBotUserExperienceDTO experience = search.getContent().get(0);
             this.userExperienceCache.add(experience);
             return experience;
         }
