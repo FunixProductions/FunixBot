@@ -1,4 +1,4 @@
-package fr.funixgaming.funixbot.core.commands.entities;
+package fr.funixgaming.funixbot.twitch.commands.utils.entities;
 
 import lombok.Getter;
 

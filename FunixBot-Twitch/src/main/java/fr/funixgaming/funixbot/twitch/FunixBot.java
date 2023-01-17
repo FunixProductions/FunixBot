@@ -1,78 +1,65 @@
 package fr.funixgaming.funixbot.twitch;
 
-import fr.funixgaming.api.client.funixbot.clients.FunixBotCommandClient;
+import fr.funixgaming.api.client.external_api_impl.twitch.reference.clients.users.TwitchUsersClient;
 import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
-import fr.funixgaming.funixbot.core.Bot;
-import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
-import fr.funixgaming.funixbot.core.commands.CommandHandler;
-import fr.funixgaming.funixbot.core.commands.entities.SimpleCommand;
-import fr.funixgaming.funixbot.core.configs.TwitchConfig;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
-import fr.funixgaming.funixbot.core.modules.BotTwitchAuth;
+import fr.funixgaming.funixbot.core.utils.TwitchStatus;
 import fr.funixgaming.funixbot.twitch.commands.*;
-import fr.funixgaming.funixbot.core.commands.entities.StaticCommand;
+import fr.funixgaming.funixbot.twitch.commands.utils.CommandHandler;
+import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
+import fr.funixgaming.funixbot.twitch.commands.utils.entities.SimpleCommand;
+import fr.funixgaming.funixbot.twitch.commands.utils.entities.StaticCommand;
 import fr.funixgaming.funixbot.twitch.config.BotConfig;
 import fr.funixgaming.funixbot.twitch.events.FunixBotEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
-import fr.funixgaming.twitch.api.exceptions.TwitchIRCException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
 @Getter
 @Service
-public class FunixBot implements Bot, ServletContextListener {
-    private static volatile FunixBot instance = null;
-
+public class FunixBot {
     private final TwitchBot twitchBot;
     private final BotConfig botConfig;
-    private final TwitchConfig twitchConfig;
     private final CommandHandler commandHandler;
-    private final BotTwitchAuth botTwitchAuth;
 
-    private final FunixBotCommandClient funixBotCommandClient;
-    private final FunixBotUserExperienceClient funixBotUserExperienceClient;
+    private final TwitchStatus twitchStatus;
+    private final TwitchUsersClient twitchUsersClient;
+    private final FunixBotUserExperienceClient userExperienceClient;
 
     private final Set<BotCommand> commands = new HashSet<>();
 
-    private boolean running = true;
-
-    public FunixBot(BotConfig botConfig,
-                    TwitchConfig twitchConfig,
-                    CommandHandler commandHandler,
+    public FunixBot(CommandHandler commandHandler,
                     FunixBotEvents funixBotEvents,
-                    BotTwitchAuth botTwitchAuth,
-                    FunixBotCommandClient funixBotCommandClient,
-                    FunixBotUserExperienceClient funixBotUserExperienceClient) throws FunixBotException, TwitchIRCException {
+                    BotConfig botConfig,
+                    TwitchBot twitchBot,
+                    TwitchStatus twitchStatus,
+                    TwitchUsersClient twitchUsersClient,
+                    FunixBotUserExperienceClient userExperienceClient) throws FunixBotException {
         try {
-            this.botConfig = botConfig;
-            this.twitchConfig = twitchConfig;
             this.commandHandler = commandHandler;
-            this.funixBotCommandClient = funixBotCommandClient;
-            this.funixBotUserExperienceClient = funixBotUserExperienceClient;
-            this.botTwitchAuth = botTwitchAuth;
+            this.twitchBot = twitchBot;
+            this.botConfig = botConfig;
+            this.twitchUsersClient = twitchUsersClient;
+            this.userExperienceClient = userExperienceClient;
+            this.twitchStatus = twitchStatus;
 
-            this.twitchBot = new TwitchBot(botConfig.getBotUsername(), botTwitchAuth.getAuth());
-            this.twitchBot.joinChannel(twitchConfig.getStreamerUsername());
+            this.twitchBot.joinChannel(botConfig.getStreamerUsername());
             this.twitchBot.addEventListener(funixBotEvents);
 
             configureCommands();
-
-            instance = this;
-        } catch (FunixBotException | TwitchIRCException e) {
+        } catch (FunixBotException e) {
             log.error("Une erreur est survenue lors du start du bot twitch. Erreur: {}", e.getMessage(), e);
             throw e;
         }
     }
 
     private void configureCommands() throws FunixBotException {
-        final String channelToSend = twitchConfig.getStreamerUsername();
+        final String channelToSend = botConfig.getStreamerUsername();
         final Set<SimpleCommand> simpleCommands = SimpleCommand.getCommandsFromClasspath();
 
         for (final SimpleCommand command : simpleCommands) {
@@ -89,38 +76,17 @@ public class FunixBot implements Bot, ServletContextListener {
         addNewCommand(new MultiTwitchCommand(this));
     }
 
-    @Override
     public void sendChatMessage(final String channel, final String message) {
         this.twitchBot.sendMessageToChannel(channel, message);
     }
 
-    @Override
     public void addNewCommand(final BotCommand command) {
         this.commands.add(command);
         this.commandHandler.addListener(command);
     }
 
-    @Override
     public void removeCommand(final String commandName) {
         this.commands.removeIf(command -> !(command instanceof StaticCommand) && command.getCommandName().equalsIgnoreCase(commandName));
     }
 
-    @Override
-    public void stopBot() {
-        this.running = false;
-        this.twitchBot.closeConnection();
-    }
-
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-        this.stopBot();
-    }
-
-    public static FunixBot getInstance() throws FunixBotException {
-        if (instance == null) {
-            throw new FunixBotException("Le bot n'est pas encore chargé.");
-        } else {
-            return instance;
-        }
-    }
 }

@@ -1,13 +1,11 @@
 package fr.funixgaming.funixbot.twitch.commands;
 
+import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
 import fr.funixgaming.api.core.utils.time.TimeUtils;
-import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
-import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.twitch.FunixBot;
-import fr.funixgaming.funixbot.core.modules.TwitchStreamStatus;
+import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
 import fr.funixgaming.funixbot.twitch.utils.TwitchEmotes;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
-import fr.funixgaming.twitch.api.reference.entities.responses.channel.Stream;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,23 +25,18 @@ public class CommandUptime extends BotCommand {
 
     @Override
     public void onUserCommand(@NonNull ChatMember user, @NonNull String command, @NonNull String[] args) {
-        try {
-            final String channel = user.getChannelName();
-            final TwitchStreamStatus streamStatus = TwitchStreamStatus.getInstance();
-            final Stream stream = streamStatus.getStream();
+        final String channel = user.getChannelName();
+        final TwitchStreamDTO streamInfo = bot.getTwitchStatus().getFunixStreamInfo();
 
-            if (stream != null) {
-                bot.sendChatMessage(channel, String.format("%s Le stream a commencé depuis %s.", TwitchEmotes.TWITCH_LOGO, getUptime(stream)));
-            } else {
-                bot.sendChatMessage(channel, TwitchEmotes.TWITCH_LOGO + " Le stream est hors ligne. !discord & !twitter pour savoir quand je stream.");
-            }
-        } catch (FunixBotException e) {
-            log.error("Erreur command uptime: {}", e.getMessage());
+        if (streamInfo != null) {
+            bot.sendChatMessage(channel, String.format("%s Le stream a commencé depuis %s.", TwitchEmotes.TWITCH_LOGO, getUptime(streamInfo)));
+        } else {
+            bot.sendChatMessage(channel, TwitchEmotes.TWITCH_LOGO + " Le stream est hors ligne. !discord & !twitter pour savoir quand je stream.");
         }
     }
 
     @NonNull
-    public String getUptime(@NonNull final Stream stream) {
+    public String getUptime(@NonNull final TwitchStreamDTO stream) {
         final Instant now = Instant.now();
         final Instant streamStart = stream.getStartedAt().toInstant();
         final List<String> uptimeStream = new ArrayList<>();

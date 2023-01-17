@@ -5,10 +5,9 @@ import fr.funixgaming.funixbot.core.utils.BotColors;
 import fr.funixgaming.funixbot.discord.FunixBot;
 import fr.funixgaming.funixbot.discord.configs.BotConfig;
 import fr.funixgaming.funixbot.discord.configs.BotConfigGenerated;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
@@ -16,27 +15,44 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class RoleMessageHandler {
 
     private final BotConfigGenerated botConfigGenerated;
     private final BotConfig botConfig;
+    private final JDA jda;
+    private final FunixBot funixBot;
 
-    public void setMessageRoleChoice(@NonNull final FunixBot funixBot) throws FunixBotException {
-        final TextChannel rolesChannel = funixBot.getJda().getTextChannelById(botConfig.getRolesChannelId());
+    public RoleMessageHandler(BotConfigGenerated botConfigGenerated,
+                              BotConfig botConfig,
+                              JDA jda,
+                              FunixBot funixBot) {
+        this.botConfigGenerated = botConfigGenerated;
+        this.botConfig = botConfig;
+        this.jda = jda;
+        this.funixBot = funixBot;
+
+        try {
+            setMessageRoleChoice();
+        } catch (FunixBotException e) {
+            throw new RuntimeException("Erreur lors du chargement du role handler.", e);
+        }
+    }
+
+    private void setMessageRoleChoice() throws FunixBotException {
+        final TextChannel rolesChannel = jda.getTextChannelById(botConfig.getRolesChannelId());
 
         if (rolesChannel == null) {
             throw new FunixBotException("Le channel pour le choix des rôles n'existe pas.");
         }
 
         if (botConfigGenerated.getMessageRolesChoiceId() == null) {
-            createMessageRoleChoice(rolesChannel, funixBot);
+            createMessageRoleChoice(rolesChannel);
         } else {
             try {
                 rolesChannel.retrieveMessageById(botConfigGenerated.getMessageRolesChoiceId()).complete();
             } catch (ErrorResponseException responseException) {
                 if (responseException.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
-                    createMessageRoleChoice(rolesChannel, funixBot);
+                    createMessageRoleChoice(rolesChannel);
                 } else {
                     throw new FunixBotException(String.format("Impossible d'envoyer le message de choix de roles. Erreur: %s", responseException.getMessage()));
                 }
@@ -45,44 +61,39 @@ public class RoleMessageHandler {
     }
 
     public void manageRolesByReactions(final User user, final MessageReaction messageReaction, boolean addReaction) {
-        try {
-            final String messageId = messageReaction.getMessageId();
+        final String messageId = messageReaction.getMessageId();
 
-            if (this.botConfigGenerated.getMessageRolesChoiceId().equals(messageId)) {
-                final FunixBot funixBot = FunixBot.getInstance();
-                final BotEmotes botEmotes = funixBot.getBotEmotes();
-                final BotRoles botRoles = funixBot.getBotRoles();
-                final Guild guild = funixBot.getBotGuild();
-                final Emote emote = messageReaction.getReactionEmote().getEmote();
+        if (this.botConfigGenerated.getMessageRolesChoiceId().equals(messageId)) {
+            final BotEmotes botEmotes = funixBot.getBotEmotes();
+            final BotRoles botRoles = funixBot.getBotRoles();
+            final Guild guild = funixBot.getBotGuild();
+            final Emote emote = messageReaction.getReactionEmote().getEmote();
 
-                if (addReaction) {
-                    if (emote.equals(botEmotes.getTwitchEmote())) {
-                        guild.addRoleToMember(user, botRoles.getTwitchNotifRole()).queue();
-                    } else if (emote.equals(botEmotes.getYoutubeEmote())) {
-                        guild.addRoleToMember(user, botRoles.getYoutubeNotifRole()).queue();
-                    } else if (emote.equals(botEmotes.getTiktokEmote())) {
-                        guild.addRoleToMember(user, botRoles.getTiktokNotifRole()).queue();
-                    }
-                } else {
-                    if (emote.equals(botEmotes.getTwitchEmote())) {
-                        guild.removeRoleFromMember(user, botRoles.getTwitchNotifRole()).queue();
-                    } else if (emote.equals(botEmotes.getYoutubeEmote())) {
-                        guild.removeRoleFromMember(user, botRoles.getYoutubeNotifRole()).queue();
-                    } else if (emote.equals(botEmotes.getTiktokEmote())) {
-                        guild.removeRoleFromMember(user, botRoles.getTiktokNotifRole()).queue();
-                    }
+            if (addReaction) {
+                if (emote.equals(botEmotes.getTwitchEmote())) {
+                    guild.addRoleToMember(user, botRoles.getTwitchNotifRole()).queue();
+                } else if (emote.equals(botEmotes.getYoutubeEmote())) {
+                    guild.addRoleToMember(user, botRoles.getYoutubeNotifRole()).queue();
+                } else if (emote.equals(botEmotes.getTiktokEmote())) {
+                    guild.addRoleToMember(user, botRoles.getTiktokNotifRole()).queue();
+                }
+            } else {
+                if (emote.equals(botEmotes.getTwitchEmote())) {
+                    guild.removeRoleFromMember(user, botRoles.getTwitchNotifRole()).queue();
+                } else if (emote.equals(botEmotes.getYoutubeEmote())) {
+                    guild.removeRoleFromMember(user, botRoles.getYoutubeNotifRole()).queue();
+                } else if (emote.equals(botEmotes.getTiktokEmote())) {
+                    guild.removeRoleFromMember(user, botRoles.getTiktokNotifRole()).queue();
                 }
             }
-        } catch (FunixBotException e) {
-            log.error("Le funixbot n'est pas chargé.");
         }
     }
 
-    private void createMessageRoleChoice(final TextChannel rolesChannel, final FunixBot funixBot) {
+    private void createMessageRoleChoice(final TextChannel rolesChannel) {
         final BotEmotes botEmotes = funixBot.getBotEmotes();
         final EmbedBuilder embedBuilder = new EmbedBuilder();
 
-        embedBuilder.setAuthor(null, null, funixBot.getJda().getSelfUser().getAvatarUrl());
+        embedBuilder.setAuthor(null, null, jda.getSelfUser().getAvatarUrl());
         embedBuilder.setTitle("Choix des rôles");
         embedBuilder.setDescription(
                 "Afin d'éviter de faire des tag everyone et here sur le discord, vous pouvez choisir vos rôles pour recevoir les notifications qui vous intéressent.\n" +

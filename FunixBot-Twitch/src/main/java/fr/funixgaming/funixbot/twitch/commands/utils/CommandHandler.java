@@ -1,16 +1,16 @@
-package fr.funixgaming.funixbot.core.commands;
+package fr.funixgaming.funixbot.twitch.commands.utils;
 
 import feign.FeignException;
 import fr.funixgaming.api.client.funixbot.clients.FunixBotCommandClient;
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotCommandDTO;
+import fr.funixgaming.api.core.crud.dtos.PageDTO;
 import fr.funixgaming.api.core.crud.enums.SearchOperation;
-import fr.funixgaming.funixbot.core.Bot;
-import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
+import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
+import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import fr.funixgaming.twitch.api.tools.TwitchThreadPool;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -25,12 +25,13 @@ public class CommandHandler {
     private final Map<UUID, Instant> cooldownsApiCommands = new HashMap<>();
 
     private final FunixBotCommandClient funixBotCommandClient;
+    private final TwitchBot twitchBot;
 
     public void addListener(final BotCommand listener) {
         listeners.add(listener);
     }
 
-    public void onNewChat(final ChatMember member, final String message, final Bot bot, final String channelSendMessage) {
+    public void onNewChat(final ChatMember member, final String message, final String channelSendMessage) {
         if (message.startsWith("!")) {
             threadPool.newTask(() -> {
                 final String[] args = message.split(" ");
@@ -46,13 +47,13 @@ public class CommandHandler {
                     }
 
                     try {
-                        final Page<FunixBotCommandDTO> search = this.funixBotCommandClient.getAll("0", "1", String.format("command:%s:%s", SearchOperation.EQUALS, commandName), "");
+                        final PageDTO<FunixBotCommandDTO> search = this.funixBotCommandClient.getAll("0", "1", String.format("command:%s:%s", SearchOperation.EQUALS.getOperation(), commandName), "");
 
-                        if (!search.isEmpty()) {
+                        if (!search.getContent().isEmpty()) {
                             final FunixBotCommandDTO commandApi = search.getContent().get(0);
 
-                            if (canExcecuteApiCommand(commandApi)) {
-                                bot.sendChatMessage(channelSendMessage, commandApi.getMessage());
+                            if (canExecuteApiCommand(commandApi)) {
+                                twitchBot.sendMessageToChannel(channelSendMessage, commandApi.getMessage());
                             }
                         }
                     } catch (FeignException e) {
@@ -63,7 +64,7 @@ public class CommandHandler {
         }
     }
 
-    private boolean canExcecuteApiCommand(final FunixBotCommandDTO commandDTO) {
+    private boolean canExecuteApiCommand(final FunixBotCommandDTO commandDTO) {
         final Instant now = Instant.now();
         final Instant lastExecution = cooldownsApiCommands.get(commandDTO.getId());
 

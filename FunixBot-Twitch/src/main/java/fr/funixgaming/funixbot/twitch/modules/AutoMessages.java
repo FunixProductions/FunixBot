@@ -5,7 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.DataFiles;
-import fr.funixgaming.funixbot.twitch.FunixBot;
+import fr.funixgaming.funixbot.twitch.config.BotConfig;
+import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -15,12 +16,19 @@ import java.time.temporal.ChronoUnit;
 public class AutoMessages {
     private static final int LIMIT_MESSAGES = 20;
 
+    private final TwitchBot twitchBot;
+    private final BotConfig botConfig;
+
     private final String[] messages;
     private int count = 0;
     private int selected = 0;
     private Instant lastMessageTime = Instant.now();
 
-    public AutoMessages() throws FunixBotException {
+    public AutoMessages(TwitchBot twitchBot,
+                        BotConfig botConfig) throws FunixBotException {
+        this.twitchBot = twitchBot;
+        this.botConfig = botConfig;
+
         final String data = DataFiles.readFileFromClasspath("/json/autoMessages.json");
         final JsonObject obj = JsonParser.parseString(data).getAsJsonObject();
         final JsonArray array = obj.get("messages").getAsJsonArray();
@@ -33,7 +41,6 @@ public class AutoMessages {
     }
 
     public void userMessage() throws FunixBotException {
-        final FunixBot funixBot = FunixBot.getInstance();
         final Instant now = Instant.now();
 
         ++this.count;
@@ -42,7 +49,7 @@ public class AutoMessages {
             this.lastMessageTime = now;
             this.count = 0;
 
-            funixBot.sendChatMessage(funixBot.getTwitchConfig().getStreamerUsername(), messages[selected]);
+            twitchBot.sendMessageToChannel(botConfig.getStreamerUsername(), messages[selected]);
 
             ++this.selected;
             if (this.selected >= this.messages.length) {
