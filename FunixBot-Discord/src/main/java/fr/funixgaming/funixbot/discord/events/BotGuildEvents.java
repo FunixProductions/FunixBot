@@ -14,13 +14,11 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 
 @Slf4j
-@Component
 @AllArgsConstructor
 public class BotGuildEvents extends ListenerAdapter {
 

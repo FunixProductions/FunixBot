@@ -3,7 +3,6 @@ package fr.funixgaming.funixbot.discord.modules;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.BotColors;
 import fr.funixgaming.funixbot.discord.FunixBot;
-import fr.funixgaming.funixbot.discord.configs.BotConfig;
 import fr.funixgaming.funixbot.discord.configs.BotConfigGenerated;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -11,25 +10,20 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 public class RoleMessageHandler {
 
     private final BotConfigGenerated botConfigGenerated;
-    private final BotConfig botConfig;
-    private final JDA jda;
     private final FunixBot funixBot;
+    private final JDA jda;
 
     public RoleMessageHandler(BotConfigGenerated botConfigGenerated,
-                              BotConfig botConfig,
-                              JDA jda,
-                              FunixBot funixBot) {
+                              FunixBot funixBot,
+                              JDA jda) {
         this.botConfigGenerated = botConfigGenerated;
-        this.botConfig = botConfig;
-        this.jda = jda;
         this.funixBot = funixBot;
+        this.jda = jda;
 
         try {
             setMessageRoleChoice();
@@ -39,7 +33,7 @@ public class RoleMessageHandler {
     }
 
     private void setMessageRoleChoice() throws FunixBotException {
-        final TextChannel rolesChannel = jda.getTextChannelById(botConfig.getRolesChannelId());
+        final TextChannel rolesChannel = jda.getTextChannelById(funixBot.getBotConfig().getRolesChannelId());
 
         if (rolesChannel == null) {
             throw new FunixBotException("Le channel pour le choix des rôles n'existe pas.");

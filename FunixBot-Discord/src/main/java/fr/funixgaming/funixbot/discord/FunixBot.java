@@ -1,6 +1,5 @@
 package fr.funixgaming.funixbot.discord;
 
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.discord.configs.BotConfig;
 import fr.funixgaming.funixbot.discord.modules.BotEmotes;
@@ -14,7 +13,6 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.springframework.stereotype.Service;
 
-
 @Slf4j
 @Getter
 @Service
@@ -24,8 +22,6 @@ public class FunixBot {
     private final BotEmotes botEmotes;
     private final BotRoles botRoles;
     private final Guild botGuild;
-
-    private TwitchStreamDTO funixStreamStatus = null;
 
     public FunixBot(BotConfig botConfig, JDA jda) throws Exception {
         try {
