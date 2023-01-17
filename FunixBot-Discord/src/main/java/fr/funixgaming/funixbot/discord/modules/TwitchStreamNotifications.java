@@ -59,9 +59,7 @@ public class TwitchStreamNotifications {
         String gameBoxArtUrl = null;
 
         if (game != null) {
-            gameBoxArtUrl = game.getBoxArtUrl();
-            gameBoxArtUrl = gameBoxArtUrl.replace("{width}", "600");
-            gameBoxArtUrl = gameBoxArtUrl.replace("{height}", "840");
+            gameBoxArtUrl = game.getBoxArtUrl(600, 840);
         }
 
         final EmbedBuilder embedBuilder = new EmbedBuilder()

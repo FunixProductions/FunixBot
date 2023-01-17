@@ -1,8 +1,5 @@
 package fr.funixgaming.funixbot.discord.configs;
 
-import fr.funixgaming.funixbot.discord.events.BotGuildEvents;
-import fr.funixgaming.funixbot.discord.events.BotMessagesEvents;
-import fr.funixgaming.funixbot.discord.events.BotSlashCommandsEvents;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.JDA;
@@ -46,19 +43,11 @@ public class BotConfig {
     private String tiktokNotifRoleId;
 
     @Bean(destroyMethod = "shutdown")
-    public JDA discordInstance(BotMessagesEvents botMessagesEvents,
-                               BotSlashCommandsEvents slashCommandsEvents,
-                               BotGuildEvents botGuildEvents) {
+    public JDA discordInstance() {
         try {
             final JDABuilder jdaBuilder = JDABuilder.createDefault(botToken);
 
             jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS);
-
-            jdaBuilder.addEventListeners(
-                    botMessagesEvents,
-                    slashCommandsEvents,
-                    botGuildEvents
-            );
 
             jdaBuilder.setActivity(Activity.of(
                     Activity.ActivityType.WATCHING,
