@@ -3,9 +3,9 @@ package fr.funixgaming.funixbot.twitch.commands;
 import feign.FeignException;
 import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotUserExperienceDTO;
-import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.twitch.FunixBot;
+import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
 import fr.funixgaming.funixbot.twitch.modules.ChatExperience;
 import fr.funixgaming.funixbot.twitch.utils.TwitchEmotes;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
@@ -21,7 +21,7 @@ public class LevelCommand extends BotCommand {
     public LevelCommand(final FunixBot bot) {
         super("level", "lvl", "lv");
         this.funixBot = bot;
-        this.experienceClient = bot.getFunixBotUserExperienceClient();
+        this.experienceClient = bot.getUserExperienceClient();
     }
 
     @Override

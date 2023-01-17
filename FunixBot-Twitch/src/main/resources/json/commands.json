@@ -56,8 +56,12 @@
       "response": "YouTube : youtube.com/c/funixgaming"
     },
     {
+      "command": "vod",
+      "response": "Youtube VOD: youtube.com/@funix-vod"
+    },
+    {
       "command": "don",
-      "response": "Faire un don pour la chaine twitch : https://streamlabs.com/funixgaming"
+      "response": "Soutenir le stream avec un don direct : https://streamlabs.com/funixgaming"
     },
     {
       "command": "sub",

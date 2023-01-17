@@ -1,9 +1,8 @@
 package fr.funixgaming.funixbot.twitch.events;
 
-import fr.funixgaming.funixbot.core.commands.CommandHandler;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
-import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.funixbot.twitch.commands.CommandGiveaway;
+import fr.funixgaming.funixbot.twitch.commands.utils.CommandHandler;
 import fr.funixgaming.funixbot.twitch.modules.AutoMessages;
 import fr.funixgaming.funixbot.twitch.modules.ChatExperience;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchEvents;
@@ -30,7 +29,7 @@ public class FunixBotEvents implements TwitchEvents {
         final String message = chatMessage.getMessage();
 
         try {
-            commandHandler.onNewChat(chatMember, message, FunixBot.getInstance(), chatMember.getChannelName());
+            commandHandler.onNewChat(chatMember, message, chatMember.getChannelName());
             chatExperience.userChatExp(chatMember);
             CommandGiveaway.getInstance().onUserChat(chatMessage);
 

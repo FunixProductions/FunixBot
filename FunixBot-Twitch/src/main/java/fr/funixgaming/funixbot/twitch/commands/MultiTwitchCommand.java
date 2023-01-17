@@ -1,12 +1,10 @@
 package fr.funixgaming.funixbot.twitch.commands;
 
-import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
-import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
+import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
 import fr.funixgaming.funixbot.twitch.FunixBot;
-import fr.funixgaming.funixbot.core.modules.TwitchStreamStatus;
+import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
 import fr.funixgaming.funixbot.twitch.utils.TwitchEmotes;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
-import fr.funixgaming.twitch.api.reference.entities.responses.channel.Stream;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -28,23 +26,19 @@ public class MultiTwitchCommand extends BotCommand {
 
     @Override
     public void onUserCommand(@NonNull ChatMember user, @NonNull String command, @NotNull @NonNull String[] args) {
-        try {
-            final Stream stream = TwitchStreamStatus.getInstance().getStream();
+        final TwitchStreamDTO streamData = this.bot.getTwitchStatus().getFunixStreamInfo();
 
-            if (stream != null) {
-                final Set<String> streamersTitle = getStreamersInTitle(stream.getTitle());
+        if (streamData != null) {
+            final Set<String> streamersTitle = getStreamersInTitle(streamData.getTitle());
 
-                if (!streamersTitle.isEmpty()) {
-                    bot.sendChatMessage(user.getChannelName(), String.format(
-                            "%s MultiTwitch -> %s/%s",
-                            TwitchEmotes.TWITCH_LOGO,
-                            MULTISTREAM_URL + bot.getTwitchConfig().getStreamerUsername(),
-                            String.join("/", streamersTitle)
-                    ));
-                }
+            if (!streamersTitle.isEmpty()) {
+                bot.sendChatMessage(user.getChannelName(), String.format(
+                        "%s MultiTwitch -> %s/%s",
+                        TwitchEmotes.TWITCH_LOGO,
+                        MULTISTREAM_URL + bot.getBotConfig().getStreamerUsername(),
+                        String.join("/", streamersTitle)
+                ));
             }
-        } catch (FunixBotException e) {
-            log.error("Erreur lors de l'execution de la commande multitwitch. {}", e.getMessage());
         }
     }
 

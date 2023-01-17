@@ -1,9 +1,9 @@
 package fr.funixgaming.funixbot.twitch.commands;
 
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotUserExperienceDTO;
-import fr.funixgaming.funixbot.core.commands.entities.BotCommand;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.twitch.FunixBot;
+import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
 import fr.funixgaming.funixbot.twitch.modules.ChatExperience;
 import fr.funixgaming.funixbot.twitch.utils.TwitchEmotes;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
@@ -123,7 +123,7 @@ public class CommandGiveaway extends BotCommand {
                 }
             }
 
-            bot.sendChatMessage(bot.getTwitchConfig().getStreamerUsername(), String.format(
+            bot.sendChatMessage(bot.getBotConfig().getStreamerUsername(), String.format(
                     "%s Début du giveaway ! Mot clé -> %s",
                     TwitchEmotes.GIFT,
                     this.triggerWord
@@ -131,7 +131,7 @@ public class CommandGiveaway extends BotCommand {
 
         } catch (FunixBotException e) {
             endGiveaway();
-            bot.sendChatMessage(bot.getTwitchConfig().getStreamerUsername(), String.format(
+            bot.sendChatMessage(bot.getBotConfig().getStreamerUsername(), String.format(
                     "%s Giveaway erreur -> %s",
                     TwitchEmotes.GIFT,
                     e.getMessage()

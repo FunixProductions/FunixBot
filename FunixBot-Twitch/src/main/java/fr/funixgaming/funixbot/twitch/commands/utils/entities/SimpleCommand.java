@@ -1,12 +1,12 @@
-package fr.funixgaming.funixbot.core.commands.entities;
+package fr.funixgaming.funixbot.twitch.commands.utils.entities;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.funixgaming.funixbot.core.Bot;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.DataFiles;
+import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
 import lombok.Getter;
 import lombok.NonNull;
@@ -20,7 +20,7 @@ import java.util.Set;
 @Setter
 public class SimpleCommand extends BotCommand {
     private final String response;
-    private Bot bot;
+    private FunixBot bot;
     private String channelToSend;
 
     public SimpleCommand(final String response,

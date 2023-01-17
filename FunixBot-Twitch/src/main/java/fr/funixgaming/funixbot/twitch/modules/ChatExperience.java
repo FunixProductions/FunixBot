@@ -1,27 +1,27 @@
 package fr.funixgaming.funixbot.twitch.modules;
 
 import feign.FeignException;
+import fr.funixgaming.api.client.external_api_impl.twitch.reference.clients.chat.TwitchChatClient;
+import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.TwitchDataResponseDTO;
+import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.channel.chat.TwitchChannelChattersDTO;
 import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotUserExperienceDTO;
+import fr.funixgaming.api.core.crud.dtos.PageDTO;
 import fr.funixgaming.api.core.crud.enums.SearchOperation;
-import fr.funixgaming.funixbot.core.configs.TwitchConfig;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
-import fr.funixgaming.funixbot.core.modules.TwitchStreamStatus;
-import fr.funixgaming.funixbot.twitch.FunixBot;
+import fr.funixgaming.funixbot.core.utils.TwitchStatus;
 import fr.funixgaming.funixbot.twitch.config.BotConfig;
 import fr.funixgaming.funixbot.twitch.utils.TwitchEmotes;
+import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
-import fr.funixgaming.twitch.api.exceptions.TwitchApiException;
-import fr.funixgaming.twitch.api.reference.TmiTwitchApi;
-import fr.funixgaming.twitch.api.reference.entities.responses.twitch.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,33 +33,36 @@ public class ChatExperience {
     private static volatile ChatExperience instance = null;
 
     private final BotConfig botConfig;
-    private final TwitchConfig twitchConfig;
-    private final TwitchStreamStatus streamStatus;
+    private final TwitchBot twitchBot;
+
+    private final TwitchChatClient twitchChatClient;
+    private final TwitchStatus twitchStatus;
     private final FunixBotUserExperienceClient funixBotUserExperienceClient;
 
-    private final TmiTwitchApi tmiTwitchApi = new TmiTwitchApi();
     private final Set<FunixBotUserExperienceDTO> userExperienceCache = new HashSet<>();
 
     public ChatExperience(BotConfig botConfig,
-                          TwitchConfig twitchConfig,
-                          TwitchStreamStatus twitchStreamStatus,
+                          TwitchBot twitchBot,
+                          TwitchChatClient twitchChatClient,
+                          TwitchStatus twitchStatus,
                           FunixBotUserExperienceClient funixBotUserExperienceClient) {
         this.botConfig = botConfig;
-        this.twitchConfig = twitchConfig;
-        this.streamStatus = twitchStreamStatus;
+        this.twitchChatClient = twitchChatClient;
         this.funixBotUserExperienceClient = funixBotUserExperienceClient;
+        this.twitchBot = twitchBot;
+        this.twitchStatus = twitchStatus;
 
         instance = this;
     }
 
     public void userChatExp(final ChatMember user) {
-        if (user.getDisplayName().equalsIgnoreCase(twitchConfig.getStreamerUsername()) ||
+        if (user.getDisplayName().equalsIgnoreCase(botConfig.getStreamerUsername()) ||
                 user.getDisplayName().equalsIgnoreCase(botConfig.getBotUsername())) {
             return;
         }
 
         try {
-            if (streamStatus.getStream() != null) {
+            if (twitchStatus.getFunixStreamInfo() != null) {
                 final FunixBotUserExperienceDTO experience = findExpByUserId(Integer.toString(user.getUserId()));
 
                 if (experience == null) {
@@ -79,7 +82,7 @@ public class ChatExperience {
     }
 
     public void giveUserExp(final String twitchUserId, final String userName, final int expToGive) throws FunixBotException {
-        if (userName.equalsIgnoreCase(twitchConfig.getStreamerUsername()) ||
+        if (userName.equalsIgnoreCase(botConfig.getStreamerUsername()) ||
                 userName.equalsIgnoreCase(botConfig.getBotUsername())) {
             return;
         }
@@ -91,20 +94,18 @@ public class ChatExperience {
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
     public void gainLurkExp() {
         try {
-            if (streamStatus.getStream() != null) {
-                final FunixBot funixBot = FunixBot.getInstance();
-                final Set<String> usernames = new HashSet<>(tmiTwitchApi.getUsernamesConnectedOnChat(twitchConfig.getStreamerUsername()));
-                final Set<User> ids = funixBot.getBotTwitchAuth().getTwitchApi().getUsersByUserName(usernames);
+            if (twitchStatus.getFunixStreamInfo() != null) {
+                final TwitchDataResponseDTO<TwitchChannelChattersDTO> chatters = this.twitchChatClient.getChannelChatters(1000, null);
 
-                for (final User user : ids) {
-                    if (!user.getName().equalsIgnoreCase(twitchConfig.getStreamerUsername()) &&
-                            !user.getName().equalsIgnoreCase(botConfig.getBotUsername())) {
-                        addExp(findExpByUserId(user.getId()), user.getDisplayName(), 5);
+                for (final TwitchChannelChattersDTO user : chatters.getData()) {
+                    if (!user.getUserLogin().equalsIgnoreCase(botConfig.getStreamerUsername()) &&
+                            !user.getUserLogin().equalsIgnoreCase(botConfig.getBotUsername())) {
+                        addExp(findExpByUserId(user.getUserId()), user.getUserName(), 5);
                     }
                 }
             }
-        } catch (TwitchApiException | FunixBotException e) {
-            log.error("Erreur lors du gain d'exp lurk {}.", e.getMessage());
+        } catch (FeignException | FunixBotException e) {
+            log.error("Erreur lors du gain d'exp lurk.", e);
         }
     }
 
@@ -148,9 +149,9 @@ public class ChatExperience {
             }
         }
 
-        final Page<FunixBotUserExperienceDTO> search = funixBotUserExperienceClient.getAll("0", "1", String.format("twitchUserId:%s:%s", SearchOperation.EQUALS.getOperation(), twitchUserId), "");
+        final PageDTO<FunixBotUserExperienceDTO> search = funixBotUserExperienceClient.getAll("0", "1", String.format("twitchUserId:%s:%s", SearchOperation.EQUALS.getOperation(), twitchUserId), "");
 
-        if (search.isEmpty()) {
+        if (search.getContent().isEmpty()) {
             return null;
         } else {
             final FunixBotUserExperienceDTO experience = search.getContent().get(0);
@@ -169,9 +170,10 @@ public class ChatExperience {
                 experience.setXp(0);
 
                 log.info("Level UP pour {} (Niveau {})", username, experience.getLevel());
-                if (experience.getLevel() % 5 == 0) {
-                    FunixBot.getInstance().sendChatMessage(
-                            this.twitchConfig.getStreamerUsername(),
+
+                if (experience.getLevel() % 5 == 0 && userNotInLurk(experience)) {
+                    twitchBot.sendMessageToChannel(
+                            botConfig.getStreamerUsername(),
                             String.format("%s Level UP pour %s (Niveau %d)", TwitchEmotes.TWITCH_LOGO, username, experience.getLevel())
                     );
                 }
@@ -184,5 +186,12 @@ public class ChatExperience {
             throw new FunixBotException("Chat Experience pas chargé.");
         }
         return instance;
+    }
+
+    private boolean userNotInLurk(final FunixBotUserExperienceDTO experienceDTO) {
+        final Instant now = Instant.now();
+        final Instant lastMessage = Instant.ofEpochSecond(experienceDTO.getLastMessageDateSeconds());
+
+        return lastMessage.plus(5, ChronoUnit.MINUTES).isAfter(now);
     }
 }
