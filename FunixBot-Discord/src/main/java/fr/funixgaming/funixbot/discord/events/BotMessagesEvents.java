@@ -55,12 +55,12 @@ public class BotMessagesEvents extends ListenerAdapter {
                     .setTitle("**Choix des rôles**")
                     .setDescription("Afin d'éviter de faire des tag everyone et here sur le discord, vous pouvez choisir vos rôles pour recevoir les notifications qui vous intéressent.\n" +
                             "Vous pouvez d'ailleurs ajouter et retirer votre rôle à tout moment.")
-                    .addField("<:twitch:1076929000330498058>", "Les notifications Twitch", true)
-                    .addField("<:youtube:1076929043154346047>", "Les notifications YouTube", true)
-                    .addField("<:tiktok:1076929073516912733>", "Les notifications TikTok", true);
-            Button twitchbtn = Button.primary("notif-twitch", Emoji.fromCustom(":twitch:", Long.parseLong("1076929000330498058"), false));
-            Button youtubebtn = Button.primary("notif-youtube", Emoji.fromCustom(":youtube:", Long.parseLong("1076929043154346047"), false));
-            Button tiktokbtn = Button.primary("notif-tiktok", Emoji.fromCustom(":tiktok:", Long.parseLong("1076929073516912733"), false));
+                    .addField(botEmotes.getTwitchEmote().getAsMention(), "Les notifications Twitch", true)
+                    .addField(botEmotes.getYoutubeEmote().getAsMention(), "Les notifications YouTube", true)
+                    .addField(botEmotes.getTiktokEmote().getAsMention(), "Les notifications TikTok", true);
+            Button twitchbtn = Button.primary("notif-twitch", Emoji.fromCustom(String.format(":%s:", botEmotes.getTwitchEmote().getName()), botEmotes.getTwitchEmote().getId(), false));
+            Button youtubebtn = Button.primary("notif-youtube", Emoji.fromCustom(String.format(":%s:", botEmotes.getYoutubeEmote().getName()), botEmotes.getYoutubeEmote().getId(), false));
+            Button tiktokbtn = Button.primary("notif-tiktok", Emoji.fromCustom(String.format(":%s:", botEmotes.getTiktokEmote().getName()), botEmotes.getTiktokEmote().getId(), false));
 
             event.getChannel().sendMessageEmbeds(embed.build()).addActionRow(twitchbtn, youtubebtn, tiktokbtn).queue();
             event.getMessage().delete().queue();
