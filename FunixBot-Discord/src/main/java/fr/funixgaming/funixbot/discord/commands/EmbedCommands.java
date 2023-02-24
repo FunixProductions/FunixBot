@@ -1,6 +1,6 @@
-package fr.gamecreep.bot.commands;
+package fr.funixgaming.funixbot.commands;
 
-import fr.gamecreep.bot.commands.CommandCategories;
+import fr.funixgaming.funixbot.commands.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
