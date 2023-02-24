@@ -1,4 +1,4 @@
-package fr.gamecreep.bot.commands;
+package fr.funixgaming.funixbot.discord.commands;
 
 public enum CommandCategories {
 
