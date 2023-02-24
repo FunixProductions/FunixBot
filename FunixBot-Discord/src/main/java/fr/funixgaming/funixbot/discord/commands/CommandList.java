@@ -1,6 +1,6 @@
-package fr.gamecreep.bot.commands;
+package fr.funixgaming.funixbot.commands;
 
-import fr.gamecreep.bot.commands.*;
+package fr.funixgaming.funixbot.commands.*;
 
 public enum CommandList {
 
