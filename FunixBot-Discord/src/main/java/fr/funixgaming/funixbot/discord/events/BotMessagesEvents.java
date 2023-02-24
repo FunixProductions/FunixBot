@@ -49,7 +49,7 @@ public class BotMessagesEvents extends ListenerAdapter {
 
         log.info("[{} > {}] {}", user.getAsTag(), textChannel.getName(), message.getContentRaw());
 
-        if (event.getMessage().getContentDisplay().equals("!rolereact") && event.getAuthor().getId().equals("696753471650660412")){
+        if (event.getMessage().getContentDisplay().equals("!rolereact") && event.getAuthor().getId().equals("161938556359671809")){
             EmbedBuilder embed = new EmbedBuilder()
                     .setColor(new Color(44,175,255))
                     .setTitle("**Choix des rôles**")
