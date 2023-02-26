@@ -12,7 +12,6 @@
 
     <groupId>fr.funixgaming.funixbot.core</groupId>
     <artifactId>core</artifactId>
-    <version>1.2.1</version>
 
     <build>
         <plugins>
