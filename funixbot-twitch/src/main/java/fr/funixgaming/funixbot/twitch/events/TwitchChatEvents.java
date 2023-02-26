@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class FunixBotEvents implements TwitchEvents {
+public class TwitchChatEvents implements TwitchEvents {
 
     private final CommandHandler commandHandler;
     private final AutoMessages autoMessages;

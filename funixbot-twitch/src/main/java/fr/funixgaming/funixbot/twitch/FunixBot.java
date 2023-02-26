@@ -8,9 +8,8 @@ import fr.funixgaming.funixbot.twitch.commands.*;
 import fr.funixgaming.funixbot.twitch.commands.utils.CommandHandler;
 import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
 import fr.funixgaming.funixbot.twitch.commands.utils.entities.SimpleCommand;
-import fr.funixgaming.funixbot.twitch.commands.utils.entities.StaticCommand;
 import fr.funixgaming.funixbot.twitch.config.BotConfig;
-import fr.funixgaming.funixbot.twitch.events.FunixBotEvents;
+import fr.funixgaming.funixbot.twitch.events.TwitchChatEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +33,7 @@ public class FunixBot {
     private final Set<BotCommand> commands = new HashSet<>();
 
     public FunixBot(CommandHandler commandHandler,
-                    FunixBotEvents funixBotEvents,
+                    TwitchChatEvents twitchChatEvents,
                     BotConfig botConfig,
                     TwitchBot twitchBot,
                     TwitchStatus twitchStatus,
@@ -49,7 +48,7 @@ public class FunixBot {
             this.twitchStatus = twitchStatus;
 
             this.twitchBot.joinChannel(botConfig.getStreamerUsername());
-            this.twitchBot.addEventListener(funixBotEvents);
+            this.twitchBot.addEventListener(twitchChatEvents);
 
             configureCommands();
         } catch (FunixBotException e) {
@@ -66,27 +65,18 @@ public class FunixBot {
             command.setChannelToSend(channelToSend);
             command.setBot(this);
 
-            addNewCommand(command);
+            this.commandHandler.addListener(command);
         }
 
-        addNewCommand(new CommandGiveaway(this));
-        addNewCommand(new CommandFollowCheck(this));
-        addNewCommand(new LevelCommand(this));
-        addNewCommand(new CommandUptime(this));
-        addNewCommand(new MultiTwitchCommand(this));
+        this.commandHandler.addListener(new CommandGiveaway(this));
+        this.commandHandler.addListener(new CommandFollowCheck(this));
+        this.commandHandler.addListener(new LevelCommand(this));
+        this.commandHandler.addListener(new CommandUptime(this));
+        this.commandHandler.addListener(new MultiTwitchCommand(this));
     }
 
     public void sendChatMessage(final String channel, final String message) {
         this.twitchBot.sendMessageToChannel(channel, message);
-    }
-
-    public void addNewCommand(final BotCommand command) {
-        this.commands.add(command);
-        this.commandHandler.addListener(command);
-    }
-
-    public void removeCommand(final String commandName) {
-        this.commands.removeIf(command -> !(command instanceof StaticCommand) && command.getCommandName().equalsIgnoreCase(commandName));
     }
 
 }
