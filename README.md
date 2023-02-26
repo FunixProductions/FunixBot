@@ -2,7 +2,7 @@
 FunixBot for twitch and discord
 
 [![Maven Central](https://img.shields.io/maven-central/v/fr.funixgaming.funixbot/funix-bot.svg)](https://search.maven.org/artifact/fr.funixgaming.funixbot/funix-bot)
-![Tests build](https://github.com/FunixProductions/FunixAPI/actions/workflows/main.yml/badge.svg?branch=master)
+[![FunixBot build & test](https://github.com/FunixProductions/FunixBot/actions/workflows/test-build.yml/badge.svg?branch=master)](https://github.com/FunixProductions/FunixBot/actions/workflows/test-build.yml)
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 ![Spring app](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
