@@ -9,11 +9,11 @@ COPY pom.xml .
 COPY Core/pom.xml ./core/
 COPY Core/src ./core/src
 
-COPY Funixbot-Discord/pom.xml ./funixbot-discord/
-COPY Funixbot-Discord/src ./funixbot-discord/src
+COPY funixbot-discord/pom.xml ./funixbot-discord/
+COPY funixbot-discord/src ./funixbot-discord/src
 
-COPY Funixbot-Twitch/pom.xml ./funixbot-twitch/
-COPY Funixbot-Twitch/src ./funixbot-twitch/src
+COPY funixbot-twitch/pom.xml ./funixbot-twitch/
+COPY funixbot-twitch/src ./funixbot-twitch/src
 
 RUN mvn clean package
 RUN rm funixbot-discord/target/funix-bot-discord-*-javadoc.jar
