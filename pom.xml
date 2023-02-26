@@ -8,12 +8,12 @@
     <artifactId>funix-bot</artifactId>
     <name>FunixBot</name>
     <packaging>pom</packaging>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
 
     <parent>
         <artifactId>funix-api</artifactId>
         <groupId>fr.funixgaming.api</groupId>
-        <version>1.2.3</version>
+        <version>1.2.6</version>
     </parent>
 
     <modules>
@@ -62,12 +62,12 @@
         <java.version>17</java.version>
 
         <twitchApi.version>1.3.0</twitchApi.version>
-        <funixbot.core.version>1.2.1</funixbot.core.version>
+        <funixbot.version>1.2.2</funixbot.version>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <commons.io.version>2.11.0</commons.io.version>
         <!-- https://github.com/DV8FromTheWorld/JDA -->
-        <discord.jda.version>5.0.0-alpha.12</discord.jda.version>
+        <discord.jda.version>5.0.0-beta.4</discord.jda.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
