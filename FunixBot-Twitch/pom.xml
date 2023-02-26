@@ -13,13 +13,12 @@
 
     <groupId>fr.funixgaming.funixbot.twitch</groupId>
     <artifactId>funix-bot-twitch</artifactId>
-    <version>1.2.1</version>
 
     <dependencies>
         <dependency>
             <groupId>fr.funixgaming.funixbot.core</groupId>
             <artifactId>core</artifactId>
-            <version>${funixbot.core.version}</version>
+            <version>${funixbot.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
