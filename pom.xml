@@ -6,7 +6,6 @@
 
     <groupId>fr.funixgaming.funixbot</groupId>
     <artifactId>funix-bot</artifactId>
-    <name>FunixBot</name>
     <packaging>pom</packaging>
     <version>1.2.2</version>
 
