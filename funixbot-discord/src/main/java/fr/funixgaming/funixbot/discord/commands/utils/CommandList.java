@@ -1,7 +1,7 @@
 package fr.funixgaming.funixbot.commands.utils;
 
 import fr.funixgaming.funixbot.commands.*;
-import fr.gamecreep.bot.commands.utils.BotCommand;
+import fr.funixgaming.funixbot.commands.utils.BotCommand;
 
 import java.util.ArrayList;
 import java.util.List;
