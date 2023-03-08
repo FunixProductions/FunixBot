@@ -1,9 +1,6 @@
-package fr.gamecreep.bot.commands.utils;
+package fr.funixgaming.funixbot.commands.utils;
 
-import fr.gamecreep.bot.commands.CommandGnou;
-import fr.gamecreep.bot.commands.CommandHelp;
-import fr.gamecreep.bot.commands.CommandIP;
-import fr.gamecreep.bot.commands.CommandMe;
+import fr.funixgaming.funixbot.commands.*;
 import fr.gamecreep.bot.commands.utils.BotCommand;
 
 import java.util.ArrayList;
