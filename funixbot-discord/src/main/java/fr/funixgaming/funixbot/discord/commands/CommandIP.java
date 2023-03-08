@@ -1,6 +1,6 @@
-package fr.gamecreep.bot.commands;
+package fr.funixgaming.funixbot.commands;
 
-import fr.gamecreep.bot.commands.utils.BotCommand;
+import fr.funixgaming.funixbot.commands.utils.BotCommand;
 import lombok.NonNull;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -10,10 +10,6 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.awt.*;
 
 public class CommandIP extends BotCommand {
-
-    /*
-        Principalement repris du FunixBot Twitch.
-     */
 
     public CommandIP() {
         super("ip", "Récupère l'IP et les informations du serveur Minecraft Pacifista !");
