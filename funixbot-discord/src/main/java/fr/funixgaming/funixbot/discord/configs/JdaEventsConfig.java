@@ -1,6 +1,7 @@
 package fr.funixgaming.funixbot.discord.configs;
 
 import fr.funixgaming.funixbot.discord.FunixBot;
+import fr.funixgaming.funixbot.discord.events.BotButtonEvents;
 import fr.funixgaming.funixbot.discord.events.BotGuildEvents;
 import fr.funixgaming.funixbot.discord.events.BotMessagesEvents;
 import fr.funixgaming.funixbot.discord.events.BotSlashCommandsEvents;
@@ -45,6 +46,15 @@ public class JdaEventsConfig {
 
         jda.addEventListener(botSlashCommandsEvents);
         return botSlashCommandsEvents;
+    }
+    
+    @Bean
+    public BotButtonEvents botButtonEvents(FunixBot funixBot,
+                                                         JDA jda) {
+        final BotButtonEvents botButtonEvents = new BotButtonEvents(funixBot);
+
+        jda.addEventListener(botButtonEvents);
+        return botButtonEvents;
     }
 
 }
