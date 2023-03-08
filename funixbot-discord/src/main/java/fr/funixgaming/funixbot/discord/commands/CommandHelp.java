@@ -1,7 +1,7 @@
-package fr.gamecreep.bot.commands;
+package fr.funixgaming.funixbot.commands;
 
-import fr.gamecreep.bot.commands.utils.BotCommand;
-import fr.gamecreep.bot.commands.utils.CommandList;
+import fr.funixgaming.funixbot.commands.utils.BotCommand;
+import fr.funixgaming.funixbot.commands.utils.CommandList;
 import lombok.NonNull;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
