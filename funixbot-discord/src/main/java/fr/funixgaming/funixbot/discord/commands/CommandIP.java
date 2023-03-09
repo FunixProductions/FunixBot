@@ -1,6 +1,6 @@
 package fr.funixgaming.funixbot.commands;
 
-import fr.funixgaming.funixbot.commands.utils.BotCommand;
+import fr.funixgaming.funixbot.commands.utils.SlashCommand;
 import lombok.NonNull;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -9,14 +9,23 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.*;
 
-public class CommandIP extends BotCommand {
+public class CommandIP implements SlashCommand {
 
-    public CommandIP() {
-        super("ip", "Récupère l'IP et les informations du serveur Minecraft Pacifista !");
+    private String name = "ip";
+    private String description = "Récupère l'IP et les informations du serveur Minecraft Pacifista !";
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
-    public void onUserCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void runCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Pacifista Minecraft");
