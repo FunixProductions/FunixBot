@@ -1,7 +1,7 @@
-package fr.funixgaming.funixbot.commands.utils;
+package fr.funixgaming.funixbot.discord.commands.utils;
 
-import fr.funixgaming.funixbot.commands.*;
-import fr.funixgaming.funixbot.commands.utils.SlashCommand;
+import fr.funixgaming.funixbot.discord.commands.*;
+import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
 
 import java.util.ArrayList;
 import java.util.List;
