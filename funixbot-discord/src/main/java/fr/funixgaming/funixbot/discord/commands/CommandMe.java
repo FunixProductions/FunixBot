@@ -1,28 +1,31 @@
 package fr.funixgaming.funixbot.commands;
 
-import fr.funixgaming.funixbot.commands.utils.BotCommand;
+import fr.funixgaming.funixbot.commands.utils.SlashCommand;
 import lombok.NonNull;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
-import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
-import net.dv8tion.jda.api.utils.data.DataObject;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class CommandMe extends BotCommand {
+public class CommandMe implements SlashCommand {
 
-    public CommandMe() {
-        super("me", "Récupère les informations de ton compte Discord !");
+    private String name = "me";
+    private String description = "Récupère les informations de ton compte Discord !";
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
-    public void onUserCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void runCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.FRANCE);
 
