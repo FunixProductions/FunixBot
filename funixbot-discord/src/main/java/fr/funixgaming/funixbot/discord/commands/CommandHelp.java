@@ -1,28 +1,35 @@
 package fr.funixgaming.funixbot.commands;
 
-import fr.funixgaming.funixbot.commands.utils.BotCommand;
 import fr.funixgaming.funixbot.commands.utils.CommandList;
+import fr.funixgaming.funixbot.commands.utils.SlashCommand;
 import lombok.NonNull;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.awt.*;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 
-public class CommandHelp extends BotCommand {
+public class CommandHelp implements SlashCommand {
 
-    public CommandHelp() {
-        super("help", "Récupère les commandes disponibles !");
+    private String name = "help";
+    private String description = "Récupère les commandes disponibles !";
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
-    public void onUserCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void runCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
 
         CommandList cmdList;
         cmdList = new CommandList();
-        List<BotCommand> commandList = cmdList.getList();
+        List<SlashCommand> commandList = cmdList.getList();
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setThumbnail(interactionEvent.getJDA().getSelfUser().getAvatarUrl());
@@ -31,7 +38,7 @@ public class CommandHelp extends BotCommand {
         embed.setColor(new Color(44,175,255));
         embed.setDescription("Voici toute les commandes du bot !");
 
-        for (BotCommand cmd : commandList) {
+        for (SlashCommand cmd : commandList) {
             embed.addField(cmd.getName(), cmd.getDescription(), false);
         }
 
