@@ -1,6 +1,6 @@
 package fr.funixgaming.funixbot.commands;
 
-import fr.gamecreep.bot.commands.utils.SlashCommand;
+import fr.funixgaming.funixbot.commands.utils.SlashCommand;
 import lombok.NonNull;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
