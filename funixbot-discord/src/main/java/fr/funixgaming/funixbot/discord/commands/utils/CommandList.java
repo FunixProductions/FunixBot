@@ -1,20 +1,20 @@
 package fr.funixgaming.funixbot.commands.utils;
 
 import fr.funixgaming.funixbot.commands.*;
-import fr.funixgaming.funixbot.commands.utils.BotCommand;
+import fr.funixgaming.funixbot.commands.utils.SlashCommand;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommandList {
-    private List<BotCommand> commandList;
+    private List<SlashCommand> commandList;
     private CommandIP ipcmd = new CommandIP();
     private CommandMe mecmd = new CommandMe();
     private CommandGnou gnoucmd = new CommandGnou();
     private CommandHelp helpcmd = new CommandHelp();
 
     public CommandList() {
-        commandList = new ArrayList<BotCommand>();
+        commandList = new ArrayList<SlashCommand>();
 
         commandList.add(ipcmd);
         commandList.add(mecmd);
