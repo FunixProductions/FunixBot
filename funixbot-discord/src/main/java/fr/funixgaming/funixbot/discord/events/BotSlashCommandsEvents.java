@@ -1,7 +1,7 @@
 package fr.funixgaming.funixbot.discord.events;
 
-import fr.funixgaming.funixbot.commands.utils.SlashCommand;
-import fr.funixgaming.funixbot.commands.utils.CommandList;
+import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
+import fr.funixgaming.funixbot.discord.commands.utils.CommandList;
 import fr.funixgaming.funixbot.discord.FunixBot;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
