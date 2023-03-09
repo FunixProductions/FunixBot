@@ -1,5 +1,6 @@
 package fr.funixgaming.funixbot.discord;
 
+import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.discord.configs.BotConfig;
 import fr.funixgaming.funixbot.discord.modules.BotEmotes;
@@ -35,6 +36,14 @@ public class FunixBot {
 
             this.botEmotes = new BotEmotes(this);
             this.botRoles = new BotRoles(this);
+            
+            CommandList cmdList;
+            cmdList = new CommandList();
+            List<SlashCommand> commandList = cmdList.getList();
+
+            for (SlashCommand cmd : commandList) {
+                jda.upsertCommand(cmd.getName(), cmd.getDescription());
+            }
 
             log.info("Discord bot prêt ! Lien d'invitation : {}", this.jda.getInviteUrl(Permission.ADMINISTRATOR));
 
