@@ -1,6 +1,6 @@
-package fr.funixgaming.funixbot.commands;
+package fr.funixgaming.funixbot.discord.commands;
 
-import fr.funixgaming.funixbot.commands.utils.SlashCommand;
+import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
 import lombok.NonNull;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
