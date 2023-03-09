@@ -1,6 +1,6 @@
 package fr.funixgaming.funixbot.discord.events;
 
-import fr.funixgaming.funixbot.commands.utils.BotCommand;
+import fr.funixgaming.funixbot.commands.utils.SlashCommand;
 import fr.funixgaming.funixbot.commands.utils.CommandList;
 import fr.funixgaming.funixbot.discord.FunixBot;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +19,9 @@ public class BotSlashCommandsEvents extends ListenerAdapter {
 
         CommandList cmdList;
         cmdList = new CommandList();
-        List<BotCommand> commandList = cmdList.getList();
+        List<SlashCommand> commandList = cmdList.getList();
 
-        for (BotCommand cmd : commandList) {
+        for (SlashCommand cmd : commandList) {
             if (cmd.getName().equals(event.getName())) {
                 cmd.onUserCommand(event);
             }
