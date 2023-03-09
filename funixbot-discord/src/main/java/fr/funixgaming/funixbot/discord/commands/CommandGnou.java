@@ -1,24 +1,28 @@
 package fr.funixgaming.funixbot.commands;
 
-import fr.funixgaming.funixbot.commands.utils.BotCommand;
+import fr.gamecreep.bot.commands.utils.SlashCommand;
 import lombok.NonNull;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-import java.awt.*;
+public class CommandGnou implements SlashCommand {
 
-public class CommandGnou extends BotCommand {
+    private String name = "gnou";
+    private String description = "Blague drôle 👀";
 
-    public CommandGnou() {
-        super("gnou", "Blague drôle 👀");
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
-    public void onUserCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
+    public String getDescription() {
+        return description;
+    }
 
+    @Override
+    public void runCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
         String reply = "Alors c'est l'histoire d'un gnou qui se balade dans la savane et qui croise un autre groupe de gnou." + "\nL'autre groupe de gnou le voyant tout seul lui a donc demandé : " + "\nEh viens avec gnou :water_buffalo:";
 
         interactionEvent.reply(reply).setEphemeral(true).queue();
-
     }
 }
