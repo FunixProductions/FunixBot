@@ -38,6 +38,21 @@ public class CommandMe implements SlashCommand {
         embed.setThumbnail(interactionEvent.getUser().getAvatarUrl());
 
         interactionEvent.replyEmbeds(embed.build()).queue();
+    }
+    
+    @Override
+    public void runCommand(@NonNull MessageReceivedEvent message) {
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.FRANCE);
+
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setAuthor(message.getAuthor().getAsTag(), null, message.getAuthor().getAvatarUrl());
+        embed.setDescription("Voici donc les infos principales de ton compte");
+        embed.addField("Pseudo", message.getAuthor().getAsTag(), false);
+        embed.addField("Date de création", message.getAuthor().getTimeCreated().format(formatter), false);
+        embed.setColor(Color.decode("#2cafff"));
+        embed.setThumbnail(message.getAuthor().getAvatarUrl());
+
+        message.getChannel().sendMessageEmbeds(embed.build()).queue();
     }
 }
