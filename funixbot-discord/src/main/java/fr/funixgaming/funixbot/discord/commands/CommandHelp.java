@@ -44,25 +44,4 @@ public class CommandHelp implements SlashCommand {
 
         interactionEvent.replyEmbeds(embed.build()).queue();
     }
-    
-    @Override
-    public void runCommand(@NonNull MessageReceivedEvent message) {
-
-        CommandList cmdList;
-        cmdList = new CommandList();
-        List<SlashCommand> commandList = cmdList.getList();
-
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setThumbnail(message.getJDA().getSelfUser().getAvatarUrl());
-        embed.setAuthor(message.getJDA().getSelfUser().getAsTag(), null, message.getJDA().getSelfUser().getAvatarUrl());
-        embed.setFooter(message.getAuthor().getAsTag(), message.getAuthor().getAvatarUrl());
-        embed.setColor(new Color(44,175,255));
-        embed.setDescription("Voici toute les commandes du bot !");
-
-        for (SlashCommand cmd : commandList) {
-            embed.addField(cmd.getName(), cmd.getDescription(), false);
-        }
-
-        message.getChannel().sendMessageEmbeds(embed.build()).queue();
-    }
 }
