@@ -25,4 +25,11 @@ public class CommandGnou implements SlashCommand {
 
         interactionEvent.reply(reply).setEphemeral(true).queue();
     }
+    
+    @Override
+    public void runCommand(@NonNull MessageReceivedEvent message) {
+        String reply = "Alors c'est l'histoire d'un gnou qui se balade dans la savane et qui croise un autre groupe de gnou." + "\nL'autre groupe de gnou le voyant tout seul lui a donc demandé : " + "\nEh viens avec gnou :water_buffalo:";
+
+        message.getChannel().sendMessage(reply).queue();
+    }
 }
