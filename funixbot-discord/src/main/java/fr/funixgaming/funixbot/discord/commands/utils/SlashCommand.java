@@ -8,5 +8,5 @@ public interface SlashCommand {
     String getName();
     String getDescription();
     void runCommand(@NonNull SlashCommandInteractionEvent interactionEvent);
-
+    void runCommand(@NonNull MessageReceivedEvent message);
 }
