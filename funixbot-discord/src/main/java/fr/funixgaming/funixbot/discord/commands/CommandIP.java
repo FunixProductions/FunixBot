@@ -44,25 +44,4 @@ public class CommandIP implements SlashCommand {
 
         interactionEvent.replyEmbeds(embed.build()).addActionRow(btn).queue();
     }
-    
-    @Override
-    public void runCommand(@NonNull MessageReceivedEvent message) {
-
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("Pacifista Minecraft");
-        embed.setDescription("Serveur minecraft survie");
-        embed.addField("Site Web", "https://pacifista.fr", true);
-        embed.addField("IP de connection", "play.pacifista.fr", true);
-        embed.addField("Version", "1.19.2", true);
-        embed.setColor(Color.decode("#2cafff"));
-
-        Button btn = Button.link(
-                "https://pacifista.fr",
-                "Accéder au site Web"
-        ).withEmoji(
-                Emoji.fromCustom(":globe_web:", Long.parseLong("1078054633592852581"), false)
-        );
-
-        message.getChannel().sendMessageEmbeds(embed.build()).addActionRow(btn).queue();
-    }
 }
