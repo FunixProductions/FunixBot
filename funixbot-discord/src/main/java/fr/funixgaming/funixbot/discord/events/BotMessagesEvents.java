@@ -1,7 +1,5 @@
 package fr.funixgaming.funixbot.discord.events;
 
-import fr.funixgaming.funixbot.discord.commands.utils.CommandList;
-import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
 import fr.funixgaming.funixbot.discord.modules.RoleMessageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,30 +27,6 @@ public class BotMessagesEvents extends ListenerAdapter {
         final MessageChannel textChannel = event.getChannel();
 
         log.info("[{} > {}] {}", user.getAsTag(), textChannel.getName(), message.getContentRaw());
-        
-        if (event.getAuthor().isBot()) return;
-
-        CommandList cmdList;
-        cmdList = new CommandList();
-        List<SlashCommand> commandList = cmdList.getList();
-        
-        if (message.getContentRaw().startsWith("!")) {
-            String command = message.getContentRaw().split(" ")[0].replace("!", "");
-            int i;
-
-            for (i = 0; i < commandList.size(); i++) {
-                SlashCommand cmd = commandList.get(i);
-                if (command.equals(cmd.getName())) {
-                    cmd.runCommand(event);
-                    i = 0;
-                    return;
-                }
-            }
-
-            if (i == commandList.size()) {
-                textChannel.sendMessage(String.format(":warning: La commande `%s` n'existe pas ! \n`!help` pour la liste des commandes.", command)).queue();
-            }
-        }
     }
 
     @Override
