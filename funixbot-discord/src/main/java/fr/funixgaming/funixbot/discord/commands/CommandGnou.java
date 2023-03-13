@@ -1,23 +1,14 @@
 package fr.funixgaming.funixbot.discord.commands;
 
 import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
-import lombok.NonNull;
+import lombok.*;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+@Getter
 public class CommandGnou implements SlashCommand {
 
     private String name = "gnou";
     private String description = "Blague drôle 👀";
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
 
     @Override
     public void runCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
