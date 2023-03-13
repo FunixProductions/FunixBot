@@ -18,8 +18,7 @@ public class CommandHelp implements SlashCommand {
     @Override
     public void runCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
 
-        CommandList cmdList;
-        cmdList = new CommandList();
+        CommandList cmdList = new CommandList();
         List<SlashCommand> commandList = cmdList.getCommandList();
 
         EmbedBuilder embed = new EmbedBuilder();
