@@ -39,7 +39,7 @@ public class FunixBot {
             
             CommandList cmdList;
             cmdList = new CommandList();
-            List<SlashCommand> commandList = cmdList.getList();
+            List<SlashCommand> commandList = cmdList.getCommandList();
 
             for (SlashCommand cmd : commandList) {
                 jda.upsertCommand(cmd.getName(), cmd.getDescription());
