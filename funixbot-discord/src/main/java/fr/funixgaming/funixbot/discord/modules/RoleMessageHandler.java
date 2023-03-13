@@ -6,6 +6,7 @@ import fr.funixgaming.funixbot.discord.FunixBot;
 import fr.funixgaming.funixbot.discord.configs.BotConfigGenerated;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -85,26 +86,24 @@ public class RoleMessageHandler {
 
     private void createMessageRoleChoice(final TextChannel rolesChannel) {
         final BotEmotes botEmotes = funixBot.getBotEmotes();
-        final EmbedBuilder embedBuilder = new EmbedBuilder();
 
-        embedBuilder.setAuthor(null, null, jda.getSelfUser().getAvatarUrl());
-        embedBuilder.setTitle("Choix des rôles");
-        embedBuilder.setDescription(
-                "Afin d'éviter de faire des tag everyone et here sur le discord, vous pouvez choisir vos rôles pour recevoir les notifications qui vous intéressent.\n" +
-                        "Vous pouvez d'ailleurs ajouter et retirer votre rôle à tout moment."
-        );
+        EmbedBuilder embed = new EmbedBuilder()
+                .setColor(BotColors.FUNIX_COLOR)
+                .setTitle("Choix des rôles")
+                .setDescription(
+                        "Afin d'éviter de faire des tag everyone et here sur le discord, vous pouvez choisir vos rôles pour recevoir les notifications qui vous intéressent.\n" +
+                                "Vous pouvez d'ailleurs ajouter et retirer votre rôle à tout moment."
+                )
+                .addField(botEmotes.getTwitchEmote().getAsMention(), "Les notifications Twitch", true)
+                .addField(botEmotes.getYoutubeEmote().getAsMention(), "Les notifications YouTube", true)
+                .addField(botEmotes.getTiktokEmote().getAsMention(), "Les notifications TikTok", true);
 
-        embedBuilder.setColor(BotColors.FUNIX_COLOR);
-        embedBuilder.addField(botEmotes.getTwitchEmote().getAsMention(), "Les notifications Twitch", true);
-        embedBuilder.addField(botEmotes.getYoutubeEmote().getAsMention(), "Les notifications YouTube", true);
-        embedBuilder.addField(botEmotes.getTiktokEmote().getAsMention(), "Les notifications TikTok", true);
+        Button twitchbtn = Button.primary("notif-twitch", Emoji.fromCustom(String.format(":%s:", botEmotes.getTwitchEmote().getName()), botEmotes.getTwitchEmote().getId(), false));
+        Button youtubebtn = Button.primary("notif-youtube", Emoji.fromCustom(String.format(":%s:", botEmotes.getYoutubeEmote().getName()), botEmotes.getYoutubeEmote().getId(), false));
+        Button tiktokbtn = Button.primary("notif-tiktok", Emoji.fromCustom(String.format(":%s:", botEmotes.getTiktokEmote().getName()), botEmotes.getTiktokEmote().getId(), false));
 
-        rolesChannel.sendMessageEmbeds(embedBuilder.build()).queue((message -> {
+        rolesChannel.sendMessageEmbeds(embed.build()).addActionRow(twitchbtn, youtubebtn, tiktokbtn).queue((message -> {
             this.botConfigGenerated.setMessageRolesChoiceId(message.getId());
-
-            message.addReaction(botEmotes.getTwitchEmote()).queue();
-            message.addReaction(botEmotes.getYoutubeEmote()).queue();
-            message.addReaction(botEmotes.getTiktokEmote()).queue();
         }));
     }
 
