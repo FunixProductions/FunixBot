@@ -20,7 +20,7 @@ public class CommandHelp implements SlashCommand {
 
         CommandList cmdList;
         cmdList = new CommandList();
-        List<SlashCommand> commandList = cmdList.getList();
+        List<SlashCommand> commandList = cmdList.getCommandList();
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setThumbnail(interactionEvent.getJDA().getSelfUser().getAvatarUrl());
