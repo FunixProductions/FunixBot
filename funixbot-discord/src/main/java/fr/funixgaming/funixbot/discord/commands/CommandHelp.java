@@ -2,27 +2,18 @@ package fr.funixgaming.funixbot.discord.commands;
 
 import fr.funixgaming.funixbot.discord.commands.utils.CommandList;
 import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
-import lombok.NonNull;
+import lombok.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.awt.*;
 import java.util.List;
 
+@Getter
 public class CommandHelp implements SlashCommand {
 
     private String name = "help";
     private String description = "Récupère les commandes disponibles !";
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
 
     @Override
     public void runCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
