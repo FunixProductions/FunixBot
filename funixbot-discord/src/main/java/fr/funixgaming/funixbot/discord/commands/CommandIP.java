@@ -1,7 +1,7 @@
 package fr.funixgaming.funixbot.discord.commands;
 
 import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
-import lombok.NonNull;
+import lombok.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -9,20 +9,11 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.*;
 
+@Getter
 public class CommandIP implements SlashCommand {
 
     private String name = "ip";
     private String description = "Récupère l'IP et les informations du serveur Minecraft Pacifista !";
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
 
     @Override
     public void runCommand(@NonNull SlashCommandInteractionEvent interactionEvent) {
