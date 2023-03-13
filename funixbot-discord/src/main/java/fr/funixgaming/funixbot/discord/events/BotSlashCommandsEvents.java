@@ -22,7 +22,7 @@ public class BotSlashCommandsEvents extends ListenerAdapter {
 
         for (SlashCommand cmd : commandList) {
             if (cmd.getName().equals(event.getName())) {
-                cmd.onUserCommand(event);
+                cmd.runCommand(event);
             }
         }
     }
