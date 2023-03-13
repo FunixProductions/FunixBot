@@ -19,7 +19,7 @@ public class BotSlashCommandsEvents extends ListenerAdapter {
 
         CommandList cmdList;
         cmdList = new CommandList();
-        List<SlashCommand> commandList = cmdList.getList();
+        List<SlashCommand> commandList = cmdList.getCommandList();
 
         for (SlashCommand cmd : commandList) {
             if (cmd.getName().equals(event.getName())) {
