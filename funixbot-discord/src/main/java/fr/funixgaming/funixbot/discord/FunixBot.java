@@ -37,8 +37,7 @@ public class FunixBot {
             this.botEmotes = new BotEmotes(this);
             this.botRoles = new BotRoles(this);
             
-            CommandList cmdList;
-            cmdList = new CommandList();
+            CommandList cmdList = new CommandList();
             List<SlashCommand> commandList = cmdList.getCommandList();
 
             for (SlashCommand cmd : commandList) {
