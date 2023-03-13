@@ -22,35 +22,51 @@ public class test extends ListenerAdapter {
 
         switch (event.getInteraction().getComponentId()) {
             case "notif-twitch":
-                Role role1 = hasrole(twitchrole, event.getMember());
-                giveRole(event, role1, twitchrole);
+                handleRole(twitchrole, event);
                 break;
             case "notif-youtube":
-                Role role2 = hasrole(youtuberole, event.getMember());
-                giveRole(event, role2, youtuberole);
+                handleRole(youtuberole, event);
                 break;
             case "notif-tiktok":
-                Role role3 = hasrole(tiktokrole, event.getMember());
-                giveRole(event, role3, tiktokrole);
+                handleRole(tiktokrole, event);
                 break;
         }
 
     }
 
-    public Role hasrole(@NotNull Role Role, @NotNull Member member) {
-        Role role = member.getRoles().stream().filter(r -> r.equals(Role)).findFirst().orElse(null);
-        if (role == null) return null;
-        else return role;
+    public void handleRole(@NonNull Role role, @NonNull ButtonInteractionEvent event) {
+        Member member = event.getMember();
+        List<Role> roles = member.getRoles();
+        /*
+            Check for every member roles if he has it.
+            If yes, remove it
+            If not, add it
+        */
+        int i;
+        for (i = 0; i < roles.size(); i++) {
+            Role r = roles.get(i);
+            if (r.equals(role)) {
+                removeRole(role, event);
+                i = 0;
+                return;
+            }
+        }
+
+        if (i == roles.size()) {
+            addRole(role, event);
+        }
     }
 
-    public void giveRole(ButtonInteractionEvent event, Role role, Role roleselected) {
-        if (role == null) {
-            event.getGuild().addRoleToMember(event.getMember(), roleselected).queue();
-            event.reply(String.format("Le rôle <@&%s> t'as été donné avec succès !", roleselected.getId())).setEphemeral(true).queue();
-        } else {
-            event.getGuild().removeRoleFromMember(event.getMember(), role).queue();
-            event.reply(String.format("Le rôle <@&%s> t'as été enlevé avec succès !", role.getId())).setEphemeral(true).queue();
-        }
+    public void addRole(@NonNull Role role, @NonNull ButtonInteractionEvent event) {
+        Member member = event.getMember();
+        event.getGuild().addRoleToMember(member, role).queue();
+        event.reply(String.format("Le rôle <@&%s> t'as été ajouté avec succès !", role.getId())).setEphemeral(true).queue();
+    }
+
+    public void removeRole(@NonNull Role role, @NonNull ButtonInteractionEvent event) {
+        Member member = event.getMember();
+        event.getGuild().removeRoleFromMember(member, role).queue();
+        event.reply(String.format("Le rôle <@&%s> t'as été supprimé avec succès !", role.getId())).setEphemeral(true).queue();
     }
 
 }
