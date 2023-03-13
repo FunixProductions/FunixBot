@@ -5,9 +5,10 @@ import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 
 public class CommandList {
-    private List<SlashCommand> commandList;
+    @Getter private List<SlashCommand> commandList;
     private CommandIP ipcmd = new CommandIP();
     private CommandMe mecmd = new CommandMe();
     private CommandGnou gnoucmd = new CommandGnou();
@@ -22,9 +23,4 @@ public class CommandList {
         commandList.add(helpcmd);
 
     }
-
-    public List getList() {
-        return commandList;
-    }
-
 }
