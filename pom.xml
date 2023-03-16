@@ -17,8 +17,8 @@
 
     <modules>
         <module>core</module>
-        <module>funixBot-twitch</module>
-        <module>funixBot-discord</module>
+        <module>funixbot-discord</module>
+        <module>funixbot-twitch</module>
     </modules>
 
     <description>FunixBot, Twitch and Discord</description>
