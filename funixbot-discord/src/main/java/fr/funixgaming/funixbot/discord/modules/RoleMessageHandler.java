@@ -4,12 +4,16 @@ import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.BotColors;
 import fr.funixgaming.funixbot.discord.FunixBot;
 import fr.funixgaming.funixbot.discord.configs.BotConfigGenerated;
+import fr.funixgaming.funixbot.discord.entities.roles.notifications.TiktokNotificationRole;
+import fr.funixgaming.funixbot.discord.entities.roles.notifications.TwitchNotificationRole;
+import fr.funixgaming.funixbot.discord.entities.roles.notifications.YoutubeNotificationRole;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Emoji;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 
 @Slf4j
@@ -55,35 +59,6 @@ public class RoleMessageHandler {
         }
     }
 
-    public void manageRolesByReactions(final User user, final MessageReaction messageReaction, boolean addReaction) {
-        final String messageId = messageReaction.getMessageId();
-
-        if (this.botConfigGenerated.getMessageRolesChoiceId().equals(messageId)) {
-            final BotEmotes botEmotes = funixBot.getBotEmotes();
-            final BotRoles botRoles = funixBot.getBotRoles();
-            final Guild guild = funixBot.getBotGuild();
-            final Emote emote = messageReaction.getReactionEmote().getEmote();
-
-            if (addReaction) {
-                if (emote.equals(botEmotes.getTwitchEmote())) {
-                    guild.addRoleToMember(user, botRoles.getTwitchNotifRole()).queue();
-                } else if (emote.equals(botEmotes.getYoutubeEmote())) {
-                    guild.addRoleToMember(user, botRoles.getYoutubeNotifRole()).queue();
-                } else if (emote.equals(botEmotes.getTiktokEmote())) {
-                    guild.addRoleToMember(user, botRoles.getTiktokNotifRole()).queue();
-                }
-            } else {
-                if (emote.equals(botEmotes.getTwitchEmote())) {
-                    guild.removeRoleFromMember(user, botRoles.getTwitchNotifRole()).queue();
-                } else if (emote.equals(botEmotes.getYoutubeEmote())) {
-                    guild.removeRoleFromMember(user, botRoles.getYoutubeNotifRole()).queue();
-                } else if (emote.equals(botEmotes.getTiktokEmote())) {
-                    guild.removeRoleFromMember(user, botRoles.getTiktokNotifRole()).queue();
-                }
-            }
-        }
-    }
-
     private void createMessageRoleChoice(final TextChannel rolesChannel) {
         final BotEmotes botEmotes = funixBot.getBotEmotes();
 
@@ -98,9 +73,9 @@ public class RoleMessageHandler {
                 .addField(botEmotes.getYoutubeEmote().getAsMention(), "Les notifications YouTube", true)
                 .addField(botEmotes.getTiktokEmote().getAsMention(), "Les notifications TikTok", true);
 
-        Button twitchbtn = Button.primary("notif-twitch", Emoji.fromEmote(String.format(":%s:", botEmotes.getTwitchEmote().getName()), Long.parseLong(botEmotes.getTwitchEmote().getId()), false));
-        Button youtubebtn = Button.primary("notif-youtube", Emoji.fromEmote(String.format(":%s:", botEmotes.getYoutubeEmote().getName()), Long.parseLong(botEmotes.getYoutubeEmote().getId()), false));
-        Button tiktokbtn = Button.primary("notif-tiktok", Emoji.fromEmote(String.format(":%s:", botEmotes.getTiktokEmote().getName()), Long.parseLong(botEmotes.getTiktokEmote().getId()), false));
+        Button twitchbtn = Button.primary(TwitchNotificationRole.NAME, Emoji.fromEmote(String.format(":%s:", botEmotes.getTwitchEmote().getName()), Long.parseLong(botEmotes.getTwitchEmote().getId()), false));
+        Button youtubebtn = Button.primary(YoutubeNotificationRole.NAME, Emoji.fromEmote(String.format(":%s:", botEmotes.getYoutubeEmote().getName()), Long.parseLong(botEmotes.getYoutubeEmote().getId()), false));
+        Button tiktokbtn = Button.primary(TiktokNotificationRole.NAME, Emoji.fromEmote(String.format(":%s:", botEmotes.getTiktokEmote().getName()), Long.parseLong(botEmotes.getTiktokEmote().getId()), false));
 
         rolesChannel.sendMessageEmbeds(embed.build()).setActionRow(twitchbtn, youtubebtn, tiktokbtn).queue((message -> {
             this.botConfigGenerated.setMessageRolesChoiceId(message.getId());
