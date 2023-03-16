@@ -1,5 +1,7 @@
 package fr.funixgaming.funixbot.discord;
 
+import fr.funixgaming.funixbot.discord.commands.utils.CommandList;
+import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.discord.configs.BotConfig;
 import fr.funixgaming.funixbot.discord.modules.BotEmotes;
@@ -12,6 +14,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Getter
@@ -35,6 +39,13 @@ public class FunixBot {
 
             this.botEmotes = new BotEmotes(this);
             this.botRoles = new BotRoles(this);
+            
+            CommandList cmdList = new CommandList();
+            List<SlashCommand> commandList = cmdList.getCommandList();
+
+            for (SlashCommand cmd : commandList) {
+                jda.upsertCommand(cmd.getName(), cmd.getDescription());
+            }
 
             log.info("Discord bot prêt ! Lien d'invitation : {}", this.jda.getInviteUrl(Permission.ADMINISTRATOR));
 
