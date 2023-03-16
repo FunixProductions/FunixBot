@@ -3,7 +3,7 @@ package fr.funixgaming.funixbot.discord.commands;
 import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
 import lombok.*;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
@@ -30,7 +30,7 @@ public class CommandIP implements SlashCommand {
                 "https://pacifista.fr",
                 "Accéder au site Web"
         ).withEmoji(
-                Emoji.fromCustom(":globe_web:", Long.parseLong("1078054633592852581"), false)
+                Emoji.fromEmote(":globe_web:", Long.parseLong("1078054633592852581"), false)
         );
 
         interactionEvent.replyEmbeds(embed.build()).addActionRow(btn).queue();

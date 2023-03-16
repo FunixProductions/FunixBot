@@ -98,11 +98,11 @@ public class RoleMessageHandler {
                 .addField(botEmotes.getYoutubeEmote().getAsMention(), "Les notifications YouTube", true)
                 .addField(botEmotes.getTiktokEmote().getAsMention(), "Les notifications TikTok", true);
 
-        Button twitchbtn = Button.primary("notif-twitch", Emoji.fromCustom(String.format(":%s:", botEmotes.getTwitchEmote().getName()), botEmotes.getTwitchEmote().getId(), false));
-        Button youtubebtn = Button.primary("notif-youtube", Emoji.fromCustom(String.format(":%s:", botEmotes.getYoutubeEmote().getName()), botEmotes.getYoutubeEmote().getId(), false));
-        Button tiktokbtn = Button.primary("notif-tiktok", Emoji.fromCustom(String.format(":%s:", botEmotes.getTiktokEmote().getName()), botEmotes.getTiktokEmote().getId(), false));
+        Button twitchbtn = Button.primary("notif-twitch", Emoji.fromEmote(String.format(":%s:", botEmotes.getTwitchEmote().getName()), Long.parseLong(botEmotes.getTwitchEmote().getId()), false));
+        Button youtubebtn = Button.primary("notif-youtube", Emoji.fromEmote(String.format(":%s:", botEmotes.getYoutubeEmote().getName()), Long.parseLong(botEmotes.getYoutubeEmote().getId()), false));
+        Button tiktokbtn = Button.primary("notif-tiktok", Emoji.fromEmote(String.format(":%s:", botEmotes.getTiktokEmote().getName()), Long.parseLong(botEmotes.getTiktokEmote().getId()), false));
 
-        rolesChannel.sendMessageEmbeds(embed.build()).addActionRow(twitchbtn, youtubebtn, tiktokbtn).queue((message -> {
+        rolesChannel.sendMessageEmbeds(embed.build()).setActionRow(twitchbtn, youtubebtn, tiktokbtn).queue((message -> {
             this.botConfigGenerated.setMessageRolesChoiceId(message.getId());
         }));
     }

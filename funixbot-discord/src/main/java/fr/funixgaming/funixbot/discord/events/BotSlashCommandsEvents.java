@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class BotSlashCommandsEvents extends ListenerAdapter {
 

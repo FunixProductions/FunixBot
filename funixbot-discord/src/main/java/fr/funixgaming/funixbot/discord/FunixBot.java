@@ -1,5 +1,6 @@
 package fr.funixgaming.funixbot.discord;
 
+import fr.funixgaming.funixbot.discord.commands.utils.CommandList;
 import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.discord.configs.BotConfig;
@@ -13,6 +14,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Getter

@@ -50,7 +50,7 @@ public class JdaEventsConfig {
     
     @Bean
     public BotButtonEvents botButtonEvents(FunixBot funixBot,
-                                                         JDA jda) {
+                                           JDA jda) {
         final BotButtonEvents botButtonEvents = new BotButtonEvents(funixBot);
 
         jda.addEventListener(botButtonEvents);
