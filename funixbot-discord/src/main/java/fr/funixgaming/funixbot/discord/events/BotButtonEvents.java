@@ -1,19 +1,21 @@
-package fr.funixgaming.funixbot.events;
+package fr.funixgaming.funixbot.discord.events;
 
+import fr.funixgaming.funixbot.discord.FunixBot;
+import fr.funixgaming.funixbot.discord.modules.BotRoles;
 import lombok.NonNull;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
-import fr.funixgaming.funixbot.discord.FunixBot;
+import java.util.List;
 
-public class test extends ListenerAdapter {
+public class BotButtonEvents extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         super.onButtonInteraction(event);
 
+        FunixBot funixBot = null;
         final BotRoles botRoles = funixBot.getBotRoles();
 
         Role twitchrole = botRoles.getTwitchNotifRole();
