@@ -1,10 +1,10 @@
 package fr.funixgaming.funixbot.twitch.commands.utils;
 
+import com.funixproductions.core.crud.dtos.PageDTO;
+import com.funixproductions.core.crud.enums.SearchOperation;
 import feign.FeignException;
 import fr.funixgaming.api.client.funixbot.clients.FunixBotCommandClient;
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotCommandDTO;
-import fr.funixgaming.api.core.crud.dtos.PageDTO;
-import fr.funixgaming.api.core.crud.enums.SearchOperation;
 import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;

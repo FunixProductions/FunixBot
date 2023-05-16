@@ -6,7 +6,7 @@
     <parent>
         <artifactId>funix-bot</artifactId>
         <groupId>fr.funixgaming.funixbot</groupId>
-        <version>1.2.2</version>
+        <version>1.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -49,13 +49,13 @@
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <version>${mapstruct.version}</version>
+                            <version>${org.mapstruct.version}</version>
                         </path>
 
                         <path>
                             <groupId>org.springframework.boot</groupId>
                             <artifactId>spring-boot-configuration-processor</artifactId>
-                            <version>${spring.boot.configuration.processor.version}</version>
+                            <version>${org.springframeork.boot.annotation.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

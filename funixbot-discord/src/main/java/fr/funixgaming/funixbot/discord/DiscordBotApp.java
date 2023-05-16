@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableAsync
 @EnableScheduling
-@EnableFeignClients(basePackages = "fr.funixgaming")
+@EnableFeignClients(basePackages = {"fr.funixgaming", "com.funixproductions.api.client"})
 @SpringBootApplication(scanBasePackages = "fr.funixgaming", exclude = {
         DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class,

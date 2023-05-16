@@ -1,9 +1,9 @@
 package fr.funixgaming.funixbot.twitch.commands;
 
+import com.funixproductions.api.client.twitch.reference.dtos.responses.TwitchDataResponseDTO;
+import com.funixproductions.api.client.twitch.reference.dtos.responses.user.TwitchFollowDTO;
+import com.funixproductions.core.tools.time.TimeUtils;
 import feign.FeignException;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.TwitchDataResponseDTO;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.user.TwitchFollowDTO;
-import fr.funixgaming.api.core.utils.time.TimeUtils;
 import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
 import fr.funixgaming.twitch.api.chatbot_irc.entities.ChatMember;
