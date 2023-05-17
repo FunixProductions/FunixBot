@@ -1,14 +1,11 @@
 package fr.funixgaming.funixbot.discord.events;
 
-import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
-import fr.funixgaming.funixbot.discord.commands.utils.CommandList;
 import fr.funixgaming.funixbot.discord.FunixBot;
+import fr.funixgaming.funixbot.discord.entities.commands.utils.SlashCommand;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 public class BotSlashCommandsEvents extends ListenerAdapter {
@@ -16,13 +13,8 @@ public class BotSlashCommandsEvents extends ListenerAdapter {
     private final FunixBot funixBot;
 
     @Override
-    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        super.onSlashCommandInteraction(event);
-
-        CommandList cmdList = new CommandList();
-        List<SlashCommand> commandList = cmdList.getCommandList();
-
-        for (SlashCommand cmd : commandList) {
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        for (SlashCommand cmd : funixBot.getBotCommands()) {
             if (cmd.getName().equals(event.getName())) {
                 cmd.runCommand(event);
             }

@@ -1,11 +1,17 @@
 package fr.funixgaming.funixbot.discord;
 
-import fr.funixgaming.funixbot.discord.commands.utils.CommandList;
-import fr.funixgaming.funixbot.discord.commands.utils.SlashCommand;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.discord.configs.BotConfig;
+import fr.funixgaming.funixbot.discord.entities.commands.CommandGnou;
+import fr.funixgaming.funixbot.discord.entities.commands.CommandIP;
+import fr.funixgaming.funixbot.discord.entities.commands.CommandMe;
+import fr.funixgaming.funixbot.discord.entities.commands.utils.DiscordCommand;
+import fr.funixgaming.funixbot.discord.entities.roles.notifications.TiktokNotificationRole;
+import fr.funixgaming.funixbot.discord.entities.roles.notifications.TwitchNotificationRole;
+import fr.funixgaming.funixbot.discord.entities.roles.notifications.YoutubeNotificationRole;
+import fr.funixgaming.funixbot.discord.entities.roles.users.FollowrRole;
+import fr.funixgaming.funixbot.discord.entities.roles.utils.FunixBotRole;
 import fr.funixgaming.funixbot.discord.modules.BotEmotes;
-import fr.funixgaming.funixbot.discord.modules.BotRoles;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
@@ -13,19 +19,23 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-@Slf4j
+@Slf4j(topic = "FunixBot")
 @Getter
 @Service
 public class FunixBot {
     private final JDA jda;
     private final BotConfig botConfig;
     private final BotEmotes botEmotes;
-    private final BotRoles botRoles;
     private final Guild botGuild;
+
+    private final Set<DiscordCommand> botCommands = new HashSet<>();
+    private final Set<FunixBotRole> botRoles = new HashSet<>();
 
     public FunixBot(BotConfig botConfig, JDA jda) throws Exception {
         try {
@@ -38,21 +48,38 @@ public class FunixBot {
             }
 
             this.botEmotes = new BotEmotes(this);
-            this.botRoles = new BotRoles(this);
-            
-            CommandList cmdList = new CommandList();
-            List<SlashCommand> commandList = cmdList.getCommandList();
 
-            for (SlashCommand cmd : commandList) {
-                jda.upsertCommand(cmd.getName(), cmd.getDescription());
-            }
+            setupCommands();
+            setupRoles();
 
             log.info("Discord bot prêt ! Lien d'invitation : {}", this.jda.getInviteUrl(Permission.ADMINISTRATOR));
-
         } catch (Exception e) {
             log.error("Une erreur est survenue lors du lancement du bot discord. {}", e.getMessage());
             throw e;
         }
+    }
+
+    private void setupCommands() {
+        this.botCommands.add(new CommandGnou(this.jda));
+        this.botCommands.add(new CommandIP(this.jda));
+        this.botCommands.add(new CommandMe(this.jda));
+    }
+
+    private void setupRoles() throws FunixBotException {
+        this.botRoles.add(new FollowrRole(this));
+        this.botRoles.add(new TiktokNotificationRole(this));
+        this.botRoles.add(new TwitchNotificationRole(this));
+        this.botRoles.add(new YoutubeNotificationRole(this));
+    }
+
+    @Nullable
+    public FunixBotRole getRoleByName(final String name) {
+        for (final FunixBotRole funixBotRole : this.botRoles) {
+            if (funixBotRole.getRoleUniqueName().equals(name)) {
+                return funixBotRole;
+            }
+        }
+        return null;
     }
 
     public void sendChatMessage(String channelId, String message) {

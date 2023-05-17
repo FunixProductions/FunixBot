@@ -1,5 +1,6 @@
 package fr.funixgaming.funixbot.discord.configs;
 
+import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.discord.FunixBot;
 import fr.funixgaming.funixbot.discord.events.BotButtonEvents;
 import fr.funixgaming.funixbot.discord.events.BotGuildEvents;
@@ -32,7 +33,7 @@ public class JdaEventsConfig {
     @Bean
     public BotGuildEvents botGuildEvents(FunixBot funixBot,
                                          BotConfig botConfig,
-                                         JDA jda) {
+                                         JDA jda) throws FunixBotException {
         final BotGuildEvents botGuildEvents = new BotGuildEvents(botConfig, funixBot);
 
         jda.addEventListener(botGuildEvents);

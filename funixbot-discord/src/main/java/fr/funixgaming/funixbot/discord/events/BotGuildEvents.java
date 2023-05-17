@@ -2,6 +2,8 @@ package fr.funixgaming.funixbot.discord.events;
 
 import fr.funixgaming.funixbot.discord.FunixBot;
 import fr.funixgaming.funixbot.discord.configs.BotConfig;
+import fr.funixgaming.funixbot.discord.entities.roles.users.FollowrRole;
+import fr.funixgaming.funixbot.discord.entities.roles.utils.FunixBotRole;
 import fr.funixgaming.funixbot.discord.enums.GuildEventType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +47,10 @@ public class BotGuildEvents extends ListenerAdapter {
         guildMemberEventLog(event.getUser(), GuildEventType.JOIN);
 
         final Guild guild = funixBot.getBotGuild();
-        guild.addRoleToMember(event.getUser(), funixBot.getBotRoles().getFollowerRole()).queue();
+        final FunixBotRole role = funixBot.getRoleByName(FollowrRole.NAME);
+        if (role != null) {
+            guild.addRoleToMember(event.getUser(), role.getRole()).queue();
+        }
     }
 
     private void guildMemberEventLog(final User user, final GuildEventType eventType) {

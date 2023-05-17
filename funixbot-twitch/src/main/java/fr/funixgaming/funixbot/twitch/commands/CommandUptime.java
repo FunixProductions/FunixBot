@@ -1,7 +1,7 @@
 package fr.funixgaming.funixbot.twitch.commands;
 
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
-import fr.funixgaming.api.core.utils.time.TimeUtils;
+import com.funixproductions.api.client.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
+import com.funixproductions.core.tools.time.TimeUtils;
 import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
 import fr.funixgaming.funixbot.twitch.utils.TwitchEmotes;
