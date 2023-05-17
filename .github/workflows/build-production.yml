@@ -3,8 +3,9 @@
 name: Build production
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - master
 
 jobs:
   build-funixbot-discord-and-restart-prod:
