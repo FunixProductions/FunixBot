@@ -6,8 +6,8 @@ WORKDIR /container/funixbot/
 
 COPY pom.xml .
 
-COPY Core/pom.xml ./core/
-COPY Core/src ./core/src
+COPY core/pom.xml ./core/
+COPY core/src ./core/src
 
 COPY funixbot-discord/pom.xml ./funixbot-discord/
 COPY funixbot-discord/src ./funixbot-discord/src
