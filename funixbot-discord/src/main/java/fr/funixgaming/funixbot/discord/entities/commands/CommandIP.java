@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Emoji;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
@@ -36,7 +36,7 @@ public class CommandIP extends DiscordCommand {
                 "https://pacifista.fr",
                 "Accéder au site Web"
         ).withEmoji(
-                Emoji.fromEmote(":globe_web:", Long.parseLong("1078054633592852581"), false)
+                Emoji.fromCustom(":globe_web:", Long.parseLong("1078054633592852581"), false)
         );
 
         interactionEvent.replyEmbeds(embed.build()).addActionRow(btn).queue();

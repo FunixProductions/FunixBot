@@ -10,8 +10,7 @@ import fr.funixgaming.funixbot.discord.entities.roles.notifications.YoutubeNotif
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Emoji;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.ErrorResponse;
@@ -69,13 +68,13 @@ public class RoleMessageHandler {
                         "Afin d'éviter de faire des tag everyone et here sur le discord, vous pouvez choisir vos rôles pour recevoir les notifications qui vous intéressent.\n" +
                                 "Vous pouvez d'ailleurs ajouter et retirer votre rôle à tout moment."
                 )
-                .addField(botEmotes.getTwitchEmote().getAsMention(), "Les notifications Twitch", true)
-                .addField(botEmotes.getYoutubeEmote().getAsMention(), "Les notifications YouTube", true)
-                .addField(botEmotes.getTiktokEmote().getAsMention(), "Les notifications TikTok", true);
+                .addField(botEmotes.getTwitchEmote().getAsReactionCode(), "Les notifications Twitch", true)
+                .addField(botEmotes.getYoutubeEmote().getAsReactionCode(), "Les notifications YouTube", true)
+                .addField(botEmotes.getTiktokEmote().getAsReactionCode(), "Les notifications TikTok", true);
 
-        Button twitchbtn = Button.primary(TwitchNotificationRole.NAME, Emoji.fromEmote(String.format(":%s:", botEmotes.getTwitchEmote().getName()), Long.parseLong(botEmotes.getTwitchEmote().getId()), false));
-        Button youtubebtn = Button.primary(YoutubeNotificationRole.NAME, Emoji.fromEmote(String.format(":%s:", botEmotes.getYoutubeEmote().getName()), Long.parseLong(botEmotes.getYoutubeEmote().getId()), false));
-        Button tiktokbtn = Button.primary(TiktokNotificationRole.NAME, Emoji.fromEmote(String.format(":%s:", botEmotes.getTiktokEmote().getName()), Long.parseLong(botEmotes.getTiktokEmote().getId()), false));
+        Button twitchbtn = Button.primary(TwitchNotificationRole.NAME, botEmotes.getTwitchEmote());
+        Button youtubebtn = Button.primary(YoutubeNotificationRole.NAME, botEmotes.getYoutubeEmote());
+        Button tiktokbtn = Button.primary(TiktokNotificationRole.NAME, botEmotes.getTiktokEmote());
 
         rolesChannel.sendMessageEmbeds(embed.build()).setActionRow(twitchbtn, youtubebtn, tiktokbtn).queue((message -> {
             this.botConfigGenerated.setMessageRolesChoiceId(message.getId());
