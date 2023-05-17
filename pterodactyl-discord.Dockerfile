@@ -18,7 +18,7 @@ COPY funixbot-twitch/src ./funixbot-twitch/src
 RUN mvn clean package -B
 RUN rm funixbot-discord/target/funix-bot-discord-*-javadoc.jar
 RUN rm funixbot-discord/target/funix-bot-discord-*-sources.jar
-RUN rm funixbot-twitch/target/funix-bot-twitch-*-sources.jar
+RUN rm funixbot-twitch/target/funix-bot-twitch-*-javadoc.jar
 RUN rm funixbot-twitch/target/funix-bot-twitch-*-sources.jar
 
 FROM openjdk:17 AS FINAL_PTEROQ
