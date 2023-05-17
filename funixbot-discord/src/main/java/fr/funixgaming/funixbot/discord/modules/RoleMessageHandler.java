@@ -68,9 +68,9 @@ public class RoleMessageHandler {
                         "Afin d'éviter de faire des tag everyone et here sur le discord, vous pouvez choisir vos rôles pour recevoir les notifications qui vous intéressent.\n" +
                                 "Vous pouvez d'ailleurs ajouter et retirer votre rôle à tout moment."
                 )
-                .addField(botEmotes.getTwitchEmote().getAsReactionCode(), "Les notifications Twitch", true)
-                .addField(botEmotes.getYoutubeEmote().getAsReactionCode(), "Les notifications YouTube", true)
-                .addField(botEmotes.getTiktokEmote().getAsReactionCode(), "Les notifications TikTok", true);
+                .addField(botEmotes.getTwitchEmote().getFormatted(), "Les notifications Twitch", true)
+                .addField(botEmotes.getYoutubeEmote().getFormatted(), "Les notifications YouTube", true)
+                .addField(botEmotes.getTiktokEmote().getFormatted(), "Les notifications TikTok", true);
 
         Button twitchbtn = Button.primary(TwitchNotificationRole.NAME, botEmotes.getTwitchEmote());
         Button youtubebtn = Button.primary(YoutubeNotificationRole.NAME, botEmotes.getYoutubeEmote());
