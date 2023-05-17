@@ -1,0 +1,70 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Build production
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-funixbot-discord-and-restart-prod:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push funixbot discord api pterodactyl dockerfile
+        run: |
+          docker build . --tag ghcr.io/funixproductions/funixbot-discord-pteroq:latest -f pterodactyl-discord.Dockerfile
+          docker push ghcr.io/funixproductions/funixbot-discord-pteroq:latest
+
+      - name: Send start signal to restart funixbot discord with new version
+        run: |
+          curl "https://${{ secrets.PTERODACTYL_DOMAIN }}/api/client/servers/f78ed08c/power?signal=restart" \
+            -X POST \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: Bearer ${{ secrets.PTERODACTYL_API_KEY }}'
+
+  build-funixbot-twitch-and-restart-prod:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push funixbot twitch api pterodactyl dockerfile
+        run: |
+          docker build . --tag ghcr.io/funixproductions/funixbot-twitch-pteroq:latest -f pterodactyl-twitch.Dockerfile
+          docker push ghcr.io/funixproductions/funixbot-twitch-pteroq:latest
+
+      - name: Send start signal to restart funixbot twitch with new version
+        run: |
+          curl "https://${{ secrets.PTERODACTYL_DOMAIN }}/api/client/servers/0e631822/power?signal=restart" \
+            -X POST \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: Bearer ${{ secrets.PTERODACTYL_API_KEY }}'
