@@ -10,12 +10,7 @@ import fr.funixgaming.funixbot.discord.entities.roles.notifications.YoutubeNotif
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-<<<<<<< HEAD
-import net.dv8tion.jda.api.entities.Emoji;
-import net.dv8tion.jda.api.entities.TextChannel;
-=======
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
->>>>>>> 62313d3c8452c31bc1c4f62e78f0860ff1a0a106
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.ErrorResponse;
@@ -77,15 +72,9 @@ public class RoleMessageHandler {
                 .addField(botEmotes.getYoutubeEmote().getFormatted(), "Les notifications YouTube", true)
                 .addField(botEmotes.getTiktokEmote().getFormatted(), "Les notifications TikTok", true);
 
-<<<<<<< HEAD
-        Button twitchbtn = Button.primary(TwitchNotificationRole.NAME, Emoji.fromEmote(String.format(":%s:", botEmotes.getTwitchEmote().getName()), Long.parseLong(botEmotes.getTwitchEmote().getId()), false));
-        Button youtubebtn = Button.primary(YoutubeNotificationRole.NAME, Emoji.fromEmote(String.format(":%s:", botEmotes.getYoutubeEmote().getName()), Long.parseLong(botEmotes.getYoutubeEmote().getId()), false));
-        Button tiktokbtn = Button.primary(TiktokNotificationRole.NAME, Emoji.fromEmote(String.format(":%s:", botEmotes.getTiktokEmote().getName()), Long.parseLong(botEmotes.getTiktokEmote().getId()), false));
-=======
         Button twitchbtn = Button.primary(TwitchNotificationRole.NAME, botEmotes.getTwitchEmote());
         Button youtubebtn = Button.primary(YoutubeNotificationRole.NAME, botEmotes.getYoutubeEmote());
         Button tiktokbtn = Button.primary(TiktokNotificationRole.NAME, botEmotes.getTiktokEmote());
->>>>>>> 62313d3c8452c31bc1c4f62e78f0860ff1a0a106
 
         rolesChannel.sendMessageEmbeds(embed.build()).setActionRow(twitchbtn, youtubebtn, tiktokbtn).queue((message -> {
             this.botConfigGenerated.setMessageRolesChoiceId(message.getId());
