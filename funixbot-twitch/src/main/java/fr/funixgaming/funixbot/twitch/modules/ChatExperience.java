@@ -1,13 +1,13 @@
 package fr.funixgaming.funixbot.twitch.modules;
 
+import com.funixproductions.api.client.twitch.reference.clients.chat.TwitchChatClient;
+import com.funixproductions.api.client.twitch.reference.dtos.responses.TwitchDataResponseDTO;
+import com.funixproductions.api.client.twitch.reference.dtos.responses.channel.chat.TwitchChannelChattersDTO;
+import com.funixproductions.core.crud.dtos.PageDTO;
+import com.funixproductions.core.crud.enums.SearchOperation;
 import feign.FeignException;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.clients.chat.TwitchChatClient;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.TwitchDataResponseDTO;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.channel.chat.TwitchChannelChattersDTO;
 import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
 import fr.funixgaming.api.client.funixbot.dtos.FunixBotUserExperienceDTO;
-import fr.funixgaming.api.core.crud.dtos.PageDTO;
-import fr.funixgaming.api.core.crud.enums.SearchOperation;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.TwitchStatus;
 import fr.funixgaming.funixbot.twitch.config.BotConfig;

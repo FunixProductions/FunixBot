@@ -1,9 +1,9 @@
 package fr.funixgaming.funixbot.core.utils;
 
+import com.funixproductions.api.client.twitch.reference.clients.stream.TwitchStreamsClient;
+import com.funixproductions.api.client.twitch.reference.dtos.responses.TwitchDataResponseDTO;
+import com.funixproductions.api.client.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
 import feign.FeignException;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.clients.stream.TwitchStreamsClient;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.TwitchDataResponseDTO;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;

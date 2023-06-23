@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 @Setter
 @Component
 public class BotConfigGenerated {
+    private static final String ERROR_MESSAGE = "Impossible de créer le fichier botConfig.json";
     private final File configFile = new File(DataFiles.getInstance().getDataFolder(), "botConfig.json");
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting().
@@ -29,18 +29,15 @@ public class BotConfigGenerated {
             .create();
 
     public BotConfigGenerated(BotConfig botConfig) throws IOException {
-        try {
-            final String configString = FileUtils.readFileToString(configFile, StandardCharsets.UTF_8);
+        if (!configFile.exists() && !configFile.createNewFile()) {
+            throw new IOException(ERROR_MESSAGE);
+        }
+        final String configString = FileUtils.readFileToString(configFile, StandardCharsets.UTF_8);
 
-            if (configString.length() > 0) {
-                final BotConfigGenerated tmp = gson.fromJson(configString, BotConfigGenerated.class);
+        if (configString.length() > 0) {
+            final BotConfigGenerated tmp = gson.fromJson(configString, BotConfigGenerated.class);
 
-                this.messageRolesChoiceId = tmp.getMessageRolesChoiceId();
-            }
-        } catch (FileNotFoundException e) {
-            if (!configFile.exists() && !configFile.createNewFile()) {
-                throw new IOException("Impossible de créer le fichier botConfig.json");
-            }
+            this.messageRolesChoiceId = tmp.getMessageRolesChoiceId();
         }
     }
 
@@ -51,7 +48,7 @@ public class BotConfigGenerated {
     public void saveConfig() {
         try {
             if (!configFile.exists() && !configFile.createNewFile()) {
-                throw new IOException("Impossible de créer le fichier botConfig.json");
+                throw new IOException(ERROR_MESSAGE);
             }
 
             DataFiles.setInFile(configFile, gson.toJson(this, BotConfigGenerated.class));

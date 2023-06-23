@@ -26,4 +26,4 @@ jobs:
           cache: maven
 
       - name: Build and test with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn --batch-mode --update-snapshots verify -Dmaven.javadoc.skip -Dgpg.skip

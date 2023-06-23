@@ -17,8 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+<<<<<<< HEAD
+=======
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+>>>>>>> 62313d3c8452c31bc1c4f62e78f0860ff1a0a106
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 

@@ -1,5 +1,6 @@
 package fr.funixgaming.funixbot.discord.configs;
 
+import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.JDA;
@@ -9,8 +10,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.security.auth.login.LoginException;
 
 @Getter
 @Setter
@@ -43,7 +42,7 @@ public class BotConfig {
     private String tiktokNotifRoleId;
 
     @Bean(destroyMethod = "shutdown")
-    public JDA discordInstance() {
+    public JDA discordInstance() throws FunixBotException {
         try {
             final JDABuilder jdaBuilder = JDABuilder.createDefault(botToken);
 
@@ -56,8 +55,9 @@ public class BotConfig {
             );
 
             return jdaBuilder.build().awaitReady();
-        } catch (LoginException | InterruptedException e) {
-            throw new RuntimeException("Impossible de lancer le bot discord.", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new FunixBotException("Impossible de lancer le bot discord.", e);
         }
     }
 }

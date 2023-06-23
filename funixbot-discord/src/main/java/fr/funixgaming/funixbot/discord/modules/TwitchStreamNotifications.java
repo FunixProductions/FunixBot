@@ -1,14 +1,16 @@
 package fr.funixgaming.funixbot.discord.modules;
 
+import com.funixproductions.api.client.twitch.reference.clients.game.TwitchGameClient;
+import com.funixproductions.api.client.twitch.reference.dtos.responses.TwitchDataResponseDTO;
+import com.funixproductions.api.client.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
+import com.funixproductions.api.client.twitch.reference.dtos.responses.game.TwitchGameDTO;
 import feign.FeignException;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.clients.game.TwitchGameClient;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.TwitchDataResponseDTO;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
-import fr.funixgaming.api.client.external_api_impl.twitch.reference.dtos.responses.game.TwitchGameDTO;
+import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.BotColors;
 import fr.funixgaming.funixbot.core.utils.TwitchStatus;
 import fr.funixgaming.funixbot.discord.FunixBot;
 import fr.funixgaming.funixbot.discord.configs.BotConfig;
+import fr.funixgaming.funixbot.discord.entities.roles.notifications.TwitchNotificationRole;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -28,17 +30,23 @@ public class TwitchStreamNotifications {
     private final BotConfig botConfig;
     private final TwitchGameClient gameClient;
     private final TwitchStatus twitchStatus;
+    private final TwitchNotificationRole twitchNotificationRole;
 
     private Instant lastNotificationTime;
 
     public TwitchStreamNotifications(FunixBot funixBot,
                                      BotConfig botConfig,
                                      TwitchGameClient gameClient,
-                                     TwitchStatus twitchStatus) {
+                                     TwitchStatus twitchStatus) throws FunixBotException {
         this.funixBot = funixBot;
         this.botConfig = botConfig;
         this.gameClient = gameClient;
         this.twitchStatus = twitchStatus;
+
+        this.twitchNotificationRole = (TwitchNotificationRole) funixBot.getRoleByName(TwitchNotificationRole.NAME);
+        if (this.twitchNotificationRole == null) {
+            throw new FunixBotException("The notification role for twitch is not found.");
+        }
     }
 
     @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
@@ -72,7 +80,7 @@ public class TwitchStreamNotifications {
                 .setFooter("Notification de stream", funixBot.getJda().getSelfUser().getAvatarUrl());
 
         log.info("Envoi de la notification de stream pour {}", stream.getUserName());
-        funixBot.sendChatMessage(botConfig.getTwitchChannelId(), String.format("%s est en live sur Twitch ! %s", stream.getUserName(), funixBot.getBotRoles().getTwitchNotifRole().getAsMention()));
+        funixBot.sendChatMessage(botConfig.getTwitchChannelId(), String.format("%s est en live sur Twitch ! %s", stream.getUserName(), this.twitchNotificationRole.getRole().getAsMention()));
         funixBot.sendChatMessage(botConfig.getTwitchChannelId(), embedBuilder.build());
         lastNotificationTime = Instant.now();
     }

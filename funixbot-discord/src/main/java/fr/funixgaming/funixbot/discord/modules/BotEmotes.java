@@ -4,9 +4,10 @@ import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.DataFiles;
 import fr.funixgaming.funixbot.discord.FunixBot;
 import lombok.Getter;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Icon;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import org.springframework.lang.NonNull;
 
 import javax.imageio.ImageIO;
@@ -20,9 +21,9 @@ public class BotEmotes {
 
     private final FunixBot funixBot;
 
-    private final Emote twitchEmote;
-    private final Emote youtubeEmote;
-    private final Emote tiktokEmote;
+    private final Emoji twitchEmote;
+    private final Emoji youtubeEmote;
+    private final Emoji tiktokEmote;
 
     public BotEmotes(final FunixBot funixBot) throws FunixBotException {
         this.funixBot = funixBot;
@@ -33,10 +34,10 @@ public class BotEmotes {
         this.tiktokEmote = searchEmote("tiktok", guild);
     }
 
-    private static Emote searchEmote(@NonNull final String emoteName, @NonNull final Guild guild) throws FunixBotException {
-        final List<Emote> emoteList = guild.getEmotesByName(emoteName, false);
+    private static Emoji searchEmote(@NonNull final String emoteName, @NonNull final Guild guild) throws FunixBotException {
+        final List<RichCustomEmoji> emoteList = guild.getEmojisByName(emoteName, false);
 
-        for (final Emote emote : emoteList) {
+        for (final Emoji emote : emoteList) {
             if (emote.getName().equals(emoteName)) {
                 return emote;
             }
@@ -44,7 +45,7 @@ public class BotEmotes {
         return createEmoteFromClassPath(emoteName, guild);
     }
 
-    private static Emote createEmoteFromClassPath(@NonNull final String emoteName, @NonNull final Guild guild) throws FunixBotException {
+    private static Emoji createEmoteFromClassPath(@NonNull final String emoteName, @NonNull final Guild guild) throws FunixBotException {
         try {
             final BufferedImage bufferedImage = DataFiles.getImageFromClasspath(String.format("/emotes/%s.png", emoteName));
             final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -52,7 +53,7 @@ public class BotEmotes {
             ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
             final Icon icon = Icon.from(byteArrayOutputStream.toByteArray(), Icon.IconType.PNG);
 
-            return guild.createEmote(emoteName, icon).complete();
+            return guild.createEmoji(emoteName, icon).complete();
         } catch (IOException e) {
             throw new FunixBotException(e.getMessage(), e);
         }
