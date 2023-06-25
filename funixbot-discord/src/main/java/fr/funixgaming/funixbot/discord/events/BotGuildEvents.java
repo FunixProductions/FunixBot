@@ -66,30 +66,30 @@ public class BotGuildEvents extends ListenerAdapter {
             case JOIN -> {
                 final EmbedBuilder generalEmbed = new EmbedBuilder();
                 generalEmbed.setColor(Color.GREEN);
-                generalEmbed.setDescription(String.format("%s a rejoint le discord.", user.getAsTag()));
+                generalEmbed.setDescription(String.format("%s a rejoint le discord.", user.getName()));
                 generalEmbed.setAuthor(user.getName(), null, user.getAvatarUrl());
                 generalEmbed.setThumbnail(user.getAvatarUrl());
 
                 embedBuilder.setColor(Color.GREEN);
-                embedBuilder.setDescription(String.format("%s a rejoint le discord.", user.getAsTag()));
+                embedBuilder.setDescription(String.format("%s a rejoint le discord.", user.getName()));
 
                 funixBot.sendChatMessage(botConfig.getGeneralChannelId(), generalEmbed.build());
             }
             case LEAVE -> {
                 embedBuilder.setColor(Color.RED);
-                embedBuilder.setDescription(String.format("%s a quitté le discord.", user.getAsTag()));
+                embedBuilder.setDescription(String.format("%s a quitté le discord.", user.getName()));
             }
             case KICK -> {
                 embedBuilder.setColor(Color.YELLOW);
-                embedBuilder.setDescription(String.format("%s a été kick du discord.", user.getAsTag()));
+                embedBuilder.setDescription(String.format("%s a été kick du discord.", user.getName()));
             }
             case BAN -> {
                 embedBuilder.setColor(Color.BLACK);
-                embedBuilder.setDescription(String.format("%s a été ban du discord.", user.getAsTag()));
+                embedBuilder.setDescription(String.format("%s a été ban du discord.", user.getName()));
             }
             case UNBAN -> {
                 embedBuilder.setColor(Color.GRAY);
-                embedBuilder.setDescription(String.format("%s a été unban du discord.", user.getAsTag()));
+                embedBuilder.setDescription(String.format("%s a été unban du discord.", user.getName()));
             }
         }
 

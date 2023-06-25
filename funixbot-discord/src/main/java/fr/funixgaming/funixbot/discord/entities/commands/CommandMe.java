@@ -26,9 +26,9 @@ public class CommandMe extends DiscordCommand {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.FRANCE);
         final EmbedBuilder embed = new EmbedBuilder();
 
-        embed.setAuthor(interactionEvent.getUser().getAsTag(), null, interactionEvent.getUser().getAvatarUrl());
+        embed.setAuthor(interactionEvent.getUser().getName(), null, interactionEvent.getUser().getAvatarUrl());
         embed.setDescription("Voici donc les infos principales de ton compte");
-        embed.addField("Pseudo", interactionEvent.getUser().getAsTag(), false);
+        embed.addField("Pseudo", interactionEvent.getUser().getName(), false);
         embed.addField("Date de création", interactionEvent.getUser().getTimeCreated().format(formatter), false);
         embed.setColor(Color.decode("#2cafff"));
         embed.setThumbnail(interactionEvent.getUser().getAvatarUrl());
