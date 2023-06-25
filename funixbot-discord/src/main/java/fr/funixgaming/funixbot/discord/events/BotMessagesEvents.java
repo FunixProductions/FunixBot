@@ -27,7 +27,7 @@ public class BotMessagesEvents extends ListenerAdapter {
         final Message message = event.getMessage();
         final MessageChannel textChannel = event.getChannel();
 
-        log.info("[{} > {}] {}", user.getAsTag(), textChannel.getName(), message.getContentRaw());
+        log.info("[{} > {}] {}", user.getName(), textChannel.getName(), message.getContentRaw());
     }
 
     @Override
@@ -36,6 +36,6 @@ public class BotMessagesEvents extends ListenerAdapter {
         final Message message = event.getMessage();
         final MessageChannel textChannel = event.getChannel();
 
-        log.info("UPDATE [{} > {}] {}", user.getAsTag(), textChannel.getName(), message.getContentRaw());
+        log.info("UPDATE [{} > {}] {}", user.getName(), textChannel.getName(), message.getContentRaw());
     }
 }
