@@ -4,10 +4,6 @@ import fr.funixgaming.funixbot.discord.modules.RoleMessageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Message;
-<<<<<<< HEAD
-import net.dv8tion.jda.api.entities.MessageChannel;
-=======
->>>>>>> 62313d3c8452c31bc1c4f62e78f0860ff1a0a106
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
