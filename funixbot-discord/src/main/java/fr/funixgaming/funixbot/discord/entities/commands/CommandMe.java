@@ -29,6 +29,8 @@ public class CommandMe extends DiscordCommand {
         embed.setAuthor(interactionEvent.getUser().getName(), null, interactionEvent.getUser().getAvatarUrl());
         embed.setDescription("Voici donc les infos principales de ton compte");
         embed.addField("Pseudo", interactionEvent.getUser().getName(), false);
+        embed.addField("Nom d'affichage", interactionEvent.getUser().getEffectiveName(), false);
+        embed.addField("ID", interactionEvent.getUser().getId(), false);
         embed.addField("Date de création", interactionEvent.getUser().getTimeCreated().format(formatter), false);
         embed.setColor(Color.decode("#2cafff"));
         embed.setThumbnail(interactionEvent.getUser().getAvatarUrl());
