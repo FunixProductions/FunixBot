@@ -55,7 +55,7 @@
                         <path>
                             <groupId>org.springframework.boot</groupId>
                             <artifactId>spring-boot-configuration-processor</artifactId>
-                            <version>${org.springframeork.boot.annotation.version}</version>
+                            <version>${org.springframework.boot.annotation.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

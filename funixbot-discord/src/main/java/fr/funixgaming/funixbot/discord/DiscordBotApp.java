@@ -14,17 +14,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableAsync
 @EnableScheduling
-@EnableFeignClients(basePackages = {"fr.funixgaming", "com.funixproductions.api.client"})
-@SpringBootApplication(scanBasePackages = "fr.funixgaming", exclude = {
-        DataSourceAutoConfiguration.class,
-        DataSourceTransactionManagerAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class})
-@ImportAutoConfiguration({FeignAutoConfiguration.class})
+@EnableFeignClients(basePackages = {"fr.funixgaming"})
+@SpringBootApplication(scanBasePackages = {"fr.funixgaming", "com.funixproductions"})
 public class DiscordBotApp {
     public static void main(final String[] args) {
-        final SpringApplication app = new SpringApplication(DiscordBotApp.class);
-
-        app.setWebApplicationType(WebApplicationType.NONE);
-        app.run(args);
+        SpringApplication.run(DiscordBotApp.class, args);
     }
 }

@@ -8,23 +8,15 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableAsync
 @EnableScheduling
-@EnableFeignClients(basePackages = {"fr.funixgaming", "com.funixproductions.api.client"})
-@SpringBootApplication(scanBasePackages = "fr.funixgaming", exclude = {
-        DataSourceAutoConfiguration.class,
-        DataSourceTransactionManagerAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class})
-@ImportAutoConfiguration({FeignAutoConfiguration.class})
+@EnableFeignClients(basePackages = {"fr.funixgaming"})
+@SpringBootApplication(scanBasePackages = {"fr.funixgaming", "com.funixproductions"})
 public class TwitchBotApp {
     public static void main(final String[] args) {
-        final SpringApplication app = new SpringApplication(TwitchBotApp.class);
-
-        app.setWebApplicationType(WebApplicationType.NONE);
-        app.run(args);
+        SpringApplication.run(TwitchBotApp.class, args);
     }
 }

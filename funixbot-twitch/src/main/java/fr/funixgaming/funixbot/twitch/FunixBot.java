@@ -1,7 +1,7 @@
 package fr.funixgaming.funixbot.twitch;
 
 import com.funixproductions.api.client.twitch.reference.clients.users.TwitchUsersClient;
-import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
+import fr.funixgaming.api.funixbot.client.clients.FunixBotUserExperienceClient;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.TwitchStatus;
 import fr.funixgaming.funixbot.twitch.commands.*;

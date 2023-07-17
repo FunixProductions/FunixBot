@@ -1,9 +1,9 @@
 package fr.funixgaming.funixbot.core.utils;
 
-import com.funixproductions.api.client.twitch.reference.clients.stream.TwitchStreamsClient;
-import com.funixproductions.api.client.twitch.reference.dtos.responses.TwitchDataResponseDTO;
-import com.funixproductions.api.client.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
+import com.funixproductions.api.twitch.reference.client.dtos.responses.TwitchDataResponseDTO;
+import com.funixproductions.api.twitch.reference.client.dtos.responses.channel.stream.TwitchStreamDTO;
 import feign.FeignException;
+import fr.funixgaming.api.twitch.client.clients.TwitchStreamClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
@@ -17,13 +17,13 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class TwitchStatus {
 
-    private final TwitchStreamsClient twitchStreamsClient;
+    private final TwitchStreamClient twitchStreamsClient;
     private TwitchStreamDTO funixStreamInfo = null;
 
     @Scheduled(fixedRate = 20, timeUnit = TimeUnit.SECONDS)
     public void updateStreamStatus() {
         try {
-            final TwitchDataResponseDTO<TwitchStreamDTO> streamDto = this.twitchStreamsClient.getFunixStream();
+            final TwitchDataResponseDTO<TwitchStreamDTO> streamDto = this.twitchStreamsClient.getStream();
 
             if (streamDto.getData().isEmpty()) {
                 this.funixStreamInfo = null;

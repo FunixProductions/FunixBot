@@ -1,8 +1,8 @@
 package fr.funixgaming.funixbot.twitch.commands;
 
 import feign.FeignException;
-import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
-import fr.funixgaming.api.client.funixbot.dtos.FunixBotUserExperienceDTO;
+import fr.funixgaming.api.funixbot.client.clients.FunixBotUserExperienceClient;
+import fr.funixgaming.api.funixbot.client.dtos.FunixBotUserExperienceDTO;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.twitch.FunixBot;
 import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;

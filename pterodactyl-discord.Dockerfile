@@ -21,7 +21,7 @@ RUN rm funixbot-discord/target/funix-bot-discord-*-sources.jar
 RUN rm funixbot-twitch/target/funix-bot-twitch-*-javadoc.jar
 RUN rm funixbot-twitch/target/funix-bot-twitch-*-sources.jar
 
-FROM openjdk:17 AS FINAL_PTEROQ
+FROM openjdk:17-alpine AS FINAL_PTEROQ
 
 MAINTAINER Antoine PRONNIER, <antoine.pronnier@gmail.com>
 

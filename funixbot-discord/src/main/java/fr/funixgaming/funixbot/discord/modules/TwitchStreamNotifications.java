@@ -1,10 +1,10 @@
 package fr.funixgaming.funixbot.discord.modules;
 
-import com.funixproductions.api.client.twitch.reference.clients.game.TwitchGameClient;
-import com.funixproductions.api.client.twitch.reference.dtos.responses.TwitchDataResponseDTO;
-import com.funixproductions.api.client.twitch.reference.dtos.responses.channel.stream.TwitchStreamDTO;
-import com.funixproductions.api.client.twitch.reference.dtos.responses.game.TwitchGameDTO;
+import com.funixproductions.api.twitch.reference.client.dtos.responses.TwitchDataResponseDTO;
+import com.funixproductions.api.twitch.reference.client.dtos.responses.channel.stream.TwitchStreamDTO;
+import com.funixproductions.api.twitch.reference.client.dtos.responses.game.TwitchGameDTO;
 import feign.FeignException;
+import fr.funixgaming.api.twitch.client.clients.FunixGamingTwitchGameClient;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.BotColors;
 import fr.funixgaming.funixbot.core.utils.TwitchStatus;
@@ -28,7 +28,7 @@ public class TwitchStreamNotifications {
 
     private final FunixBot funixBot;
     private final BotConfig botConfig;
-    private final TwitchGameClient gameClient;
+    private final FunixGamingTwitchGameClient gameClient;
     private final TwitchStatus twitchStatus;
     private final TwitchNotificationRole twitchNotificationRole;
 
@@ -36,7 +36,7 @@ public class TwitchStreamNotifications {
 
     public TwitchStreamNotifications(FunixBot funixBot,
                                      BotConfig botConfig,
-                                     TwitchGameClient gameClient,
+                                     FunixGamingTwitchGameClient gameClient,
                                      TwitchStatus twitchStatus) throws FunixBotException {
         this.funixBot = funixBot;
         this.botConfig = botConfig;
