@@ -1,13 +1,13 @@
 package fr.funixgaming.funixbot.twitch.modules;
 
-import com.funixproductions.api.client.twitch.reference.clients.chat.TwitchChatClient;
-import com.funixproductions.api.client.twitch.reference.dtos.responses.TwitchDataResponseDTO;
-import com.funixproductions.api.client.twitch.reference.dtos.responses.channel.chat.TwitchChannelChattersDTO;
+import com.funixproductions.api.twitch.reference.client.dtos.responses.TwitchDataResponseDTO;
+import com.funixproductions.api.twitch.reference.client.dtos.responses.channel.chat.TwitchChannelChattersDTO;
 import com.funixproductions.core.crud.dtos.PageDTO;
 import com.funixproductions.core.crud.enums.SearchOperation;
 import feign.FeignException;
-import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
-import fr.funixgaming.api.client.funixbot.dtos.FunixBotUserExperienceDTO;
+import fr.funixgaming.api.funixbot.client.clients.FunixBotUserExperienceClient;
+import fr.funixgaming.api.funixbot.client.dtos.FunixBotUserExperienceDTO;
+import fr.funixgaming.api.twitch.client.clients.FunixGamingTwitchStreamClient;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.TwitchStatus;
 import fr.funixgaming.funixbot.twitch.config.BotConfig;
@@ -35,7 +35,7 @@ public class ChatExperience {
     private final BotConfig botConfig;
     private final TwitchBot twitchBot;
 
-    private final TwitchChatClient twitchChatClient;
+    private final FunixGamingTwitchStreamClient funixGamingTwitchStreamClient;
     private final TwitchStatus twitchStatus;
     private final FunixBotUserExperienceClient funixBotUserExperienceClient;
 
@@ -43,11 +43,11 @@ public class ChatExperience {
 
     public ChatExperience(BotConfig botConfig,
                           TwitchBot twitchBot,
-                          TwitchChatClient twitchChatClient,
+                          FunixGamingTwitchStreamClient twitchChatClient,
                           TwitchStatus twitchStatus,
                           FunixBotUserExperienceClient funixBotUserExperienceClient) {
         this.botConfig = botConfig;
-        this.twitchChatClient = twitchChatClient;
+        this.funixGamingTwitchStreamClient = twitchChatClient;
         this.funixBotUserExperienceClient = funixBotUserExperienceClient;
         this.twitchBot = twitchBot;
         this.twitchStatus = twitchStatus;
@@ -95,7 +95,7 @@ public class ChatExperience {
     public void gainLurkExp() {
         try {
             if (twitchStatus.getFunixStreamInfo() != null) {
-                final TwitchDataResponseDTO<TwitchChannelChattersDTO> chatters = this.twitchChatClient.getChannelChatters(1000, null);
+                final TwitchDataResponseDTO<TwitchChannelChattersDTO> chatters = this.funixGamingTwitchStreamClient.getChatters("funixgaming");
 
                 for (final TwitchChannelChattersDTO user : chatters.getData()) {
                     if (!user.getUserLogin().equalsIgnoreCase(botConfig.getStreamerUsername()) &&

@@ -1,7 +1,7 @@
 package fr.funixgaming.funixbot.twitch;
 
-import com.funixproductions.api.client.twitch.reference.clients.users.TwitchUsersClient;
-import fr.funixgaming.api.client.funixbot.clients.FunixBotUserExperienceClient;
+import fr.funixgaming.api.funixbot.client.clients.FunixBotUserExperienceClient;
+import fr.funixgaming.api.twitch.client.clients.FunixGamingTwitchUserClient;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.TwitchStatus;
 import fr.funixgaming.funixbot.twitch.commands.*;
@@ -27,7 +27,7 @@ public class FunixBot {
     private final CommandHandler commandHandler;
 
     private final TwitchStatus twitchStatus;
-    private final TwitchUsersClient twitchUsersClient;
+    private final FunixGamingTwitchUserClient twitchUsersClient;
     private final FunixBotUserExperienceClient userExperienceClient;
 
     private final Set<BotCommand> commands = new HashSet<>();
@@ -37,7 +37,7 @@ public class FunixBot {
                     BotConfig botConfig,
                     TwitchBot twitchBot,
                     TwitchStatus twitchStatus,
-                    TwitchUsersClient twitchUsersClient,
+                    FunixGamingTwitchUserClient twitchUsersClient,
                     FunixBotUserExperienceClient userExperienceClient) throws FunixBotException {
         try {
             this.commandHandler = commandHandler;
