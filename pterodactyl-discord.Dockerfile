@@ -31,6 +31,4 @@ WORKDIR /home/container
 
 COPY --from=MAVEN /container/funixbot/funixbot-discord/target/funix-bot-discord-*.jar /home/java/funixbot.jar
 
-COPY ./entrypointPteroq.sh /entrypoint.sh
-
-CMD ["/bin/bash", "/entrypoint.sh"]
+CMD ["/bin/sh", "-c", "java -jar -Xms150M -XX:MaxRAMPercentage=95.0 /home/java/funixbot.jar"]
