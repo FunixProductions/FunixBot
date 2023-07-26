@@ -83,3 +83,20 @@ jobs:
             -H 'Accept: application/json' \
             -H 'Content-Type: application/json' \
             -H 'Authorization: Bearer ${{ secrets.PTERODACTYL_API_KEY }}'
+
+  send-success-build-discord-notif:
+    needs:
+      - build-funixbot-twitch-and-restart-prod
+      - build-funixbot-discord-and-restart-prod
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CI_STATUS }}
+          DISCORD_USERNAME: FunixBot-Deploy
+          DISCORD_AVATAR: https://avatars.githubusercontent.com/u/99349214?s=200&v=4
+        uses: Ilshidur/action-discord@master
+        with:
+          args: '✅ FunixBot à été déployé sur pterodactyl !'
