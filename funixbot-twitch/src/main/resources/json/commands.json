@@ -35,7 +35,7 @@
       "aliases": [
         "ig"
       ],
-      "response": "Achetez vos jeux moins chers ! Jusqu'a moins 70% https://www.instant-gaming.com?igr=FunixGaming (Vos achats me font gagner 3% du prix du jeu acheté)."
+      "response": "Achetez vos jeux moins chers ! Jusqu'a moins 70% https://www.instant-gaming.com/?igr=FunixGaming (Vos achats me font gagner 3% du prix du jeu acheté)."
     },
     {
       "command": "twitter",
@@ -73,9 +73,10 @@
     {
       "command": "playlist",
       "aliases": [
-        "spotify"
+        "spotify",
+        "musique"
       ],
-      "response": "La playlist du stream : https://open.spotify.com/playlist/4bkcuaYbR6LNBwLp6WItmA?si=f161351cde404dcf"
+      "response": "Profil spotify avec les playlists: https://open.spotify.com/user/11183182804"
     },
     {
       "command": "tiktok",
