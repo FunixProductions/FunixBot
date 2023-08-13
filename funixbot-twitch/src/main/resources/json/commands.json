@@ -39,6 +39,9 @@
     },
     {
       "command": "twitter",
+      "aliases": [
+        "x"
+      ],
       "response": "Twitter : twitter.com/funixgaming"
     },
     {
@@ -58,10 +61,6 @@
     {
       "command": "vod",
       "response": "Youtube VOD: youtube.com/@funix-vod"
-    },
-    {
-      "command": "don",
-      "response": "Soutenir le stream avec un don direct : https://streamlabs.com/funixgaming"
     },
     {
       "command": "sub",
