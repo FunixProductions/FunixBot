@@ -7,7 +7,6 @@ import fr.funixgaming.funixbot.core.utils.TwitchStatus;
 import fr.funixgaming.funixbot.twitch.commands.*;
 import fr.funixgaming.funixbot.twitch.commands.utils.CommandHandler;
 import fr.funixgaming.funixbot.twitch.commands.utils.entities.BotCommand;
-import fr.funixgaming.funixbot.twitch.commands.utils.entities.SimpleCommand;
 import fr.funixgaming.funixbot.twitch.config.BotConfig;
 import fr.funixgaming.funixbot.twitch.events.TwitchChatEvents;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
@@ -58,16 +57,6 @@ public class FunixBot {
     }
 
     private void configureCommands() throws FunixBotException {
-        final String channelToSend = botConfig.getStreamerUsername();
-        final Set<SimpleCommand> simpleCommands = SimpleCommand.getCommandsFromClasspath();
-
-        for (final SimpleCommand command : simpleCommands) {
-            command.setChannelToSend(channelToSend);
-            command.setBot(this);
-
-            this.commandHandler.addListener(command);
-        }
-
         this.commandHandler.addListener(new CommandGiveaway(this));
         this.commandHandler.addListener(new CommandFollowCheck(this));
         this.commandHandler.addListener(new LevelCommand(this));

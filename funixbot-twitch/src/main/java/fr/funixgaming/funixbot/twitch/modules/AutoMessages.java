@@ -1,64 +1,82 @@
 package fr.funixgaming.funixbot.twitch.modules;
 
+import com.funixproductions.api.twitch.reference.client.dtos.responses.channel.stream.TwitchStreamDTO;
+import com.google.common.base.Strings;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.funixgaming.api.funixbot.client.clients.FunixBotAutoMessagesClient;
+import fr.funixgaming.api.funixbot.client.dtos.FunixBotAutoMessageDTO;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.DataFiles;
+import fr.funixgaming.funixbot.core.utils.TwitchStatus;
 import fr.funixgaming.funixbot.twitch.config.BotConfig;
 import fr.funixgaming.twitch.api.chatbot_irc.TwitchBot;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class AutoMessages {
     private static final int LIMIT_MESSAGES = 20;
+    private static final int MESSAGE_COOLDOWN = 5;
 
     private final TwitchBot twitchBot;
     private final BotConfig botConfig;
+    private final FunixBotAutoMessagesClient funixBotAutoMessagesClient;
+    private final TwitchStatus twitchStatus;
 
-    private final String[] messages;
     private int count = 0;
     private int selected = 0;
     private Instant lastMessageTime = Instant.now();
-
-    public AutoMessages(TwitchBot twitchBot,
-                        BotConfig botConfig) throws FunixBotException {
-        this.twitchBot = twitchBot;
-        this.botConfig = botConfig;
-
-        final String data = DataFiles.readFileFromClasspath("/json/autoMessages.json");
-        final JsonObject obj = JsonParser.parseString(data).getAsJsonObject();
-        final JsonArray array = obj.get("messages").getAsJsonArray();
-        final int size = array.size();
-
-        this.messages = new String[size];
-        for (int i = 0; i < size; ++i) {
-            this.messages[i] = array.get(i).getAsString();
-        }
-    }
 
     public void userMessage() throws FunixBotException {
         final Instant now = Instant.now();
 
         ++this.count;
 
-        if (this.count > LIMIT_MESSAGES && lastMessageTime.plus(10, ChronoUnit.MINUTES).isBefore(now)) {
+        if (this.count > LIMIT_MESSAGES && lastMessageTime.plus(MESSAGE_COOLDOWN, ChronoUnit.MINUTES).isBefore(now)) {
+            final List<FunixBotAutoMessageDTO> messages = this.funixBotAutoMessagesClient.getAll("0", "1000", null, null).getContent();
+            if (messages.isEmpty()) {
+                return;
+            }
+            final int messagesSize = messages.size();
+
             this.lastMessageTime = now;
             this.count = 0;
-
-            twitchBot.sendMessageToChannel(botConfig.getStreamerUsername(), messages[selected]);
-
-            ++this.selected;
-            if (this.selected >= this.messages.length) {
+            if (this.selected >= messagesSize) {
                 this.selected = 0;
             }
+
+            final FunixBotAutoMessageDTO message = messages.get(this.selected);
+            this.checkIfMessageIsNotStreamGameSpecific(message, messagesSize);
+            this.twitchBot.sendMessageToChannel(botConfig.getStreamerUsername(), message.getMessage());
+            this.selected++;
         }
     }
 
-    public String[] getMessages() {
-        return messages;
+    private void checkIfMessageIsNotStreamGameSpecific(final FunixBotAutoMessageDTO message, final int messagesSize) {
+        final TwitchStreamDTO twitchStatus = this.twitchStatus.getFunixStreamInfo();
+
+        if (twitchStatus == null) {
+            if (!Strings.isNullOrEmpty(message.getGameName())) {
+                this.selected++;
+            }
+        } else {
+            if (!Strings.isNullOrEmpty(message.getGameName()) && !message.getGameName().equalsIgnoreCase(twitchStatus.getGameName())) {
+                this.selected++;
+            }
+        }
+
+        if (this.selected >= messagesSize) {
+            this.selected = 0;
+        }
     }
+
 }

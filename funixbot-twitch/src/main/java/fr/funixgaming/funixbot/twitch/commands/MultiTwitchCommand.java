@@ -25,7 +25,7 @@ public class MultiTwitchCommand extends BotCommand {
     }
 
     @Override
-    public void onUserCommand(@NonNull ChatMember user, @NonNull String command, @NotNull @NonNull String[] args) {
+    public void onUserCommand(@NonNull ChatMember user, @NonNull String command, @NotNull String[] args) {
         final TwitchStreamDTO streamData = this.bot.getTwitchStatus().getFunixStreamInfo();
 
         if (streamData != null) {
