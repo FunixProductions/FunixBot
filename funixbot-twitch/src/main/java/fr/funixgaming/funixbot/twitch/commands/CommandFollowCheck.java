@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +46,11 @@ public class CommandFollowCheck extends BotCommand {
 
     private String getFollowTime(@NonNull final TwitchFollowDTO follow) {
         final Instant now = Instant.now();
-        final Instant followedAt = follow.getFollowedAt().toInstant();
         final List<String> uptimeStream = new ArrayList<>();
+        // ArthuritoDeLaMuerta special follow date
+        final String arthuritoDeLaMuertaTwitchId = "110916191";
+        final Instant arthuritoDeLaMuertaTwitchFollowDate = LocalDate.of(2022, 9, 15).atStartOfDay().toInstant(ZoneOffset.UTC);
+        final Instant followedAt = follow.getFromId().equals(arthuritoDeLaMuertaTwitchId) ? arthuritoDeLaMuertaTwitchFollowDate : follow.getFollowedAt().toInstant();
 
         long durationSeconds = TimeUtils.diffBetweenInstants(followedAt, now).getSeconds();
 
