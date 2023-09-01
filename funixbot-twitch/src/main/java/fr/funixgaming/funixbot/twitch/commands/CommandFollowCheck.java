@@ -12,12 +12,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 public class CommandFollowCheck extends BotCommand {
     private final static int COOLDOWN = 2;
+    private final static String ARTHURO_TWITCH_ID = "110916191";
+    private final static Instant ARTHURO_FOLLOW_DATE = LocalDate.of(2022, 9, 15).atStartOfDay().toInstant(ZoneOffset.UTC);
 
     private final FunixBot bot;
 
@@ -44,8 +48,16 @@ public class CommandFollowCheck extends BotCommand {
 
     private String getFollowTime(@NonNull final TwitchFollowDTO follow) {
         final Instant now = Instant.now();
-        final Instant followedAt = follow.getFollowedAt().toInstant();
         final List<String> uptimeStream = new ArrayList<>();
+
+        // ArthuritoDeLaMuerta special follow date
+        final Instant followedAt;
+
+        if (follow.getFromId().equals(ARTHURO_TWITCH_ID)) {
+            followedAt = ARTHURO_FOLLOW_DATE;
+        } else {
+            followedAt = follow.getFollowedAt().toInstant();
+        }
 
         long durationSeconds = TimeUtils.diffBetweenInstants(followedAt, now).getSeconds();
 
