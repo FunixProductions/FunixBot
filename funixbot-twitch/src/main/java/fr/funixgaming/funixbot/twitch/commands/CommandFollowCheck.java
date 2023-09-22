@@ -33,7 +33,7 @@ public class CommandFollowCheck extends BotCommand {
     @Override
     public void onUserCommand(@NonNull ChatMember user, @NonNull String command, @NotNull @NonNull String[] args) {
         try {
-            final TwitchDataResponseDTO<TwitchFollowDTO> followDto = this.bot.getTwitchUsersClient().isUserFollowingStreamer(Integer.toString(user.getUserId()), user.getRoomID());
+            final TwitchDataResponseDTO<TwitchFollowDTO> followDto = this.bot.getTwitchUsersClient().isUserFollowingStreamer(Integer.toString(user.getUserId()));
 
             if (!followDto.getData().isEmpty()) {
                 final TwitchFollowDTO followDTO = followDto.getData().get(0);
@@ -52,7 +52,7 @@ public class CommandFollowCheck extends BotCommand {
 
         final Instant followedAt;
 
-        if (follow.getFromId().equals(ARTHURO_TWITCH_ID)) {
+        if (follow.getUserId().equals(ARTHURO_TWITCH_ID)) {
             followedAt = ARTHURO_FOLLOW_DATE;
         } else {
             followedAt = follow.getFollowedAt().toInstant();
