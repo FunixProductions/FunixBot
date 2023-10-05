@@ -1,4 +1,4 @@
-FROM maven:3.9.4-amazoncorretto-21-debian AS MAVEN
+FROM maven:3-openjdk-17 AS MAVEN
 
 MAINTAINER Antoine PRONNIER, <antoine.pronnier@gmail.com>
 
@@ -19,7 +19,7 @@ RUN mvn clean package -B -Dmaven.javadoc.skip -Dgpg.skip -T 10
 RUN rm funixbot-discord/target/funix-bot-discord-*-sources.jar
 RUN rm funixbot-twitch/target/funix-bot-twitch-*-sources.jar
 
-FROM amazoncorretto:21-alpine AS FINAL_PTEROQ
+FROM openjdk:17 AS FINAL_PTEROQ
 
 MAINTAINER Antoine PRONNIER, <antoine.pronnier@gmail.com>
 
