@@ -21,7 +21,7 @@ import java.util.List;
 public class CommandFollowCheck extends BotCommand {
     private final static int COOLDOWN = 2;
     private final static String ARTHURO_TWITCH_ID = "110916191";
-    private final static Instant ARTHURO_FOLLOW_DATE = LocalDate.of(2021, 6, 20).atStartOfDay().toInstant(ZoneOffset.UTC);
+    private final static Instant ARTHURO_FOLLOW_DATE = LocalDate.of(2018, 11, 5).atStartOfDay().toInstant(ZoneOffset.UTC);
 
     private final FunixBot bot;
 
