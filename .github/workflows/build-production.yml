@@ -40,7 +40,7 @@ jobs:
 
       - name: Send start signal to restart funixbot discord with new version
         run: |
-          curl "https://${{ secrets.PTERODACTYL_DOMAIN }}/api/client/servers/f78ed08c/power?signal=restart" \
+          curl "https://${{ secrets.PTERODACTYL_DOMAIN }}/api/client/servers/40595d4c/power?signal=restart" \
             -X POST \
             -H 'Accept: application/json' \
             -H 'Content-Type: application/json' \
@@ -78,7 +78,7 @@ jobs:
 
       - name: Send start signal to restart funixbot twitch with new version
         run: |
-          curl "https://${{ secrets.PTERODACTYL_DOMAIN }}/api/client/servers/0e631822/power?signal=restart" \
+          curl "https://${{ secrets.PTERODACTYL_DOMAIN }}/api/client/servers/a5e21e60/power?signal=restart" \
             -X POST \
             -H 'Accept: application/json' \
             -H 'Content-Type: application/json' \
