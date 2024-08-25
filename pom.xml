@@ -64,7 +64,7 @@
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <commons.io.version>2.16.1</commons.io.version>
         <!-- https://github.com/DV8FromTheWorld/JDA -->
-        <discord.jda.version>5.0.2</discord.jda.version>
+        <discord.jda.version>5.1.0</discord.jda.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
