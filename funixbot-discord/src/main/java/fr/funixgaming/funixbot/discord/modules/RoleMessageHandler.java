@@ -4,7 +4,6 @@ import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.core.utils.BotColors;
 import fr.funixgaming.funixbot.discord.FunixBot;
 import fr.funixgaming.funixbot.discord.configs.BotConfigGenerated;
-import fr.funixgaming.funixbot.discord.entities.roles.notifications.TiktokNotificationRole;
 import fr.funixgaming.funixbot.discord.entities.roles.notifications.TwitchNotificationRole;
 import fr.funixgaming.funixbot.discord.entities.roles.notifications.YoutubeNotificationRole;
 import lombok.extern.slf4j.Slf4j;
@@ -74,9 +73,8 @@ public class RoleMessageHandler {
 
         Button twitchbtn = Button.primary(TwitchNotificationRole.NAME, botEmotes.getTwitchEmote());
         Button youtubebtn = Button.primary(YoutubeNotificationRole.NAME, botEmotes.getYoutubeEmote());
-        Button tiktokbtn = Button.primary(TiktokNotificationRole.NAME, botEmotes.getTiktokEmote());
 
-        rolesChannel.sendMessageEmbeds(embed.build()).setActionRow(twitchbtn, youtubebtn, tiktokbtn).queue((message -> {
+        rolesChannel.sendMessageEmbeds(embed.build()).setActionRow(twitchbtn, youtubebtn).queue((message -> {
             this.botConfigGenerated.setMessageRolesChoiceId(message.getId());
         }));
     }

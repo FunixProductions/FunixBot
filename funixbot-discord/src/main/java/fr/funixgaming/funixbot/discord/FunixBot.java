@@ -6,7 +6,6 @@ import fr.funixgaming.funixbot.discord.entities.commands.CommandGnou;
 import fr.funixgaming.funixbot.discord.entities.commands.CommandIP;
 import fr.funixgaming.funixbot.discord.entities.commands.CommandMe;
 import fr.funixgaming.funixbot.discord.entities.commands.utils.DiscordCommand;
-import fr.funixgaming.funixbot.discord.entities.roles.notifications.TiktokNotificationRole;
 import fr.funixgaming.funixbot.discord.entities.roles.notifications.TwitchNotificationRole;
 import fr.funixgaming.funixbot.discord.entities.roles.notifications.YoutubeNotificationRole;
 import fr.funixgaming.funixbot.discord.entities.roles.users.FollowrRole;
@@ -67,7 +66,6 @@ public class FunixBot {
 
     private void setupRoles() throws FunixBotException {
         this.botRoles.add(new FollowrRole(this));
-        this.botRoles.add(new TiktokNotificationRole(this));
         this.botRoles.add(new TwitchNotificationRole(this));
         this.botRoles.add(new YoutubeNotificationRole(this));
     }
