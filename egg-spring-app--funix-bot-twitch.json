@@ -1,0 +1,62 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-04-17T22:45:53+02:00",
+    "name": "Spring App - FunixBot Twitch",
+    "author": "funixgaming7@gmail.com",
+    "description": "Pterodactyl egg used to run FunixBot Twitch",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/funixproductions\/funixbot-twitch-pteroq:latest": "ghcr.io\/funixproductions\/funixbot-twitch-pteroq:latest"
+    },
+    "file_denylist": [],
+    "startup": "java -jar funixbot.jar -Xms150M -Xmx{{SERVER_MEMORY}}M -Dfile.encoding=UTF-8",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Started TwitchBotApp\"\r\n}",
+        "logs": "{}",
+        "stop": "^SIGKILL"
+    },
+    "scripts": {
+        "installation": {
+            "script": null,
+            "container": "debian:stretch",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "FUNIXPRODUCTIONS_API_TOKEN",
+            "description": "Auth bearer token to access the api",
+            "env_variable": "FUNIXPRODUCTIONS_API_TOKEN",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|max:1000",
+            "field_type": "text"
+        },
+        {
+            "name": "TWITCH_BOT_OAUTH_TOKEN",
+            "description": "",
+            "env_variable": "TWITCH_BOT_OAUTH_TOKEN",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|max:1000",
+            "field_type": "text"
+        },
+        {
+            "name": "OpenAI token",
+            "description": "Openai token pour les requ\u00eates avec IA",
+            "env_variable": "OPENAI_API_KEY",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|max:2000",
+            "field_type": "text"
+        }
+    ]
+}

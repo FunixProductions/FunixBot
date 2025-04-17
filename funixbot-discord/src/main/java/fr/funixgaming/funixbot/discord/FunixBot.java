@@ -1,7 +1,9 @@
 package fr.funixgaming.funixbot.discord;
 
+import com.funixproductions.core.integrations.openai.chatgpt.services.ChatGptService;
 import fr.funixgaming.funixbot.core.exceptions.FunixBotException;
 import fr.funixgaming.funixbot.discord.configs.BotConfig;
+import fr.funixgaming.funixbot.discord.entities.commands.CommandAsk;
 import fr.funixgaming.funixbot.discord.entities.commands.CommandGnou;
 import fr.funixgaming.funixbot.discord.entities.commands.CommandIP;
 import fr.funixgaming.funixbot.discord.entities.commands.CommandMe;
@@ -28,18 +30,26 @@ import java.util.Set;
 @Getter
 @Service
 public class FunixBot {
+
     private final JDA jda;
     private final BotConfig botConfig;
     private final BotEmotes botEmotes;
     private final Guild botGuild;
 
+    private final ChatGptService chatGptService;
+
     private final Set<DiscordCommand> botCommands = new HashSet<>();
     private final Set<FunixBotRole> botRoles = new HashSet<>();
 
-    public FunixBot(BotConfig botConfig, JDA jda) throws Exception {
+    public FunixBot(
+            BotConfig botConfig,
+            JDA jda,
+            ChatGptService chatGptService
+    ) throws Exception {
         try {
             this.jda = jda;
             this.botConfig = botConfig;
+            this.chatGptService = chatGptService;
 
             this.botGuild = jda.getGuildById(botConfig.getGuildId());
             if (this.botGuild == null) {
@@ -62,6 +72,7 @@ public class FunixBot {
         this.botCommands.add(new CommandGnou(this.jda));
         this.botCommands.add(new CommandIP(this.jda));
         this.botCommands.add(new CommandMe(this.jda));
+        this.botCommands.add(new CommandAsk(this.jda, this.chatGptService));
     }
 
     private void setupRoles() throws FunixBotException {

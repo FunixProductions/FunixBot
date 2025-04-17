@@ -1,0 +1,162 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-04-17T22:45:52+02:00",
+    "name": "Spring APP - FunixBot Discord",
+    "author": "funixgaming7@gmail.com",
+    "description": "Pterodactyl egg used to run FunixBot Discord",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/funixproductions\/funixbot-discord-pteroq:latest": "ghcr.io\/funixproductions\/funixbot-discord-pteroq:latest"
+    },
+    "file_denylist": [],
+    "startup": "java -jar funixbot.jar -Xms150M -Xmx{{SERVER_MEMORY}}M -Dfile.encoding=UTF-8",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Started DiscordBotApp\"\r\n}",
+        "logs": "{}",
+        "stop": "^SIGKILL"
+    },
+    "scripts": {
+        "installation": {
+            "script": "cd \/mnt\/server\r\n\r\necho -e \"installing dependencies\"\r\napt-get -y update\r\napt-get -y install curl\r\n\r\necho \"T\u00e9l\u00e9chargement de FunixBot Discord V\"${BOT_VERSION}\r\n\r\ncurl https:\/\/repo1.maven.org\/maven2\/fr\/funixgaming\/funixbot\/discord\/funix-bot-discord\/${BOT_VERSION}\/funix-bot-discord-${BOT_VERSION}.jar -o bot.jar",
+            "container": "debian:stretch",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Discord bot token",
+            "description": "",
+            "env_variable": "DISCORD_BOT_TOKEN",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|max:500",
+            "field_type": "text"
+        },
+        {
+            "name": "Guilde ID",
+            "description": "",
+            "env_variable": "DISCORD_GUILD_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Twitch channel ID",
+            "description": "Pour les notif twitch",
+            "env_variable": "DISCORD_TWITCH_CHANNEL_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Log channel id",
+            "description": "",
+            "env_variable": "DISCORD_LOG_CHANNEL_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Genaral channel id",
+            "description": "",
+            "env_variable": "DISCORD_GENERAL_CHANNEL_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Choix roles channel id",
+            "description": "",
+            "env_variable": "DISCORD_ROLES_CHANNEL_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Twitch role notif id",
+            "description": "",
+            "env_variable": "DISCORD_TWITCH_NOTIF_ROLE_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Youtube role notif id",
+            "description": "",
+            "env_variable": "DISCORD_YOUTUBE_NOTIF_ROLE_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Tiktok role notif id",
+            "description": "",
+            "env_variable": "DISCORD_TIKTOK_NOTIF_ROLE_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Version du bot",
+            "description": "",
+            "env_variable": "BOT_VERSION",
+            "default_value": "1.2.1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Follower role id",
+            "description": "",
+            "env_variable": "DISCORD_FOLLOWER_ROLE_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "FUNIXPRODUCTIONS_API_TOKEN",
+            "description": "",
+            "env_variable": "FUNIXPRODUCTIONS_API_TOKEN",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|max:1000",
+            "field_type": "text"
+        },
+        {
+            "name": "OpenAI token",
+            "description": "Token open ai pour les requ\u00eates d'ia",
+            "env_variable": "OPENAI_API_KEY",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|max:2000",
+            "field_type": "text"
+        }
+    ]
+}

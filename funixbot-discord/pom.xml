@@ -6,7 +6,7 @@
     <parent>
         <artifactId>funix-bot</artifactId>
         <groupId>fr.funixgaming.funixbot</groupId>
-        <version>1.5.0</version>
+        <version>1.6.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -27,6 +27,12 @@
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>${discord.jda.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.funixproductions.core.integrations.openai</groupId>
+            <artifactId>funixproductions-core-openai</artifactId>
+            <version>${com.funixproductions.core.version}</version>
         </dependency>
     </dependencies>
 
