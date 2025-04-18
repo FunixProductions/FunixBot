@@ -12,7 +12,7 @@
     <parent>
         <artifactId>funixgaming-api</artifactId>
         <groupId>fr.funixgaming.api</groupId>
-        <version>1.4.1</version>
+        <version>1.4.2</version>
     </parent>
 
     <modules>
