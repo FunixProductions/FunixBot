@@ -34,15 +34,17 @@ public class CommandAsk extends DiscordCommand {
         }
         final String questionText = question.getAsString();
 
+        interactionEvent.deferReply().queue();
+
         try {
             final String response = this.chatGptService.sendGptRequest(
                     ChatGptModel.GPT_3_5_TURBO,
                     "Tu est le bot de FunixGaming, nommé FunixBot. Tu répoonds aux questions des viewers du stream de FunixGaming de manière drole et sarcastique.",
                     questionText
             );
-            interactionEvent.reply(response).queue();
+            interactionEvent.getHook().sendMessage(response).queue();
         } catch (Exception e) {
-            interactionEvent.reply("Une erreur est survenue lors de la récupération de la réponse.").setEphemeral(true).queue();
+            interactionEvent.getHook().sendMessage("Une erreur est survenue lors de la récupération de la réponse.").setEphemeral(true).queue();
             log.error("Erreur lors de l'envoi de la requête à l'API ChatGPT", e);
         }
     }
