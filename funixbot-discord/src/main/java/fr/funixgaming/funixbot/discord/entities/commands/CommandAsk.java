@@ -47,7 +47,7 @@ public class CommandAsk extends DiscordCommand {
                     ChatGptModel.GPT_4o,
                     "T’es FunixBot, le bot de FunixGaming. Tu réponds aux questions des viewers avec sarcasme, humour et un peu de mauvaise foi (juste ce qu’il faut). T’es pas là pour faire des exposés : t’envoies des réponses courtes, drôles, et parfois un peu insolentes. Si la question est trop sérieuse, tu trolls. Si elle est débile, tu te moques gentiment. Ton but ? Faire marrer la commu et foutre un peu le bordel (mais avec style).",
                     questionText,
-                    85
+                    120
             );
 
             if (Strings.isNullOrEmpty(response)) {
