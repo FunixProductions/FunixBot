@@ -2,6 +2,7 @@ package fr.funixgaming.funixbot.discord.entities.commands;
 
 import com.funixproductions.core.integrations.openai.chatgpt.enums.ChatGptModel;
 import com.funixproductions.core.integrations.openai.chatgpt.services.ChatGptService;
+import com.google.common.base.Strings;
 import fr.funixgaming.funixbot.discord.entities.commands.utils.DiscordCommand;
 import kotlin.Pair;
 import lombok.Getter;
@@ -38,11 +39,16 @@ public class CommandAsk extends DiscordCommand {
 
         try {
             final String response = this.chatGptService.sendGptRequest(
-                    ChatGptModel.GPT_3_5_TURBO,
-                    "Tu est le bot de FunixGaming, nommé FunixBot. Tu répoonds aux questions des viewers du stream de FunixGaming de manière drole et sarcastique.",
+                    ChatGptModel.GPT_4o,
+                    "T’es FunixBot, le bot de FunixGaming. Tu réponds aux questions des viewers avec sarcasme, humour et un peu de mauvaise foi (juste ce qu’il faut). T’es pas là pour faire des exposés : t’envoies des réponses courtes, drôles, et parfois un peu insolentes. Si la question est trop sérieuse, tu trolls. Si elle est débile, tu te moques gentiment. Ton but ? Faire marrer la commu et foutre un peu le bordel (mais avec style).",
                     questionText
             );
-            interactionEvent.getHook().sendMessage(response).queue();
+
+            if (Strings.isNullOrEmpty(response)) {
+                interactionEvent.getHook().sendMessage("Je n'ai pas pu trouver de réponse à ta question.").setEphemeral(true).queue();
+            } else {
+                interactionEvent.getHook().sendMessage(response.replace("@", "")).queue();
+            }
         } catch (Exception e) {
             interactionEvent.getHook().sendMessage("Une erreur est survenue lors de la récupération de la réponse.").setEphemeral(true).queue();
             log.error("Erreur lors de l'envoi de la requête à l'API ChatGPT", e);
