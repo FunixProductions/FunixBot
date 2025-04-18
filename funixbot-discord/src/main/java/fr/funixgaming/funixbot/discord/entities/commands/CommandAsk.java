@@ -45,7 +45,7 @@ public class CommandAsk extends DiscordCommand {
             );
 
             if (Strings.isNullOrEmpty(response)) {
-                interactionEvent.getHook().sendMessage("Je n'ai pas pu trouver de réponse à ta question.").setEphemeral(true).queue();
+                interactionEvent.getHook().sendMessage("Je n'ai pas pu trouver de réponse à ta question.").queue();
             } else {
                 interactionEvent.getHook().sendMessage(response.replace("@", "")).queue();
             }
