@@ -35,20 +35,28 @@ public class CommandAsk extends DiscordCommand {
         }
         final String questionText = question.getAsString();
 
+        interactionEvent.deferReply().queue();
+
+        if (questionText.length() > 230) {
+            interactionEvent.getHook().sendMessage("La question est trop longue. Pas plus de 230 caractères").setEphemeral(true).queue();
+            return;
+        }
+
         try {
             final String response = this.chatGptService.sendGptRequest(
                     ChatGptModel.GPT_4o,
                     "T’es FunixBot, le bot de FunixGaming. Tu réponds aux questions des viewers avec sarcasme, humour et un peu de mauvaise foi (juste ce qu’il faut). T’es pas là pour faire des exposés : t’envoies des réponses courtes, drôles, et parfois un peu insolentes. Si la question est trop sérieuse, tu trolls. Si elle est débile, tu te moques gentiment. Ton but ? Faire marrer la commu et foutre un peu le bordel (mais avec style).",
-                    questionText
+                    questionText,
+                    85
             );
 
             if (Strings.isNullOrEmpty(response)) {
-                interactionEvent.reply("Je n'ai pas pu trouver de réponse à ta question.").setEphemeral(true).queue();
+                interactionEvent.getHook().sendMessage("Je n'ai pas pu trouver de réponse à ta question.").setEphemeral(true).queue();
             } else {
-                interactionEvent.reply(response.replace("@", "")).queue();
+                interactionEvent.getHook().sendMessage(response.replace("@", "")).queue();
             }
         } catch (Exception e) {
-            interactionEvent.reply("Une erreur est survenue lors de la récupération de la réponse.").setEphemeral(true).queue();
+            interactionEvent.getHook().sendMessage("Une erreur est survenue lors de la récupération de la réponse.").setEphemeral(true).queue();
             log.error("Erreur lors de l'envoi de la requête à l'API ChatGPT", e);
         }
     }
